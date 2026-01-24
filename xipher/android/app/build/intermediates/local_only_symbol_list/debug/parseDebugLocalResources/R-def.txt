@@ -1,0 +1,17 @@
+R_DEF: Internal format may change without notice
+local
+string app_name
+string calls
+string channels
+string chats
+string groups
+string login_title
+string message
+string password
+string register_title
+string search
+string settings
+string sign_in
+string sign_up
+string username
+style Theme.Xipher

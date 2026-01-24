@@ -1,0 +1,231 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/premiumGiftSheetRoot"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/panel_bg"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <View
+        android:layout_width="44dp"
+        android:layout_height="4dp"
+        android:layout_gravity="center_horizontal"
+        android:background="@drawable/sheet_handle_bg" />
+
+    <TextView
+        android:id="@+id/premiumGiftTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:text="@string/premium_gift_sheet_title"
+        android:textColor="@color/x_text_primary"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/premiumGiftNote"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="6dp"
+        android:text="@string/premium_gift_sheet_note"
+        android:textColor="@color/x_text_secondary"
+        android:textSize="12sp" />
+
+    <TextView
+        android:id="@+id/premiumGiftRecipientLabel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:text="@string/premium_gift_recipient_label"
+        android:textColor="@color/x_text_primary"
+        android:textSize="14sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/premiumGiftRecipientValue"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:textColor="@color/x_text_primary"
+        android:textSize="14sp" />
+
+    <TextView
+        android:id="@+id/premiumGiftPlanLabel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:text="@string/premium_gift_plan_title"
+        android:textColor="@color/x_text_primary"
+        android:textSize="14sp"
+        android:textStyle="bold" />
+
+    <LinearLayout
+        android:id="@+id/premiumGiftPlanRow"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:id="@+id/premiumGiftPlanMonth"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginEnd="6dp"
+            android:background="@drawable/premium_plan_option_bg"
+            android:clickable="true"
+            android:focusable="true"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:padding="10dp">
+
+            <TextView
+                android:id="@+id/premiumGiftPlanMonthLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/premium_gift_plan_month"
+                android:textColor="@color/x_text_primary"
+                android:textSize="13sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/premiumGiftPlanMonthPrice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:text="@string/premium_gift_price_month"
+                android:textColor="@color/x_text_secondary"
+                android:textSize="12sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/premiumGiftPlanHalf"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginStart="3dp"
+            android:layout_marginEnd="3dp"
+            android:background="@drawable/premium_plan_option_bg"
+            android:clickable="true"
+            android:focusable="true"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:padding="10dp">
+
+            <TextView
+                android:id="@+id/premiumGiftPlanHalfLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/premium_gift_plan_half"
+                android:textColor="@color/x_text_primary"
+                android:textSize="13sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/premiumGiftPlanHalfPrice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:text="@string/premium_gift_price_half"
+                android:textColor="@color/x_text_secondary"
+                android:textSize="12sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/premiumGiftPlanYear"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginStart="6dp"
+            android:background="@drawable/premium_plan_option_bg"
+            android:clickable="true"
+            android:focusable="true"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:padding="10dp">
+
+            <TextView
+                android:id="@+id/premiumGiftPlanYearLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/premium_gift_plan_year"
+                android:textColor="@color/x_text_primary"
+                android:textSize="13sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/premiumGiftPlanYearPrice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:text="@string/premium_gift_price_year"
+                android:textColor="@color/x_text_secondary"
+                android:textSize="12sp" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/premiumGiftPaymentTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="14dp"
+        android:text="@string/premium_gift_payment_title"
+        android:textColor="@color/x_text_primary"
+        android:textSize="14sp"
+        android:textStyle="bold" />
+
+    <RadioGroup
+        android:id="@+id/premiumGiftPaymentProviderGroup"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="6dp">
+
+        <RadioButton
+            android:id="@+id/premiumGiftPaymentProviderYooMoney"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/premium_payment_provider_yoomoney"
+            android:textColor="@color/x_text_primary" />
+
+        <RadioButton
+            android:id="@+id/premiumGiftPaymentProviderStripe"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/premium_payment_provider_stripe"
+            android:textColor="@color/x_text_primary" />
+    </RadioGroup>
+
+    <RadioGroup
+        android:id="@+id/premiumGiftPaymentMethodGroup"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="6dp">
+
+        <RadioButton
+            android:id="@+id/premiumGiftPaymentCard"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/premium_payment_method_card"
+            android:textColor="@color/x_text_primary" />
+
+        <RadioButton
+            android:id="@+id/premiumGiftPaymentWallet"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/premium_payment_method_wallet"
+            android:textColor="@color/x_text_primary" />
+    </RadioGroup>
+
+    <Button
+        android:id="@+id/premiumGiftPayButton"
+        android:layout_width="match_parent"
+        android:layout_height="44dp"
+        android:layout_marginTop="12dp"
+        android:background="@drawable/btn_primary"
+        android:text="@string/premium_gift_pay"
+        android:textAllCaps="false"
+        android:textColor="@color/x_on_accent"
+        android:textSize="14sp" />
+</LinearLayout>

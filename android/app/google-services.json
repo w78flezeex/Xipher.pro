@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "370867742940",
+    "project_id": "xipher-21dd8",
+    "storage_bucket": "xipher-21dd8.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:370867742940:android:ef41abbfeb683727bcac19",
+        "android_client_info": {
+          "package_name": "com.xipher.wrapper"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBHfdvZMwn1Af7gYrfaxIzd5Veip9aRJtw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

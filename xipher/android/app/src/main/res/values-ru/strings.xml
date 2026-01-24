@@ -1,0 +1,16 @@
+<resources>
+    <string name="app_name">Xipher</string>
+    <string name="login_title">Вход</string>
+    <string name="register_title">Регистрация</string>
+    <string name="username">Имя пользователя</string>
+    <string name="password">Пароль</string>
+    <string name="sign_in">Войти</string>
+    <string name="sign_up">Зарегистрироваться</string>
+    <string name="chats">Чаты</string>
+    <string name="groups">Группы</string>
+    <string name="channels">Каналы</string>
+    <string name="calls">Звонки</string>
+    <string name="settings">Настройки</string>
+    <string name="search">Поиск</string>
+    <string name="message">Сообщение</string>
+</resources>

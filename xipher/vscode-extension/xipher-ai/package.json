@@ -1,0 +1,110 @@
+{
+  "name": "xipher-ai",
+  "displayName": "Xipher AI",
+  "description": "Xipher AI assistant with ChatGPT OAuth support.",
+  "version": "0.1.0",
+  "publisher": "xipher",
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [
+    "onCommand:xipherAi.openChat",
+    "onCommand:xipherAi.explainSelection",
+    "onCommand:xipherAi.signInChatGpt",
+    "onCommand:xipherAi.signOutChatGpt",
+    "onCommand:xipherAi.setOpenAiKey"
+  ],
+  "main": "./dist/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "xipherAi.openChat",
+        "title": "Xipher AI: Open Chat"
+      },
+      {
+        "command": "xipherAi.explainSelection",
+        "title": "Xipher AI: Explain Selection"
+      },
+      {
+        "command": "xipherAi.signInChatGpt",
+        "title": "Xipher AI: Sign In to ChatGPT (OAuth)"
+      },
+      {
+        "command": "xipherAi.signOutChatGpt",
+        "title": "Xipher AI: Sign Out of ChatGPT"
+      },
+      {
+        "command": "xipherAi.setOpenAiKey",
+        "title": "Xipher AI: Set OpenAI API Key"
+      }
+    ],
+    "configuration": {
+      "title": "Xipher AI",
+      "properties": {
+        "xipherAi.systemPrompt": {
+          "type": "string",
+          "default": "You are a helpful coding assistant.",
+          "description": "System prompt sent to the model."
+        },
+        "xipherAi.requestTimeoutMs": {
+          "type": "number",
+          "default": 45000,
+          "description": "Timeout for AI requests in milliseconds."
+        },
+        "xipherAi.openai.apiBaseUrl": {
+          "type": "string",
+          "default": "https://api.openai.com/v1",
+          "description": "OpenAI API base URL."
+        },
+        "xipherAi.openai.model": {
+          "type": "string",
+          "default": "gpt-4o-mini",
+          "description": "OpenAI model for chat completions."
+        },
+        "xipherAi.openai.apiKey": {
+          "type": "string",
+          "default": "",
+          "description": "Optional OpenAI API key. If empty, the extension will use the stored secret."
+        },
+        "xipherAi.openai.useOAuth": {
+          "type": "boolean",
+          "default": false,
+          "description": "Use OAuth token instead of API key."
+        },
+        "xipherAi.openai.oauthAuthorizeUrl": {
+          "type": "string",
+          "default": "",
+          "description": "OAuth authorize URL for ChatGPT/OpenAI compatible login."
+        },
+        "xipherAi.openai.oauthTokenUrl": {
+          "type": "string",
+          "default": "",
+          "description": "OAuth token URL for ChatGPT/OpenAI compatible login."
+        },
+        "xipherAi.openai.clientId": {
+          "type": "string",
+          "default": "",
+          "description": "OAuth client ID for ChatGPT/OpenAI login."
+        },
+        "xipherAi.openai.scopes": {
+          "type": "string",
+          "default": "openid profile",
+          "description": "OAuth scopes for ChatGPT/OpenAI login."
+        }
+      }
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./"
+  },
+  "devDependencies": {
+    "@types/node": "^12.20.55",
+    "@types/vscode": "^1.85.0",
+    "typescript": "^4.6.4"
+  }
+}

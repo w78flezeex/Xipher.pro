@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" href="/xipher.ico" type="image/x-icon">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Регистрация - Xipher</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/login.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body class="login-page">
+    <div class="login-pattern"></div>
+    
+    <div class="login-shell">
+        <div class="login-card">
+            <div class="login-brand">
+                <div class="login-brand-icon">X</div>
+                <div class="login-brand-name">Xipher</div>
+            </div>
+
+            <h1 class="login-heading">Создайте аккаунт Xipher</h1>
+            <p class="login-subheading">Придумайте имя пользователя и пароль, чтобы начать общение.</p>
+            
+            <form id="registerForm" class="login-form">
+                <div class="form-group">
+                    <label for="username" class="form-label">Имя пользователя</label>
+                    <input type="text" id="username" name="username" class="form-input login-input" 
+                           placeholder="Введите имя пользователя" required minlength="3" maxlength="50"
+                           pattern="[a-zA-Z0-9_]+">
+                    <div class="form-error" id="usernameError"></div>
+                    <div class="form-success" id="usernameSuccess"></div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="password" class="form-label">Пароль</label>
+                    <input type="password" id="password" name="password" class="form-input login-input" 
+                           placeholder="Введите пароль" required minlength="6">
+                    <div class="form-error" id="passwordError"></div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="confirmPassword" class="form-label">Подтвердите пароль</label>
+                    <input type="password" id="confirmPassword" name="confirmPassword" class="form-input login-input" 
+                           placeholder="Повторите пароль" required>
+                    <div class="form-error" id="confirmPasswordError"></div>
+                </div>
+                
+                <button type="submit" class="btn-primary login-submit">Зарегистрироваться</button>
+            </form>
+            
+            <div class="login-links">
+                <a class="login-link-primary" href="/login">Уже есть аккаунт? Войти</a>
+            </div>
+
+            <p class="login-terms">Нажимая «Зарегистрироваться», вы принимаете <a href="/privacy">политику конфиденциальности</a> и <a href="/terms">пользовательское соглашение</a></p>
+        </div>
+    </div>
+
+    <link rel="stylesheet" href="/css/notifications.css">
+    <script src="/js/notifications.js"></script>
+    <script src="/js/register.js"></script>
+</body>
+</html>

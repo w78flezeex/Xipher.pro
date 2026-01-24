@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="24dp">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Введите вашу seed-фразу (12 слов)"
+        android:textSize="14sp"
+        android:textColor="#888888"
+        android:layout_marginBottom="16dp" />
+
+    <EditText
+        android:id="@+id/input_seed_phrase"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="word1 word2 word3..."
+        android:inputType="textMultiLine"
+        android:minLines="3"
+        android:maxLines="4"
+        android:padding="16dp"
+        android:background="@drawable/input_bg"
+        android:layout_marginBottom="16dp" />
+
+    <EditText
+        android:id="@+id/input_password"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Новый пароль"
+        android:inputType="textPassword"
+        android:padding="16dp"
+        android:background="@drawable/input_bg" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="⚠️ Убедитесь, что вводите фразу в безопасном месте"
+        android:textSize="12sp"
+        android:textColor="#FF9800"
+        android:layout_marginTop="16dp" />
+
+</LinearLayout>

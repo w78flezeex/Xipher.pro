@@ -1,0 +1,270 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.drawerlayout.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/drawerLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <FrameLayout
+        android:id="@+id/contentRoot"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.coordinatorlayout.widget.CoordinatorLayout
+            android:id="@+id/chatContent"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/bg_app"
+            android:padding="12dp">
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@android:color/transparent">
+
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:background="@android:color/transparent">
+
+                    <!-- Sidebar chats -->
+                    <LinearLayout
+                        android:orientation="vertical"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="0.42"
+                        android:layout_marginEnd="10dp"
+                        android:padding="10dp"
+                        android:background="@drawable/panel_bg">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:gravity="center_vertical"
+                            android:paddingBottom="8dp">
+
+                            <ImageButton
+                                android:id="@+id/btnMenu"
+                                android:layout_width="36dp"
+                                android:layout_height="36dp"
+                                android:background="@drawable/btn_icon"
+                                android:contentDescription="@string/menu"
+                                android:padding="6dp"
+                                android:src="@drawable/ic_menu"
+                                app:tint="@color/x_text_secondary" />
+
+                            <TextView
+                                android:id="@+id/chatListTitle"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="10dp"
+                                android:layout_weight="1"
+                                android:text="@string/title_chats"
+                                android:textColor="@color/x_text_primary"
+                                android:textStyle="bold"
+                                android:textSize="18sp" />
+
+                            <ImageButton
+                                android:id="@+id/btnCreate"
+                                android:layout_width="36dp"
+                                android:layout_height="36dp"
+                                android:background="@drawable/btn_icon"
+                                android:contentDescription="@string/create_chat"
+                                android:padding="6dp"
+                                android:src="@drawable/ic_add"
+                                app:tint="@color/x_text_secondary" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/folderBar"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="8dp"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal">
+
+                            <HorizontalScrollView
+                                android:id="@+id/folderScroll"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:fillViewport="true"
+                                android:scrollbars="none">
+
+                                <LinearLayout
+                                    android:id="@+id/folderChipContainer"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="horizontal" />
+                            </HorizontalScrollView>
+
+                            <ImageButton
+                                android:id="@+id/btnFolders"
+                                android:layout_width="36dp"
+                                android:layout_height="36dp"
+                                android:layout_marginStart="8dp"
+                                android:background="@drawable/btn_icon"
+                                android:contentDescription="@string/folder_manage"
+                                android:padding="6dp"
+                                android:src="@drawable/ic_storage"
+                                app:tint="@color/x_text_secondary" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/searchBar"
+                            android:layout_width="match_parent"
+                            android:layout_height="40dp"
+                            android:layout_marginBottom="8dp"
+                            android:background="@drawable/bg_input_bar"
+                            android:gravity="center_vertical"
+                            android:paddingStart="10dp"
+                            android:paddingEnd="10dp">
+
+                            <ImageView
+                                android:layout_width="18dp"
+                                android:layout_height="18dp"
+                                android:src="@drawable/ic_search"
+                                app:tint="@color/x_text_secondary" />
+
+                            <EditText
+                                android:id="@+id/etSearch"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="8dp"
+                                android:layout_weight="1"
+                                android:background="@android:color/transparent"
+                                android:hint="@string/search_hint"
+                                android:imeOptions="actionSearch"
+                                android:inputType="text"
+                                android:maxLines="1"
+                                android:textColor="@color/x_text_primary"
+                                android:textColorHint="@color/x_text_secondary"
+                                android:textSize="14sp" />
+
+                            <ImageButton
+                                android:id="@+id/btnSearchUser"
+                                android:layout_width="32dp"
+                                android:layout_height="32dp"
+                                android:background="@drawable/btn_icon"
+                                android:contentDescription="@string/search_user"
+                                android:padding="6dp"
+                                android:src="@drawable/ic_search"
+                                app:tint="@color/x_text_secondary" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/updateBar"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="8dp"
+                            android:background="@drawable/chat_card_bg"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal"
+                            android:padding="10dp"
+                            android:visibility="gone">
+
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:orientation="vertical">
+
+                                <TextView
+                                    android:id="@+id/updateTitle"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/update_available"
+                                    android:textColor="@color/x_text_primary"
+                                    android:textSize="14sp"
+                                    android:textStyle="bold" />
+
+                                <TextView
+                                    android:id="@+id/updateSubtitle"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:ellipsize="end"
+                                    android:maxLines="2"
+                                    android:text="@string/update_tap"
+                                    android:textColor="@color/x_text_secondary"
+                                    android:textSize="12sp" />
+                            </LinearLayout>
+
+                            <Button
+                                android:id="@+id/btnUpdate"
+                                android:layout_width="wrap_content"
+                                android:layout_height="36dp"
+                                android:layout_marginStart="10dp"
+                                android:background="@drawable/btn_primary"
+                                android:paddingStart="14dp"
+                                android:paddingEnd="14dp"
+                                android:text="@string/update_button"
+                                android:textAllCaps="false"
+                                android:textColor="@color/x_on_accent"
+                                android:textSize="13sp" />
+                        </LinearLayout>
+
+                        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+                            android:id="@+id/swipeRefresh"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:padding="4dp"
+                            android:background="@android:color/transparent">
+
+                            <androidx.recyclerview.widget.RecyclerView
+                                android:id="@+id/recyclerChats"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:clipToPadding="false"
+                                android:paddingBottom="16dp"/>
+
+                        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+                    </LinearLayout>
+
+                    <!-- Main chat panel -->
+                    <FrameLayout
+                        android:id="@+id/chatContainer"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="0.58"
+                        android:background="@drawable/panel_bg"/>
+                </LinearLayout>
+
+                <com.google.android.material.bottomnavigation.BottomNavigationView
+                    android:id="@+id/bottomNav"
+                    android:layout_width="match_parent"
+                    android:layout_height="64dp"
+                    android:background="@drawable/bg_bottom_nav"
+                    app:itemIconSize="22dp"
+                    app:itemIconTint="@color/bottom_nav_item"
+                    app:itemPaddingTop="6dp"
+                    app:itemPaddingBottom="6dp"
+                    app:itemTextColor="@color/bottom_nav_item"
+                    app:itemHorizontalTranslationEnabled="false"
+                    app:labelVisibilityMode="labeled"
+                    app:menu="@menu/bottom_nav" />
+            </LinearLayout>
+        </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+        <View
+            android:id="@+id/blurOverlay"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#66000000"
+            android:visibility="gone" />
+    </FrameLayout>
+
+    <LinearLayout
+        android:id="@+id/leftDrawer"
+        android:layout_width="300dp"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        android:background="@drawable/panel_bg">
+
+        <include layout="@layout/drawer_menu" />
+    </LinearLayout>
+
+</androidx.drawerlayout.widget.DrawerLayout>

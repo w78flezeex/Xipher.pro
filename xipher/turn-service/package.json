@@ -1,0 +1,17 @@
+{
+  "name": "xipher-turn-service",
+  "version": "1.0.0",
+  "private": true,
+  "type": "commonjs",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.19.2",
+    "express-rate-limit": "^6.7.0",
+    "rate-limit-redis": "^2.1.0",
+    "redis": "^3.1.2"
+  }
+}

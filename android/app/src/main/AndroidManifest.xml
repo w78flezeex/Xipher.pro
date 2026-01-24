@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" android:maxSdkVersion="28" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.USE_FULL_SCREEN_INTENT" />
+    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_LOCATION" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+
+    <application
+        android:name="com.xipher.wrapper.XipherApp"
+        android:allowBackup="false"
+        android:fullBackupContent="@xml/backup_rules"
+        android:dataExtractionRules="@xml/backup_rules"
+        android:hardwareAccelerated="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="Xipher"
+        android:roundIcon="@mipmap/ic_launcher"
+        android:supportsRtl="true"
+        android:usesCleartextTraffic="false"
+        android:networkSecurityConfig="@xml/network_security_config"
+        android:theme="@style/Theme.Xipher"
+        tools:targetApi="31">
+
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_channel_id"
+            android:value="channel_messages" />
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_icon"
+            android:resource="@drawable/ic_notifications" />
+        <meta-data
+            android:name="ru.rustore.sdk.pushclient.default_notification_channel_id"
+            android:value="channel_messages" />
+        <meta-data
+            android:name="ru.rustore.sdk.pushclient.default_notification_icon"
+            android:resource="@drawable/ic_notifications" />
+        <!-- RuStore Project ID loaded from BuildConfig, not hardcoded -->
+        <meta-data
+            android:name="ru.rustore.sdk.pushclient.project_id"
+            android:value="${RUSTORE_PROJECT_ID}" />
+
+        <provider
+            android:name="ru.rustore.sdk.pushclient.provider.RuStorePushClientInitProvider"
+            tools:node="remove" />
+
+        <activity
+            android:name="com.xipher.wrapper.ui.AuthActivity"
+            android:exported="true"
+            android:windowSoftInputMode="adjustResize">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="com.xipher.wrapper.ui.PinUnlockActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name="com.xipher.wrapper.ui.ChatActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name="com.xipher.wrapper.ui.CallsActivity"
+            android:exported="false" />
+        <activity
+            android:name="com.xipher.wrapper.ui.RegisterActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name="com.xipher.wrapper.ui.ChatDetailActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name="com.xipher.wrapper.ui.ProfileActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name="com.xipher.wrapper.ui.ChannelInfoActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name="com.xipher.wrapper.ui.ChannelManagementActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name="com.xipher.wrapper.ui.ChannelAdminPermissionsActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name="com.xipher.wrapper.ui.GroupInfoActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name="com.xipher.wrapper.ui.AdminPermissionsActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name="com.xipher.wrapper.ui.NotificationsSettingsActivity"
+            android:exported="false" />
+        <activity
+            android:name="com.xipher.wrapper.wallet.WalletActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name="com.xipher.wrapper.ui.PrivacySecurityActivity"
+            android:exported="false" />
+        <activity
+            android:name="com.xipher.wrapper.ui.LanguageActivity"
+            android:exported="false" />
+        <activity            android:name="com.xipher.wrapper.ui.ChannelCatalogActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
+        <activity            android:name="com.xipher.wrapper.ui.PremiumActivity"
+            android:exported="false" />
+        <activity
+            android:name="com.xipher.wrapper.ui.PremiumPaymentActivity"
+            android:exported="false" />
+        <activity
+            android:name="com.xipher.wrapper.ui.FaqActivity"
+            android:exported="false" />
+        <activity
+            android:name="com.xipher.wrapper.ui.ImagePreviewActivity"
+            android:exported="false" />
+        <activity
+            android:name="com.xipher.wrapper.ui.CreateChatActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name="com.xipher.wrapper.ui.SettingsActivity"
+            android:exported="false" />
+        <activity
+            android:name="com.xipher.wrapper.ui.ChatThemeActivity"
+            android:exported="false" />
+        <activity
+            android:name="com.xipher.wrapper.ui.LocationShareActivity"
+            android:exported="false" />
+        <activity
+            android:name="com.xipher.wrapper.ui.MapActivity"
+            android:exported="false" />
+        <activity
+            android:name="com.xipher.wrapper.ui.CallActivity"
+            android:exported="false"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait"
+            android:showWhenLocked="true"
+            android:turnScreenOn="true" />
+
+        <service
+            android:name="com.xipher.wrapper.notifications.XipherFirebaseMessagingService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+
+        <service
+            android:name="com.xipher.wrapper.notifications.MyRuStoreService"
+            android:exported="true"
+            tools:ignore="ExportedService">
+            <intent-filter>
+                <action android:name="ru.rustore.sdk.pushclient.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+
+        <service
+            android:name="com.xipher.wrapper.notifications.NotificationsService"
+            android:exported="false"
+            android:stopWithTask="false" />
+
+        <service
+            android:name="com.xipher.wrapper.ui.LiveLocationService"
+            android:exported="false"
+            android:foregroundServiceType="location" />
+
+        <receiver
+            android:name="com.xipher.wrapper.notifications.AppStartReceiver"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.MY_PACKAGE_REPLACED" />
+                <action android:name="com.xipher.wrapper.action.START" />
+            </intent-filter>
+        </receiver>
+
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="${applicationId}.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>
+
+    </application>
+
+</manifest>

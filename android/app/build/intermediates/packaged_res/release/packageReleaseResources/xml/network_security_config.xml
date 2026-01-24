@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Network Security Configuration -->
+<network-security-config>
+    <!-- Default: Block cleartext traffic -->
+    <base-config cleartextTrafficPermitted="false">
+        <trust-anchors>
+            <certificates src="system" />
+        </trust-anchors>
+    </base-config>
+
+    <!-- Xipher API with certificate pinning -->
+    <domain-config cleartextTrafficPermitted="false">
+        <domain includeSubdomains="true">xipher.pro</domain>
+        <domain includeSubdomains="true">api.xipher.pro</domain>
+        
+        <!-- Certificate pinning -->
+        <pin-set expiration="2027-01-21">
+            <!-- xipher.pro certificate pin -->
+            <pin digest="SHA-256">2tLOZ+z+3mmOMwAzZ9AGxhG8v6Egp7qM6WmBIL6n68k=</pin>
+            <!-- api.xipher.pro certificate pin -->
+            <pin digest="SHA-256">Y8iUIdHeBywQt6qu7TmRHl/5MmwziF7cBqi+ET/snF4=</pin>
+        </pin-set>
+        
+        <trust-anchors>
+            <certificates src="system" />
+        </trust-anchors>
+    </domain-config>
+
+    <!-- Debug overrides (only in debug builds) -->
+    <debug-overrides>
+        <trust-anchors>
+            <certificates src="user" />
+        </trust-anchors>
+    </debug-overrides>
+</network-security-config>

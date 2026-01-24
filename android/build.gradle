@@ -1,0 +1,25 @@
+buildscript {
+    repositories {
+        google()
+        mavenCentral()
+        maven { url "https://artifactory-external.vkpartner.ru/artifactory/maven" }
+    }
+    dependencies {
+        classpath "com.android.tools.build:gradle:8.5.0"
+        classpath "com.google.gms:google-services:4.4.2"
+    }
+}
+
+allprojects {
+    repositories {
+        google()
+        mavenCentral()
+        maven { url "https://artifactory-external.vkpartner.ru/artifactory/maven" }
+        maven { url "https://oss.sonatype.org/content/repositories/releases" }
+        maven { url "https://www.jitpack.io" }
+    }
+}
+
+task clean(type: Delete) {
+    delete rootProject.buildDir
+}

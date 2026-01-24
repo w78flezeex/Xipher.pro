@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/panel_bg"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical">
+
+        <TextView
+            android:id="@+id/menuAvatar"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:background="@drawable/avatar_circle_bg"
+            android:gravity="center"
+            android:textColor="@color/x_on_accent"
+            android:textStyle="bold"
+            android:textSize="18sp" />
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/menuUsername"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/username_placeholder"
+                android:textColor="@color/x_text_primary"
+                android:textStyle="bold"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/menuSubtitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/drawer_profile_title"
+                android:textColor="@color/x_text_secondary"
+                android:textSize="13sp" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="12dp"
+        android:background="@color/x_border" />
+
+    <TextView
+        android:id="@+id/menuCreate"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:padding="12dp"
+        android:text="@string/menu_create_group_channel"
+        android:textColor="@color/x_text_primary"
+        android:textSize="15sp" />
+
+    <TextView
+        android:id="@+id/menuFavorites"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="12dp"
+        android:text="@string/drawer_saved"
+        android:textColor="@color/x_text_primary"
+        android:textSize="15sp" />
+
+    <TextView
+        android:id="@+id/menuSettings"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="12dp"
+        android:text="@string/drawer_settings"
+        android:textColor="@color/x_text_primary"
+        android:textSize="15sp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:padding="12dp">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/menu_theme_toggle"
+            android:textColor="@color/x_text_primary"
+            android:textSize="15sp" />
+
+        <com.google.android.material.switchmaterial.SwitchMaterial
+            android:id="@+id/menuThemeSwitch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:useMaterialThemeColors="true" />
+    </LinearLayout>
+</LinearLayout>

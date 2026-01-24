@@ -1,0 +1,16 @@
+-- Merging decision tree log ---
+manifest
+ADDED from /root/xipher/android/feature/auth/build/intermediates/tmp/ProcessLibraryManifest/debug/tempAndroidManifest8376595455701458382.xml:2:13-83
+INJECTED from /root/xipher/android/feature/auth/build/intermediates/tmp/ProcessLibraryManifest/debug/tempAndroidManifest8376595455701458382.xml:2:13-83
+	package
+		INJECTED from /root/xipher/android/feature/auth/build/intermediates/tmp/ProcessLibraryManifest/debug/tempAndroidManifest8376595455701458382.xml
+	xmlns:android
+		ADDED from /root/xipher/android/feature/auth/build/intermediates/tmp/ProcessLibraryManifest/debug/tempAndroidManifest8376595455701458382.xml:2:23-81
+uses-sdk
+INJECTED from /root/xipher/android/feature/auth/build/intermediates/tmp/ProcessLibraryManifest/debug/tempAndroidManifest8376595455701458382.xml reason: use-sdk injection requested
+INJECTED from /root/xipher/android/feature/auth/build/intermediates/tmp/ProcessLibraryManifest/debug/tempAndroidManifest8376595455701458382.xml
+INJECTED from /root/xipher/android/feature/auth/build/intermediates/tmp/ProcessLibraryManifest/debug/tempAndroidManifest8376595455701458382.xml
+	android:targetSdkVersion
+		INJECTED from /root/xipher/android/feature/auth/build/intermediates/tmp/ProcessLibraryManifest/debug/tempAndroidManifest8376595455701458382.xml
+	android:minSdkVersion
+		INJECTED from /root/xipher/android/feature/auth/build/intermediates/tmp/ProcessLibraryManifest/debug/tempAndroidManifest8376595455701458382.xml

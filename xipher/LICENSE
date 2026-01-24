@@ -1,0 +1,147 @@
+═══════════════════════════════════════════════════════════════════════════════
+                XIPHER PROPRIETARY LICENSE WITH COPYLEFT CLAUSE
+                         Version 1.0, January 2026
+═══════════════════════════════════════════════════════════════════════════════
+
+Copyright © 2024-2026 Xipher Team. All rights reserved.
+Copyright © 2024-2026 Xipher Team. Все права защищены.
+
+───────────────────────────────────────────────────────────────────────────────
+                              DEFINITIONS
+───────────────────────────────────────────────────────────────────────────────
+
+"Product" means the source code, binary files, documentation, and all 
+related materials of the Xipher project contained in this repository.
+
+"Derivative Work" means any software based on the Product or containing 
+any portion of the Product's code.
+
+"Commercial Use" means any use of the Product or Derivative Works for 
+direct or indirect commercial advantage or monetary compensation.
+
+"Distribution" means making the Product or Derivative Works available 
+to third parties by any means, including but not limited to publishing 
+on websites, app stores, or physical media.
+
+───────────────────────────────────────────────────────────────────────────────
+                           TERMS AND CONDITIONS
+───────────────────────────────────────────────────────────────────────────────
+
+1. VIEWING AND STUDY
+
+   You are permitted to view, read, and study the source code of the 
+   Product for educational and informational purposes only.
+
+2. MODIFICATION AND DISTRIBUTION (COPYLEFT CLAUSE)
+
+   Modification and Distribution of the Product or Derivative Works is 
+   permitted ONLY if ALL of the following conditions are met:
+
+   a) OPEN SOURCE REQUIREMENT
+      The complete source code of any Derivative Work must be made 
+      publicly available in a publicly accessible repository.
+
+   b) SAME LICENSE REQUIREMENT
+      Any Derivative Work must be distributed under this exact license, 
+      with no additional restrictions or permissions.
+
+   c) ATTRIBUTION REQUIREMENT
+      You must include a prominent notice in all copies and Derivative 
+      Works stating:
+      - That the work is based on Xipher
+      - A link to the original repository: 
+        https://github.com/w78flezeex/Xipher.pro
+      - The original copyright notice
+
+   d) COPYRIGHT PRESERVATION
+      All copyright notices, license texts, and attribution notices 
+      must be preserved without modification in all copies and 
+      Derivative Works.
+
+3. COMMERCIAL USE PROHIBITION
+
+   Commercial Use of the Product or any Derivative Works is PROHIBITED 
+   without prior written permission from the copyright holder.
+   
+   To obtain a commercial license, contact: license@xipher.pro
+
+4. PROHIBITED ACTIONS
+
+   The following actions are expressly PROHIBITED:
+
+   a) Distributing closed-source versions of the Product or Derivative 
+      Works (binary-only distribution without source code)
+   
+   b) Removing, altering, or obscuring any copyright notices, 
+      trademarks, or attribution notices
+   
+   c) Using the Xipher name, logo, or trademarks without permission
+   
+   d) Misrepresenting Derivative Works as the original Product
+   
+   e) Sublicensing the Product under different terms
+
+5. NO WARRANTY
+
+   THE PRODUCT IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, 
+   EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF 
+   MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+   
+   IN NO EVENT SHALL THE COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, 
+   DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT 
+   OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE PRODUCT 
+   OR THE USE OR OTHER DEALINGS IN THE PRODUCT.
+
+6. TERMINATION
+
+   This license automatically terminates if you fail to comply with any 
+   of its terms. Upon termination:
+   
+   a) You must immediately cease all use and distribution of the Product
+   b) You must destroy all copies in your possession
+   c) The termination does not relieve you of liability for violations
+
+7. ENFORCEMENT AND LEGAL ACTION
+
+   Violation of this license constitutes copyright infringement and may 
+   result in:
+
+   a) Legal proceedings under applicable copyright law
+   b) Injunctive relief requiring cessation of infringing activities
+   c) Monetary damages, including statutory damages where available
+   d) Recovery of legal fees and costs
+   
+   This license is enforceable under:
+   - The Berne Convention for the Protection of Literary and Artistic Works
+   - TRIPS Agreement (Trade-Related Aspects of Intellectual Property Rights)
+   - Digital Millennium Copyright Act (DMCA)
+   - Copyright Law of the Russian Federation (Part IV of Civil Code)
+   - European Union Copyright Directive
+
+8. GOVERNING LAW
+
+   This license shall be governed by and construed in accordance with 
+   the laws of the Russian Federation, without regard to its conflict 
+   of law provisions.
+
+9. SEVERABILITY
+
+   If any provision of this license is held to be unenforceable, such 
+   provision shall be reformed only to the extent necessary to make it 
+   enforceable, and the remaining provisions shall continue in full 
+   force and effect.
+
+───────────────────────────────────────────────────────────────────────────────
+                               CONTACT
+───────────────────────────────────────────────────────────────────────────────
+
+Commercial licensing inquiries: license@xipher.pro
+Legal matters: legal@xipher.pro
+General inquiries: contact@xipher.pro
+
+Website: https://xipher.pro
+Repository: https://github.com/w78flezeex/Xipher.pro
+
+═══════════════════════════════════════════════════════════════════════════════
+          By using this software, you agree to these license terms.
+═══════════════════════════════════════════════════════════════════════════════

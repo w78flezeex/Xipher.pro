@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Xipher Design System - Telegram-inspired Purple Theme -->
+    
+    <!-- Core Backgrounds -->
+    <color name="x_bg_primary">#FFFFFF</color>
+    <color name="x_bg_secondary">#F9F8FF</color>
+    <color name="x_bg_tertiary">#F0EEF5</color>
+    <color name="x_bg_alt">#F3F3FA</color>
+    <color name="x_bg_card">#FFFFFF</color>
+    <color name="x_bg_card_strong">#FFFFFF</color>
+    <color name="x_bg_elevated">#FFFFFF</color>
+    <color name="x_bg_input">#F5F3FA</color>
+    
+    <!-- Borders & Dividers -->
+    <color name="x_border">#E8E5F0</color>
+    <color name="x_divider">#E0DCE8</color>
+    <color name="x_border_soft">#0D8A2BE2</color>
+    
+    <!-- Text Colors -->
+    <color name="x_text_primary">#0F0F14</color>
+    <color name="x_text_secondary">#5A5A65</color>
+    <color name="x_text_hint">#9090A0</color>
+    <color name="x_text_muted">#8A8A8F</color>
+    <color name="x_text_link">#9333EA</color>
+    
+    <!-- Xipher Accent - Purple (matches web: #9333ea, #9d00ff) -->
+    <color name="x_accent">#3B82F6</color>
+    <color name="x_accent_primary">#9333EA</color>
+    <color name="x_accent_start">#A855F7</color>
+    <color name="x_accent_mid">#9333EA</color>
+    <color name="x_accent_end">#7C3AED</color>
+    <color name="x_accent_light">#F3E8FF</color>
+    <color name="x_accent_violet">#8B5CF6</color>
+    
+    <!-- Legacy Telegram-like blue (for compatibility) -->
+    <color name="x_tg_blue">#9333EA</color>
+    <color name="x_tg_blue_dark">#7C3AED</color>
+    
+    <!-- Accent Pink -->
+    <color name="x_accent_pink">#EC4899</color>
+    <color name="x_accent_pink_light">#FCE7F3</color>
+    
+    <!-- Functional Colors -->
+    <color name="x_badge_bg">#9333EA</color>
+    <color name="x_badge_muted">#8A8A8F</color>
+    <color name="x_call_accept">#10B981</color>
+    <color name="x_call_reject">#EF4444</color>
+    <color name="x_online">#10B981</color>
+    <color name="x_typing">#9333EA</color>
+    <color name="x_on_accent">#FFFFFF</color>
+    
+    <!-- Chat Bubbles - Purple gradient like web -->
+    <color name="x_bubble_out">#9333EA</color>
+    <color name="x_bubble_out_gradient_start">#A855F7</color>
+    <color name="x_bubble_out_gradient_end">#7C3AED</color>
+    <color name="x_bubble_in">#FFFFFF</color>
+    <color name="x_bubble_in_dark">#F5F3FA</color>
+    <color name="x_bubble_text_out">#FFFFFF</color>
+    <color name="x_bubble_text_in">#0F0F14</color>
+    <color name="x_bubble_time_out">#E9D5FF</color>
+    <color name="x_bubble_time_in">#8A8A8F</color>
+    
+    <!-- Media Indicators -->
+    <color name="x_media_bg">#2D000000</color>
+    <color name="x_media_icon">#FFFFFF</color>
+    
+    <!-- Ripple & Interaction -->
+    <color name="x_ripple">#1A9333EA</color>
+    <color name="x_ripple_light">#0D9333EA</color>
+    <color name="x_highlight">#339333EA</color>
+    
+    <!-- Navigation -->
+    <color name="x_nav_bg">#FEFEFE</color>
+    <color name="x_nav_border">#E8E5F0</color>
+    <color name="x_nav_active">#9333EA</color>
+    <color name="x_nav_inactive">#9090A0</color>
+    
+    <!-- Status Colors -->
+    <color name="x_status_sent">#9090A0</color>
+    <color name="x_status_delivered">#9333EA</color>
+    <color name="x_status_read">#10B981</color>
+    <color name="x_error">#EF4444</color>
+    <color name="x_warning">#F59E0B</color>
+    <color name="x_success">#10B981</color>
+    
+    <!-- Avatar Colors (for initials) -->
+    <color name="x_avatar_1">#FF6B6B</color>
+    <color name="x_avatar_2">#F7B731</color>
+    <color name="x_avatar_3">#26DE81</color>
+    <color name="x_avatar_4">#45AAF2</color>
+    <color name="x_avatar_5">#A55EEA</color>
+    <color name="x_avatar_6">#FD9644</color>
+    <color name="x_avatar_7">#FC5C65</color>
+    
+    <!-- Material Design colors -->
+    <color name="purple_200">#FFBB86FC</color>
+    <color name="purple_500">#FF6200EE</color>
+    <color name="purple_700">#FF3700B3</color>
+    <color name="red_500">#FFF44336</color>
+    <color name="red_700">#FFD32F2F</color>
+    <color name="green_500">#FF4CAF50</color>
+    
+    <!-- Chat list unread divider -->
+    <color name="chat_list_divider_bg">#1A6366F1</color>
+    <color name="chat_list_divider_line">#336366F1</color>
+    <color name="chat_list_divider_text">#6366F1</color>
+    
+    <!-- Wallet Colors -->
+    <color name="wallet_background">#F5F5F5</color>
+    <color name="wallet_text_primary">#0F0F14</color>
+    <color name="wallet_text_secondary">#888888</color>
+    <color name="wallet_accent">#6C5CE7</color>
+    <color name="wallet_green">#10B981</color>
+    <color name="wallet_red">#EF4444</color>
+    <color name="wallet_card_bg">#FFFFFF</color>
+</resources>

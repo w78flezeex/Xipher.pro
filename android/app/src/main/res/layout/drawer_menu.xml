@@ -1,0 +1,349 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/x_bg_primary">
+
+    <!-- Header with gradient accent background -->
+    <LinearLayout
+        android:id="@+id/drawerHeaderBg"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="@drawable/drawer_header_bg"
+        android:padding="20dp"
+        android:paddingTop="48dp">
+
+        <FrameLayout
+            android:layout_width="64dp"
+            android:layout_height="64dp">
+
+            <ImageView
+                android:id="@+id/drawerAvatarImage"
+                android:layout_width="64dp"
+                android:layout_height="64dp"
+                android:background="@drawable/avatar_circle_bg"
+                android:clipToOutline="true"
+                android:scaleType="centerCrop"
+                android:visibility="gone" />
+
+            <TextView
+                android:id="@+id/drawerAvatarLetter"
+                android:layout_width="64dp"
+                android:layout_height="64dp"
+                android:background="@drawable/drawer_avatar_bg"
+                android:gravity="center"
+                android:text="@string/avatar_placeholder"
+                android:textColor="@color/x_on_accent"
+                android:textSize="24sp"
+                android:textStyle="bold" />
+        </FrameLayout>
+
+        <TextView
+            android:id="@+id/drawerUsername"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="@string/drawer_profile_title"
+            android:textColor="@color/x_on_accent"
+            android:textSize="17sp"
+            android:fontFamily="sans-serif-medium" />
+
+        <TextView
+            android:id="@+id/drawerSubtitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:text="@string/drawer_profile_subtitle"
+            android:textColor="#B3FFFFFF"
+            android:textSize="14sp" />
+    </LinearLayout>
+
+    <!-- Menu Items -->
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:fillViewport="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingVertical="8dp">
+
+            <LinearLayout
+                android:id="@+id/drawerProfile"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:gravity="center_vertical"
+                android:background="?attr/selectableItemBackground"
+                android:paddingHorizontal="20dp">
+
+                <ImageView
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:src="@drawable/ic_person"
+                    app:tint="@color/x_text_secondary" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:text="@string/drawer_my_profile"
+                    android:textColor="@color/x_text_primary"
+                    android:textSize="15sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/drawerSaved"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:gravity="center_vertical"
+                android:background="?attr/selectableItemBackground"
+                android:paddingHorizontal="20dp">
+
+                <ImageView
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:src="@drawable/ic_saved"
+                    app:tint="@color/x_text_secondary" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:text="@string/drawer_saved"
+                    android:textColor="@color/x_text_primary"
+                    android:textSize="15sp" />
+            </LinearLayout>
+
+            <!-- Wallet -->
+            <LinearLayout
+                android:id="@+id/drawerWallet"
+                android:layout_width="match_parent"
+                android:layout_height="52dp"
+                android:gravity="center_vertical"
+                android:background="@drawable/wallet_menu_item_bg"
+                android:paddingHorizontal="20dp"
+                android:layout_marginHorizontal="8dp"
+                android:layout_marginVertical="4dp">
+
+                <ImageView
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:src="@drawable/ic_wallet"
+                    app:tint="@color/wallet_accent" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginStart="20dp"
+                    android:text="@string/drawer_wallet"
+                    android:textColor="@color/x_text_primary"
+                    android:textSize="15sp" />
+
+                <TextView
+                    android:id="@+id/walletBalanceBadge"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/wallet_badge_bg"
+                    android:paddingHorizontal="10dp"
+                    android:paddingVertical="4dp"
+                    android:text="$0"
+                    android:textColor="@android:color/white"
+                    android:textSize="12sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:layout_marginVertical="8dp"
+                android:layout_marginStart="64dp"
+                android:background="@color/x_divider" />
+
+            <LinearLayout
+                android:id="@+id/drawerCreateGroup"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:gravity="center_vertical"
+                android:background="?attr/selectableItemBackground"
+                android:paddingHorizontal="20dp">
+
+                <ImageView
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:src="@drawable/ic_group"
+                    app:tint="@color/x_text_secondary" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:text="@string/drawer_create_group"
+                    android:textColor="@color/x_text_primary"
+                    android:textSize="15sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/drawerCreateChannel"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:gravity="center_vertical"
+                android:background="?attr/selectableItemBackground"
+                android:paddingHorizontal="20dp">
+
+                <ImageView
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:src="@drawable/ic_channel"
+                    app:tint="@color/x_text_secondary" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:text="@string/drawer_create_channel"
+                    android:textColor="@color/x_text_primary"
+                    android:textSize="15sp" />
+            </LinearLayout>
+
+            <!-- Каталог каналов -->
+            <LinearLayout
+                android:id="@+id/drawerChannelCatalog"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:gravity="center_vertical"
+                android:background="?attr/selectableItemBackground"
+                android:paddingHorizontal="20dp">
+
+                <ImageView
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:src="@drawable/ic_search"
+                    app:tint="@color/x_accent" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:text="@string/drawer_channel_catalog"
+                    android:textColor="@color/x_text_primary"
+                    android:textSize="15sp" />
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:layout_marginVertical="8dp"
+                android:layout_marginStart="64dp"
+                android:background="@color/x_divider" />
+
+            <LinearLayout
+                android:id="@+id/drawerSettings"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:gravity="center_vertical"
+                android:background="?attr/selectableItemBackground"
+                android:paddingHorizontal="20dp">
+
+                <ImageView
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:src="@drawable/ic_settings"
+                    app:tint="@color/x_text_secondary" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:text="@string/drawer_settings"
+                    android:textColor="@color/x_text_primary"
+                    android:textSize="15sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/drawerThemeRow"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:gravity="center_vertical"
+                android:background="?attr/selectableItemBackground"
+                android:paddingHorizontal="20dp">
+
+                <ImageView
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:src="@drawable/ic_palette"
+                    app:tint="@color/x_text_secondary" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginStart="20dp"
+                    android:text="@string/drawer_theme"
+                    android:textColor="@color/x_text_primary"
+                    android:textSize="15sp" />
+
+                <com.google.android.material.switchmaterial.SwitchMaterial
+                    android:id="@+id/drawerThemeSwitch"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:thumbTint="@color/switch_thumb_color"
+                    android:trackTint="@color/switch_track_color" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/drawerFaq"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:gravity="center_vertical"
+                android:background="?attr/selectableItemBackground"
+                android:paddingHorizontal="20dp">
+
+                <ImageView
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:src="@drawable/ic_info"
+                    app:tint="@color/x_text_secondary" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:text="@string/drawer_faq"
+                    android:textColor="@color/x_text_primary"
+                    android:textSize="15sp" />
+            </LinearLayout>
+
+        </LinearLayout>
+    </ScrollView>
+
+    <!-- Footer with version -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingHorizontal="20dp"
+        android:paddingVertical="16dp">
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:layout_marginBottom="12dp"
+            android:background="@color/x_divider" />
+
+        <TextView
+            android:id="@+id/drawerVersion"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/app_version"
+            android:textColor="@color/x_text_hint"
+            android:textSize="12sp" />
+    </LinearLayout>
+
+</LinearLayout>

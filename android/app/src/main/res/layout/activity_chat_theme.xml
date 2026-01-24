@@ -1,0 +1,398 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/x_bg_secondary">
+
+    <!-- Toolbar -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:background="@color/x_bg_primary"
+        android:elevation="2dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingHorizontal="4dp">
+
+        <ImageButton
+            android:id="@+id/btnBack"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="@string/back"
+            android:padding="12dp"
+            android:src="@drawable/ic_arrow_back"
+            app:tint="@color/x_text_primary" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginStart="8dp"
+            android:text="@string/chat_theme_title"
+            android:textColor="@color/x_text_primary"
+            android:textSize="20sp"
+            android:fontFamily="sans-serif-medium" />
+    </LinearLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:scrollbars="none">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <!-- Live Preview Card -->
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="20dp"
+                app:cardCornerRadius="20dp"
+                app:cardElevation="8dp"
+                app:cardBackgroundColor="@color/x_bg_card">
+
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="220dp">
+
+                    <!-- Background Image -->
+                    <ImageView
+                        android:id="@+id/previewBackground"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:scaleType="centerCrop" />
+
+                    <!-- Dim Overlay -->
+                    <View
+                        android:id="@+id/previewDimOverlay"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="#000000"
+                        android:alpha="0" />
+
+                    <!-- Chat Preview -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical"
+                        android:padding="16dp"
+                        android:gravity="center_vertical">
+
+                        <!-- Incoming message -->
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:layout_marginBottom="12dp">
+
+                            <View
+                                android:layout_width="32dp"
+                                android:layout_height="32dp"
+                                android:layout_marginEnd="8dp"
+                                android:background="@drawable/avatar_circle_bg" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:maxWidth="220dp"
+                                android:background="@drawable/msg_in_bg"
+                                android:paddingHorizontal="14dp"
+                                android:paddingVertical="10dp"
+                                android:text="@string/chat_theme_preview_in"
+                                android:textColor="@color/x_bubble_text_in"
+                                android:textSize="15sp" />
+                        </LinearLayout>
+
+                        <!-- Outgoing message -->
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="end"
+                            android:maxWidth="220dp"
+                            android:background="@drawable/msg_out_bg"
+                            android:paddingHorizontal="14dp"
+                            android:paddingVertical="10dp"
+                            android:text="@string/chat_theme_preview_out"
+                            android:textColor="@color/x_bubble_text_out"
+                            android:textSize="15sp" />
+
+                        <!-- Second incoming -->
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:layout_marginTop="12dp">
+
+                            <View
+                                android:layout_width="32dp"
+                                android:layout_height="32dp"
+                                android:layout_marginEnd="8dp"
+                                android:background="@drawable/avatar_circle_bg" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:maxWidth="180dp"
+                                android:background="@drawable/msg_in_bg"
+                                android:paddingHorizontal="14dp"
+                                android:paddingVertical="10dp"
+                                android:text="@string/chat_theme_preview_in2"
+                                android:textColor="@color/x_bubble_text_in"
+                                android:textSize="15sp" />
+                        </LinearLayout>
+                    </LinearLayout>
+                </FrameLayout>
+            </androidx.cardview.widget.CardView>
+
+            <!-- Upload Custom Wallpaper Section -->
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="20dp"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="2dp"
+                app:cardBackgroundColor="@color/x_bg_card">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="12dp"
+                        android:text="@string/chat_theme_custom_wallpaper"
+                        android:textColor="@color/x_accent_primary"
+                        android:textSize="14sp"
+                        android:fontFamily="sans-serif-medium"
+                        android:textAllCaps="true"
+                        android:letterSpacing="0.05" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical">
+
+                        <!-- Custom Wallpaper Preview -->
+                        <FrameLayout
+                            android:id="@+id/customWallpaperCard"
+                            android:layout_width="72dp"
+                            android:layout_height="72dp"
+                            android:layout_marginEnd="16dp"
+                            android:background="@drawable/theme_preview_border"
+                            android:padding="3dp">
+
+                            <ImageView
+                                android:id="@+id/customWallpaperPreview"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:scaleType="centerCrop"
+                                android:visibility="gone" />
+
+                            <ImageView
+                                android:id="@+id/customWallpaperCheck"
+                                android:layout_width="24dp"
+                                android:layout_height="24dp"
+                                android:layout_gravity="bottom|end"
+                                android:src="@drawable/ic_check_circle"
+                                android:visibility="gone"
+                                app:tint="@color/x_accent_primary" />
+                        </FrameLayout>
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
+
+                            <Button
+                                android:id="@+id/btnUploadWallpaper"
+                                android:layout_width="match_parent"
+                                android:layout_height="48dp"
+                                android:background="@drawable/btn_primary"
+                                android:text="@string/chat_theme_upload_photo"
+                                android:textColor="@android:color/white"
+                                android:textAllCaps="false"
+                                android:textSize="14sp"
+                                android:drawableStart="@drawable/ic_gallery"
+                                android:drawablePadding="8dp"
+                                android:drawableTint="@android:color/white" />
+
+                            <Button
+                                android:id="@+id/btnDeleteWallpaper"
+                                android:layout_width="match_parent"
+                                android:layout_height="40dp"
+                                android:layout_marginTop="8dp"
+                                android:background="?attr/selectableItemBackground"
+                                android:text="@string/chat_theme_remove_wallpaper"
+                                android:textColor="@color/x_error"
+                                android:textAllCaps="false"
+                                android:textSize="13sp"
+                                android:visibility="gone" />
+                        </LinearLayout>
+                    </LinearLayout>
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <!-- Wallpaper Settings -->
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="20dp"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="2dp"
+                app:cardBackgroundColor="@color/x_bg_card">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="16dp"
+                        android:text="@string/theme_wallpaper_settings"
+                        android:textColor="@color/x_accent_primary"
+                        android:textSize="14sp"
+                        android:fontFamily="sans-serif-medium"
+                        android:textAllCaps="true"
+                        android:letterSpacing="0.05" />
+
+                    <!-- Dim Slider -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:layout_marginBottom="16dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/chat_theme_dim"
+                            android:textColor="@color/x_text_primary"
+                            android:textSize="15sp" />
+
+                        <com.google.android.material.slider.Slider
+                            android:id="@+id/sliderDim"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:valueFrom="0"
+                            android:valueTo="70"
+                            android:stepSize="5"
+                            app:thumbColor="@color/x_accent_primary"
+                            app:trackColorActive="@color/x_accent_primary"
+                            app:trackColorInactive="@color/x_border" />
+                    </LinearLayout>
+
+                    <!-- Blur Slider -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/chat_theme_blur"
+                            android:textColor="@color/x_text_primary"
+                            android:textSize="15sp" />
+
+                        <com.google.android.material.slider.Slider
+                            android:id="@+id/sliderBlur"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:valueFrom="0"
+                            android:valueTo="25"
+                            android:stepSize="5"
+                            app:thumbColor="@color/x_accent_primary"
+                            app:trackColorActive="@color/x_accent_primary"
+                            app:trackColorInactive="@color/x_border" />
+                    </LinearLayout>
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <!-- Light Themes Section -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:layout_marginBottom="12dp"
+                android:text="@string/chat_theme_light_themes"
+                android:textColor="@color/x_accent_primary"
+                android:textSize="14sp"
+                android:fontFamily="sans-serif-medium"
+                android:textAllCaps="true"
+                android:letterSpacing="0.05" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerLightThemes"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="20dp"
+                android:nestedScrollingEnabled="false"
+                android:overScrollMode="never" />
+
+            <!-- Dark Themes Section -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:layout_marginBottom="12dp"
+                android:text="@string/chat_theme_dark_themes"
+                android:textColor="@color/x_accent_primary"
+                android:textSize="14sp"
+                android:fontFamily="sans-serif-medium"
+                android:textAllCaps="true"
+                android:letterSpacing="0.05" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerDarkThemes"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="20dp"
+                android:nestedScrollingEnabled="false"
+                android:overScrollMode="never" />
+
+            <!-- Gradient Themes Section -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:layout_marginBottom="12dp"
+                android:text="@string/chat_theme_gradient_themes"
+                android:textColor="@color/x_accent_primary"
+                android:textSize="14sp"
+                android:fontFamily="sans-serif-medium"
+                android:textAllCaps="true"
+                android:letterSpacing="0.05" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerGradientThemes"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:nestedScrollingEnabled="false"
+                android:overScrollMode="never" />
+
+        </LinearLayout>
+    </ScrollView>
+
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottomNav"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        style="@style/Xipher.BottomNavigation"
+        app:menu="@menu/bottom_nav" />
+</LinearLayout>

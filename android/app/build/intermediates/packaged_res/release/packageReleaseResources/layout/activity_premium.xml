@@ -1,0 +1,1277 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@drawable/bg_app">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:fillViewport="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingBottom="8dp">
+
+                <ImageButton
+                    android:id="@+id/btnBack"
+                    android:layout_width="36dp"
+                    android:layout_height="36dp"
+                    android:background="@drawable/btn_icon"
+                    android:contentDescription="@string/back"
+                    android:padding="6dp"
+                    android:src="@drawable/ic_back"
+                    app:tint="@color/x_text_secondary" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:layout_weight="1"
+                    android:text="@string/premium_title"
+                    android:textColor="@color/x_text_primary"
+                    android:textStyle="bold"
+                    android:textSize="18sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/premiumHeroCard"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/panel_bg"
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <FrameLayout
+                        android:layout_width="44dp"
+                        android:layout_height="44dp"
+                        android:background="@drawable/premium_badge_bg">
+
+                        <ImageView
+                            android:id="@+id/premiumHeroIcon"
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:layout_gravity="center"
+                            android:contentDescription="@string/premium_badge"
+                            android:src="@drawable/ic_premium_star"
+                            app:tint="@color/x_on_accent" />
+                    </FrameLayout>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="12dp"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/premiumHeadline"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/premium_headline"
+                            android:textColor="@color/x_text_primary"
+                            android:textSize="16sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/premiumSubtitle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="4dp"
+                            android:text="@string/premium_subtitle"
+                            android:textColor="@color/x_text_secondary"
+                            android:textSize="12sp" />
+                    </LinearLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/premiumStatusRow"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/premiumStatusPill"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/premium_status_free_bg"
+                        android:paddingStart="12dp"
+                        android:paddingEnd="12dp"
+                        android:paddingTop="6dp"
+                        android:paddingBottom="6dp"
+                        android:text="@string/premium_status_free"
+                        android:textColor="@color/x_text_secondary"
+                        android:textSize="12sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/premiumExpiryNote"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:textColor="@color/x_text_secondary"
+                        android:textSize="12sp"
+                        android:text="@string/premium_expires_placeholder" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/premiumPaymentStatusRow"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/premiumPaymentStatus"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/premium_status_pending_bg"
+                        android:paddingStart="12dp"
+                        android:paddingEnd="12dp"
+                        android:paddingTop="6dp"
+                        android:paddingBottom="6dp"
+                        android:textColor="@color/x_text_primary"
+                        android:textSize="12sp"
+                        android:textStyle="bold"
+                        android:visibility="gone" />
+
+                    <TextView
+                        android:id="@+id/premiumPaymentTimer"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:background="@drawable/premium_status_free_bg"
+                        android:paddingStart="10dp"
+                        android:paddingEnd="10dp"
+                        android:paddingTop="6dp"
+                        android:paddingBottom="6dp"
+                        android:textColor="@color/x_text_secondary"
+                        android:textSize="12sp"
+                        android:visibility="gone" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/premiumPlanTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="@string/premium_plan_title"
+                android:textColor="@color/x_text_primary"
+                android:textSize="15sp"
+                android:textStyle="bold" />
+
+            <LinearLayout
+                android:id="@+id/premiumPlanTrial"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/premium_plan_option_bg"
+                android:clickable="true"
+                android:focusable="true"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:padding="12dp">
+
+                <RadioButton
+                    android:id="@+id/premiumPlanTrialRadio"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:buttonTint="@color/x_accent_start" />
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/premium_plan_trial_title"
+                        android:textColor="@color/x_text_primary"
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/premium_plan_trial_billing"
+                        android:textColor="@color/x_text_secondary"
+                        android:textSize="12sp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:gravity="end">
+
+                    <TextView
+                        android:id="@+id/premiumPlanTrialPrice"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/premium_plan_trial_price"
+                        android:textColor="@color/x_text_primary"
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/premiumPlanTrialTag"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:background="@drawable/premium_tag_bg"
+                        android:paddingStart="8dp"
+                        android:paddingEnd="8dp"
+                        android:paddingTop="2dp"
+                        android:paddingBottom="2dp"
+                        android:text="@string/premium_plan_trial_tag"
+                        android:textColor="@color/x_on_accent"
+                        android:textSize="10sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/premiumPlanMonth"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/premium_plan_option_bg"
+                android:clickable="true"
+                android:focusable="true"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:padding="12dp">
+
+                <RadioButton
+                    android:id="@+id/premiumPlanMonthRadio"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:buttonTint="@color/x_accent_start" />
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/premium_plan_month_title"
+                        android:textColor="@color/x_text_primary"
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/premium_plan_month_billing"
+                        android:textColor="@color/x_text_secondary"
+                        android:textSize="12sp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:gravity="end">
+
+                    <TextView
+                        android:id="@+id/premiumPlanMonthPrice"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/premium_plan_month_price"
+                        android:textColor="@color/x_text_primary"
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/premiumPlanMonthTag"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:background="@drawable/premium_tag_bg"
+                        android:paddingStart="8dp"
+                        android:paddingEnd="8dp"
+                        android:paddingTop="2dp"
+                        android:paddingBottom="2dp"
+                        android:text="@string/premium_plan_month_tag"
+                        android:textColor="@color/x_on_accent"
+                        android:textSize="10sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/premiumPlanYear"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/premium_plan_option_bg"
+                android:clickable="true"
+                android:focusable="true"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:padding="12dp">
+
+                <RadioButton
+                    android:id="@+id/premiumPlanYearRadio"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:buttonTint="@color/x_accent_start" />
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/premium_plan_year_title"
+                        android:textColor="@color/x_text_primary"
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/premium_plan_year_billing"
+                        android:textColor="@color/x_text_secondary"
+                        android:textSize="12sp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:gravity="end">
+
+                    <TextView
+                        android:id="@+id/premiumPlanYearPrice"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/premium_plan_year_price"
+                        android:textColor="@color/x_text_primary"
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/premiumPlanYearTag"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:background="@drawable/premium_tag_bg"
+                        android:paddingStart="8dp"
+                        android:paddingEnd="8dp"
+                        android:paddingTop="2dp"
+                        android:paddingBottom="2dp"
+                        android:text="@string/premium_plan_year_tag"
+                        android:textColor="@color/x_on_accent"
+                        android:textSize="10sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/premiumTrialNote"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="@string/premium_trial_note"
+                android:textColor="@color/x_text_secondary"
+                android:textSize="12sp" />
+
+            <LinearLayout
+                android:id="@+id/premiumPaymentMethodCard"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:background="@drawable/panel_bg"
+                android:orientation="vertical"
+                android:padding="12dp">
+
+                <TextView
+                    android:id="@+id/premiumPaymentProviderTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/premium_payment_provider_title"
+                    android:textColor="@color/x_text_primary"
+                    android:textStyle="bold"
+                    android:textSize="14sp" />
+
+                <RadioGroup
+                    android:id="@+id/premiumPaymentProviderGroup"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="6dp"
+                    android:orientation="vertical">
+
+                    <RadioButton
+                        android:id="@+id/premiumPaymentProviderYooMoney"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:buttonTint="@color/x_accent_start"
+                        android:text="@string/premium_payment_provider_yoomoney"
+                        android:textColor="@color/x_text_primary" />
+
+                    <RadioButton
+                        android:id="@+id/premiumPaymentProviderStripe"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:buttonTint="@color/x_accent_start"
+                        android:text="@string/premium_payment_provider_stripe"
+                        android:textColor="@color/x_text_primary" />
+                </RadioGroup>
+
+                <RadioGroup
+                    android:id="@+id/premiumPaymentMethodGroup"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/premiumPaymentMethodTitle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/premium_payment_method_title"
+                        android:textColor="@color/x_text_secondary"
+                        android:textSize="12sp"
+                        android:layout_marginBottom="4dp" />
+
+                    <RadioButton
+                        android:id="@+id/premiumPaymentCard"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:buttonTint="@color/x_accent_start"
+                        android:text="@string/premium_payment_method_card"
+                        android:textColor="@color/x_text_primary" />
+
+                    <RadioButton
+                        android:id="@+id/premiumPaymentWallet"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:buttonTint="@color/x_accent_start"
+                        android:text="@string/premium_payment_method_wallet"
+                        android:textColor="@color/x_text_primary" />
+                </RadioGroup>
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/premiumSubscribeBtn"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_marginTop="12dp"
+                android:background="@drawable/btn_primary"
+                android:text="@string/premium_cta_subscribe"
+                android:textColor="@color/x_on_accent"
+                android:textStyle="bold" />
+
+            <Button
+                android:id="@+id/premiumManageBtn"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/btn_call_toggle"
+                android:text="@string/premium_manage"
+                android:textColor="@color/x_text_primary"
+                android:visibility="gone" />
+
+            <LinearLayout
+                android:id="@+id/premiumMetricsCard"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:background="@drawable/panel_bg"
+                android:orientation="horizontal"
+                android:padding="12dp">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:gravity="center_horizontal">
+
+                    <TextView
+                        android:id="@+id/premiumFolderLimitValue"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="20"
+                        android:textColor="@color/x_text_primary"
+                        android:textStyle="bold"
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/premium_metric_limit"
+                        android:textColor="@color/x_text_secondary"
+                        android:textSize="11sp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:gravity="center_horizontal">
+
+                    <TextView
+                        android:id="@+id/premiumFolderUsedValue"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="0"
+                        android:textColor="@color/x_text_primary"
+                        android:textStyle="bold"
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/premium_metric_used"
+                        android:textColor="@color/x_text_secondary"
+                        android:textSize="11sp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:gravity="center_horizontal">
+
+                    <TextView
+                        android:id="@+id/premiumFolderRemainingValue"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="20"
+                        android:textColor="@color/x_text_primary"
+                        android:textStyle="bold"
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/premium_metric_remaining"
+                        android:textColor="@color/x_text_secondary"
+                        android:textSize="11sp" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/premiumFeaturesTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="@string/premium_features_title"
+                android:textColor="@color/x_text_primary"
+                android:textSize="15sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/premiumFeaturesNote"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:text="@string/premium_features_note"
+                android:textColor="@color/x_text_secondary"
+                android:textSize="12sp" />
+
+            <LinearLayout
+                android:id="@+id/premiumFeatureDouble"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/chat_card_bg"
+                android:orientation="horizontal"
+                android:padding="12dp">
+
+                <TextView
+                    android:layout_width="36dp"
+                    android:layout_height="36dp"
+                    android:background="@drawable/premium_feature_badge_bg"
+                    android:gravity="center"
+                    android:text="x2"
+                    android:textColor="@color/x_on_accent"
+                    android:textStyle="bold"
+                    android:textSize="12sp" />
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="12dp"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/premium_feature_double_title"
+                        android:textColor="@color/x_text_primary"
+                        android:textStyle="bold"
+                        android:textSize="14sp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:text="@string/premium_feature_double_desc"
+                        android:textColor="@color/x_text_secondary"
+                        android:textSize="12sp" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/premiumFeatureVideo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/chat_card_bg"
+                android:orientation="horizontal"
+                android:padding="12dp">
+
+                <TextView
+                    android:layout_width="36dp"
+                    android:layout_height="36dp"
+                    android:background="@drawable/premium_feature_badge_bg"
+                    android:gravity="center"
+                    android:text="GIF"
+                    android:textColor="@color/x_on_accent"
+                    android:textStyle="bold"
+                    android:textSize="10sp" />
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="12dp"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/premium_feature_video_title"
+                        android:textColor="@color/x_text_primary"
+                        android:textStyle="bold"
+                        android:textSize="14sp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:text="@string/premium_feature_video_desc"
+                        android:textColor="@color/x_text_secondary"
+                        android:textSize="12sp" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/premiumFeatureBadge"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/chat_card_bg"
+                android:orientation="horizontal"
+                android:padding="12dp">
+
+                <FrameLayout
+                    android:layout_width="36dp"
+                    android:layout_height="36dp"
+                    android:background="@drawable/premium_feature_badge_bg">
+
+                    <ImageView
+                        android:layout_width="18dp"
+                        android:layout_height="18dp"
+                        android:layout_gravity="center"
+                        android:contentDescription="@string/premium_badge"
+                        android:src="@drawable/ic_premium_star"
+                        app:tint="@color/x_on_accent" />
+                </FrameLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="12dp"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/premium_feature_badge_title"
+                        android:textColor="@color/x_text_primary"
+                        android:textStyle="bold"
+                        android:textSize="14sp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:text="@string/premium_feature_badge_desc"
+                        android:textColor="@color/x_text_secondary"
+                        android:textSize="12sp" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/premiumFeatureBusiness"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/chat_card_bg"
+                android:orientation="horizontal"
+                android:padding="12dp">
+
+                <FrameLayout
+                    android:layout_width="36dp"
+                    android:layout_height="36dp"
+                    android:background="@drawable/premium_feature_badge_bg">
+
+                    <ImageView
+                        android:layout_width="18dp"
+                        android:layout_height="18dp"
+                        android:layout_gravity="center"
+                        android:contentDescription="@string/premium_business_title"
+                        android:src="@drawable/ic_clock"
+                        app:tint="@color/x_on_accent" />
+                </FrameLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="12dp"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/premium_feature_business_title"
+                        android:textColor="@color/x_text_primary"
+                        android:textStyle="bold"
+                        android:textSize="14sp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:text="@string/premium_feature_business_desc"
+                        android:textColor="@color/x_text_secondary"
+                        android:textSize="12sp" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/premiumBusinessCard"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:background="@drawable/panel_bg"
+                android:orientation="vertical"
+                android:padding="12dp"
+                android:animateLayoutChanges="true">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/premiumBusinessTitle"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="@string/premium_business_title"
+                        android:textColor="@color/x_text_primary"
+                        android:textStyle="bold"
+                        android:textSize="14sp" />
+
+                    <TextView
+                        android:id="@+id/premiumBusinessLock"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/premium_status_free_bg"
+                        android:paddingStart="10dp"
+                        android:paddingEnd="10dp"
+                        android:paddingTop="4dp"
+                        android:paddingBottom="4dp"
+                        android:text="@string/premium_business_locked"
+                        android:textColor="@color/x_text_secondary"
+                        android:textSize="11sp"
+                        android:visibility="gone" />
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/premiumBusinessNote"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:text="@string/premium_business_note"
+                    android:textColor="@color/x_text_secondary"
+                    android:textSize="12sp" />
+
+                <LinearLayout
+                    android:id="@+id/businessHoursGrid"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:id="@+id/businessRowMon"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:paddingTop="6dp"
+                        android:paddingBottom="6dp">
+
+                        <TextView
+                            android:id="@+id/businessDayMon"
+                            android:layout_width="40dp"
+                            android:layout_height="wrap_content"
+                            android:text="@string/business_day_mon"
+                            android:textColor="@color/x_text_primary"
+                            android:textSize="12sp"
+                            android:textStyle="bold" />
+
+                        <com.google.android.material.switchmaterial.SwitchMaterial
+                            android:id="@+id/businessToggleMon"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            app:useMaterialThemeColors="true" />
+
+                        <TextView
+                            android:id="@+id/businessStartMon"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="8dp"
+                            android:layout_weight="1"
+                            android:background="@drawable/btn_icon"
+                            android:gravity="center"
+                            android:padding="6dp"
+                            android:text="09:00"
+                            android:textColor="@color/x_text_primary"
+                            android:textSize="12sp" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="6dp"
+                            android:text="-"
+                            android:textColor="@color/x_text_secondary" />
+
+                        <TextView
+                            android:id="@+id/businessEndMon"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="6dp"
+                            android:layout_weight="1"
+                            android:background="@drawable/btn_icon"
+                            android:gravity="center"
+                            android:padding="6dp"
+                            android:text="18:00"
+                            android:textColor="@color/x_text_primary"
+                            android:textSize="12sp" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/businessRowTue"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:paddingTop="6dp"
+                        android:paddingBottom="6dp">
+
+                        <TextView
+                            android:id="@+id/businessDayTue"
+                            android:layout_width="40dp"
+                            android:layout_height="wrap_content"
+                            android:text="@string/business_day_tue"
+                            android:textColor="@color/x_text_primary"
+                            android:textSize="12sp"
+                            android:textStyle="bold" />
+
+                        <com.google.android.material.switchmaterial.SwitchMaterial
+                            android:id="@+id/businessToggleTue"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            app:useMaterialThemeColors="true" />
+
+                        <TextView
+                            android:id="@+id/businessStartTue"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="8dp"
+                            android:layout_weight="1"
+                            android:background="@drawable/btn_icon"
+                            android:gravity="center"
+                            android:padding="6dp"
+                            android:text="09:00"
+                            android:textColor="@color/x_text_primary"
+                            android:textSize="12sp" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="6dp"
+                            android:text="-"
+                            android:textColor="@color/x_text_secondary" />
+
+                        <TextView
+                            android:id="@+id/businessEndTue"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="6dp"
+                            android:layout_weight="1"
+                            android:background="@drawable/btn_icon"
+                            android:gravity="center"
+                            android:padding="6dp"
+                            android:text="18:00"
+                            android:textColor="@color/x_text_primary"
+                            android:textSize="12sp" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/businessRowWed"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:paddingTop="6dp"
+                        android:paddingBottom="6dp">
+
+                        <TextView
+                            android:id="@+id/businessDayWed"
+                            android:layout_width="40dp"
+                            android:layout_height="wrap_content"
+                            android:text="@string/business_day_wed"
+                            android:textColor="@color/x_text_primary"
+                            android:textSize="12sp"
+                            android:textStyle="bold" />
+
+                        <com.google.android.material.switchmaterial.SwitchMaterial
+                            android:id="@+id/businessToggleWed"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            app:useMaterialThemeColors="true" />
+
+                        <TextView
+                            android:id="@+id/businessStartWed"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="8dp"
+                            android:layout_weight="1"
+                            android:background="@drawable/btn_icon"
+                            android:gravity="center"
+                            android:padding="6dp"
+                            android:text="09:00"
+                            android:textColor="@color/x_text_primary"
+                            android:textSize="12sp" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="6dp"
+                            android:text="-"
+                            android:textColor="@color/x_text_secondary" />
+
+                        <TextView
+                            android:id="@+id/businessEndWed"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="6dp"
+                            android:layout_weight="1"
+                            android:background="@drawable/btn_icon"
+                            android:gravity="center"
+                            android:padding="6dp"
+                            android:text="18:00"
+                            android:textColor="@color/x_text_primary"
+                            android:textSize="12sp" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/businessRowThu"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:paddingTop="6dp"
+                        android:paddingBottom="6dp">
+
+                        <TextView
+                            android:id="@+id/businessDayThu"
+                            android:layout_width="40dp"
+                            android:layout_height="wrap_content"
+                            android:text="@string/business_day_thu"
+                            android:textColor="@color/x_text_primary"
+                            android:textSize="12sp"
+                            android:textStyle="bold" />
+
+                        <com.google.android.material.switchmaterial.SwitchMaterial
+                            android:id="@+id/businessToggleThu"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            app:useMaterialThemeColors="true" />
+
+                        <TextView
+                            android:id="@+id/businessStartThu"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="8dp"
+                            android:layout_weight="1"
+                            android:background="@drawable/btn_icon"
+                            android:gravity="center"
+                            android:padding="6dp"
+                            android:text="09:00"
+                            android:textColor="@color/x_text_primary"
+                            android:textSize="12sp" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="6dp"
+                            android:text="-"
+                            android:textColor="@color/x_text_secondary" />
+
+                        <TextView
+                            android:id="@+id/businessEndThu"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="6dp"
+                            android:layout_weight="1"
+                            android:background="@drawable/btn_icon"
+                            android:gravity="center"
+                            android:padding="6dp"
+                            android:text="18:00"
+                            android:textColor="@color/x_text_primary"
+                            android:textSize="12sp" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/businessRowFri"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:paddingTop="6dp"
+                        android:paddingBottom="6dp">
+
+                        <TextView
+                            android:id="@+id/businessDayFri"
+                            android:layout_width="40dp"
+                            android:layout_height="wrap_content"
+                            android:text="@string/business_day_fri"
+                            android:textColor="@color/x_text_primary"
+                            android:textSize="12sp"
+                            android:textStyle="bold" />
+
+                        <com.google.android.material.switchmaterial.SwitchMaterial
+                            android:id="@+id/businessToggleFri"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            app:useMaterialThemeColors="true" />
+
+                        <TextView
+                            android:id="@+id/businessStartFri"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="8dp"
+                            android:layout_weight="1"
+                            android:background="@drawable/btn_icon"
+                            android:gravity="center"
+                            android:padding="6dp"
+                            android:text="09:00"
+                            android:textColor="@color/x_text_primary"
+                            android:textSize="12sp" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="6dp"
+                            android:text="-"
+                            android:textColor="@color/x_text_secondary" />
+
+                        <TextView
+                            android:id="@+id/businessEndFri"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="6dp"
+                            android:layout_weight="1"
+                            android:background="@drawable/btn_icon"
+                            android:gravity="center"
+                            android:padding="6dp"
+                            android:text="18:00"
+                            android:textColor="@color/x_text_primary"
+                            android:textSize="12sp" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/businessRowSat"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:paddingTop="6dp"
+                        android:paddingBottom="6dp">
+
+                        <TextView
+                            android:id="@+id/businessDaySat"
+                            android:layout_width="40dp"
+                            android:layout_height="wrap_content"
+                            android:text="@string/business_day_sat"
+                            android:textColor="@color/x_text_primary"
+                            android:textSize="12sp"
+                            android:textStyle="bold" />
+
+                        <com.google.android.material.switchmaterial.SwitchMaterial
+                            android:id="@+id/businessToggleSat"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            app:useMaterialThemeColors="true" />
+
+                        <TextView
+                            android:id="@+id/businessStartSat"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="8dp"
+                            android:layout_weight="1"
+                            android:background="@drawable/btn_icon"
+                            android:gravity="center"
+                            android:padding="6dp"
+                            android:text="10:00"
+                            android:textColor="@color/x_text_primary"
+                            android:textSize="12sp" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="6dp"
+                            android:text="-"
+                            android:textColor="@color/x_text_secondary" />
+
+                        <TextView
+                            android:id="@+id/businessEndSat"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="6dp"
+                            android:layout_weight="1"
+                            android:background="@drawable/btn_icon"
+                            android:gravity="center"
+                            android:padding="6dp"
+                            android:text="16:00"
+                            android:textColor="@color/x_text_primary"
+                            android:textSize="12sp" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/businessRowSun"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:paddingTop="6dp"
+                        android:paddingBottom="6dp">
+
+                        <TextView
+                            android:id="@+id/businessDaySun"
+                            android:layout_width="40dp"
+                            android:layout_height="wrap_content"
+                            android:text="@string/business_day_sun"
+                            android:textColor="@color/x_text_primary"
+                            android:textSize="12sp"
+                            android:textStyle="bold" />
+
+                        <com.google.android.material.switchmaterial.SwitchMaterial
+                            android:id="@+id/businessToggleSun"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            app:useMaterialThemeColors="true" />
+
+                        <TextView
+                            android:id="@+id/businessStartSun"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="8dp"
+                            android:layout_weight="1"
+                            android:background="@drawable/btn_icon"
+                            android:gravity="center"
+                            android:padding="6dp"
+                            android:text="10:00"
+                            android:textColor="@color/x_text_primary"
+                            android:textSize="12sp" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="6dp"
+                            android:text="-"
+                            android:textColor="@color/x_text_secondary" />
+
+                        <TextView
+                            android:id="@+id/businessEndSun"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="6dp"
+                            android:layout_weight="1"
+                            android:background="@drawable/btn_icon"
+                            android:gravity="center"
+                            android:padding="6dp"
+                            android:text="16:00"
+                            android:textColor="@color/x_text_primary"
+                            android:textSize="12sp" />
+                    </LinearLayout>
+                </LinearLayout>
+
+                <Button
+                    android:id="@+id/btnSaveBusinessHours"
+                    android:layout_width="match_parent"
+                    android:layout_height="44dp"
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/btn_primary"
+                    android:text="@string/premium_business_save"
+                    android:textColor="@color/x_on_accent"
+                    android:textStyle="bold" />
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottomNav"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        style="@style/Xipher.BottomNavigation"
+        app:menu="@menu/bottom_nav" />
+</LinearLayout>

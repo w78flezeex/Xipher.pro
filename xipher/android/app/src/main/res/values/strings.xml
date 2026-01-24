@@ -1,0 +1,16 @@
+<resources>
+    <string name="app_name">Xipher</string>
+    <string name="login_title">Sign in</string>
+    <string name="register_title">Create account</string>
+    <string name="username">Username</string>
+    <string name="password">Password</string>
+    <string name="sign_in">Sign in</string>
+    <string name="sign_up">Sign up</string>
+    <string name="chats">Chats</string>
+    <string name="groups">Groups</string>
+    <string name="channels">Channels</string>
+    <string name="calls">Calls</string>
+    <string name="settings">Settings</string>
+    <string name="search">Search</string>
+    <string name="message">Message</string>
+</resources>

@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/folderRow"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="10dp"
+    android:background="@drawable/chat_card_bg"
+    android:gravity="center_vertical"
+    android:orientation="horizontal"
+    android:padding="12dp">
+
+    <ImageView
+        android:id="@+id/folderRowIcon"
+        android:layout_width="28dp"
+        android:layout_height="28dp"
+        android:src="@drawable/ic_storage"
+        app:tint="@color/x_text_secondary" />
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/folderRowName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/x_text_primary"
+            android:textSize="15sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/folderRowCount"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:textColor="@color/x_text_secondary"
+            android:textSize="12sp" />
+    </LinearLayout>
+
+    <ImageButton
+        android:id="@+id/folderRowEdit"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:background="@drawable/btn_icon"
+        android:contentDescription="@string/folder_edit"
+        android:padding="6dp"
+        android:src="@drawable/ic_edit"
+        app:tint="@color/x_text_secondary" />
+
+    <ImageButton
+        android:id="@+id/folderRowDelete"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_marginStart="6dp"
+        android:background="@drawable/btn_icon"
+        android:contentDescription="@string/folder_delete"
+        android:padding="6dp"
+        android:src="@drawable/ic_delete"
+        app:tint="@color/x_call_reject" />
+</LinearLayout>

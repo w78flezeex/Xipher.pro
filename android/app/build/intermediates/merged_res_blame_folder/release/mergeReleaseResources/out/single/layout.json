@@ -1,0 +1,306 @@
+[
+    {
+        "merged": "/root/.gradle/daemon/8.10.2/com.xipher.wrapper.app-mergeReleaseResources-72:/layout/item_friend_select.xml",
+        "source": "/root/.gradle/daemon/8.10.2/com.xipher.wrapper.app-main-74:/layout/item_friend_select.xml"
+    },
+    {
+        "merged": "/root/.gradle/daemon/8.10.2/com.xipher.wrapper.app-mergeReleaseResources-72:/layout/bottom_sheet_checklist.xml",
+        "source": "/root/.gradle/daemon/8.10.2/com.xipher.wrapper.app-main-74:/layout/bottom_sheet_checklist.xml"
+    },
+    {
+        "merged": "/root/.gradle/daemon/8.10.2/com.xipher.wrapper.app-mergeReleaseResources-72:/layout/dialog_unlock.xml",
+        "source": "/root/.gradle/daemon/8.10.2/com.xipher.wrapper.app-main-74:/layout/dialog_unlock.xml"
+    },
+    {
+        "merged": "/root/.gradle/daemon/8.10.2/com.xipher.wrapper.app-mergeReleaseResources-72:/layout/activity_register.xml",
+        "source": "/root/.gradle/daemon/8.10.2/com.xipher.wrapper.app-main-74:/layout/activity_register.xml"
+    },
+    {
+        "merged": "/root/.gradle/daemon/8.10.2/com.xipher.wrapper.app-mergeReleaseResources-72:/layout/fragment_channel_settings.xml",
+        "source": "/root/.gradle/daemon/8.10.2/com.xipher.wrapper.app-main-74:/layout/fragment_channel_settings.xml"
+    },
+    {
+        "merged": "/root/.gradle/daemon/8.10.2/com.xipher.wrapper.app-mergeReleaseResources-72:/layout/activity_admin_permissions.xml",
+        "source": "/root/.gradle/daemon/8.10.2/com.xipher.wrapper.app-main-74:/layout/activity_admin_permissions.xml"
+    },
+    {
+        "merged": "/root/.gradle/daemon/8.10.2/com.xipher.wrapper.app-mergeReleaseResources-72:/layout/item_channel_member.xml",
+        "source": "/root/.gradle/daemon/8.10.2/com.xipher.wrapper.app-main-74:/layout/item_channel_member.xml"
+    },
+    {
+        "merged": "/root/.gradle/daemon/8.10.2/com.xipher.wrapper.app-mergeReleaseResources-72:/layout/item_theme_preview.xml",
+        "source": "/root/.gradle/daemon/8.10.2/com.xipher.wrapper.app-main-74:/layout/item_theme_preview.xml"
+    },
+    {
+        "merged": "/root/.gradle/daemon/8.10.2/com.xipher.wrapper.app-mergeReleaseResources-72:/layout/item_topic_tab.xml",
+        "source": "/root/.gradle/daemon/8.10.2/com.xipher.wrapper.app-main-74:/layout/item_topic_tab.xml"
+    },
+    {
+        "merged": "/root/.gradle/daemon/8.10.2/com.xipher.wrapper.app-mergeReleaseResources-72:/layout/view_premium_gift.xml",
+        "source": "/root/.gradle/daemon/8.10.2/com.xipher.wrapper.app-main-74:/layout/view_premium_gift.xml"
+    },
+    {
+        "merged": "/root/.gradle/daemon/8.10.2/com.xipher.wrapper.app-mergeReleaseResources-72:/layout/fragment_chat.xml",
+        "source": "/root/.gradle/daemon/8.10.2/com.xipher.wrapper.app-main-74:/layout/fragment_chat.xml"
+    },
+    {
+        "merged": "/root/.gradle/daemon/8.10.2/com.xipher.wrapper.app-mergeReleaseResources-72:/layout/item_verification_request.xml",
+        "source": "/root/.gradle/daemon/8.10.2/com.xipher.wrapper.app-main-74:/layout/item_verification_request.xml"
+    },
+    {
+        "merged": "/root/.gradle/daemon/8.10.2/com.xipher.wrapper.app-mergeReleaseResources-72:/layout/item_call_log.xml",
+        "source": "/root/.gradle/daemon/8.10.2/com.xipher.wrapper.app-main-74:/layout/item_call_log.xml"
+    },
+    {
+        "merged": "/root/.gradle/daemon/8.10.2/com.xipher.wrapper.app-mergeReleaseResources-72:/layout/view_topic_tabs.xml",
+        "source": "/root/.gradle/daemon/8.10.2/com.xipher.wrapper.app-main-74:/layout/view_topic_tabs.xml"
+    },
+    {
+        "merged": "/root/.gradle/daemon/8.10.2/com.xipher.wrapper.app-mergeReleaseResources-72:/layout/sheet_create_chat.xml",
+        "source": "/root/.gradle/daemon/8.10.2/com.xipher.wrapper.app-main-74:/layout/sheet_create_chat.xml"
+    },
+    {
+        "merged": "/root/.gradle/daemon/8.10.2/com.xipher.wrapper.app-mergeReleaseResources-72:/layout/activity_privacy_security.xml",
+        "source": "/root/.gradle/daemon/8.10.2/com.xipher.wrapper.app-main-74:/layout/activity_privacy_security.xml"
+    },
+    {
+        "merged": "/root/.gradle/daemon/8.10.2/com.xipher.wrapper.app-mergeReleaseResources-72:/layout/dialog_create_wallet.xml",
+        "source": "/root/.gradle/daemon/8.10.2/com.xipher.wrapper.app-main-74:/layout/dialog_create_wallet.xml"
+    },
+    {
+        "merged": "/root/.gradle/daemon/8.10.2/com.xipher.wrapper.app-mergeReleaseResources-72:/layout/activity_chat_theme.xml",
+        "source": "/root/.gradle/daemon/8.10.2/com.xipher.wrapper.app-main-74:/layout/activity_chat_theme.xml"
+    },
+    {
+        "merged": "/root/.gradle/daemon/8.10.2/com.xipher.wrapper.app-mergeReleaseResources-72:/layout/activity_language.xml",
+        "source": "/root/.gradle/daemon/8.10.2/com.xipher.wrapper.app-main-74:/layout/activity_language.xml"
+    },
+    {
+        "merged": "/root/.gradle/daemon/8.10.2/com.xipher.wrapper.app-mergeReleaseResources-72:/layout/bottom_sheet_premium_gift.xml",
+        "source": "/root/.gradle/daemon/8.10.2/com.xipher.wrapper.app-main-74:/layout/bottom_sheet_premium_gift.xml"
+    },
+    {
+        "merged": "/root/.gradle/daemon/8.10.2/com.xipher.wrapper.app-mergeReleaseResources-72:/layout/item_folder_chip.xml",
+        "source": "/root/.gradle/daemon/8.10.2/com.xipher.wrapper.app-main-74:/layout/item_folder_chip.xml"
+    },
+    {
+        "merged": "/root/.gradle/daemon/8.10.2/com.xipher.wrapper.app-mergeReleaseResources-72:/layout/activity_channel_admin_permissions.xml",
+        "source": "/root/.gradle/daemon/8.10.2/com.xipher.wrapper.app-main-74:/layout/activity_channel_admin_permissions.xml"
+    },
+    {
+        "merged": "/root/.gradle/daemon/8.10.2/com.xipher.wrapper.app-mergeReleaseResources-72:/layout/activity_image_preview.xml",
+        "source": "/root/.gradle/daemon/8.10.2/com.xipher.wrapper.app-main-74:/layout/activity_image_preview.xml"
+    },
+    {
+        "merged": "/root/.gradle/daemon/8.10.2/com.xipher.wrapper.app-mergeReleaseResources-72:/layout/item_checklist_task.xml",
+        "source": "/root/.gradle/daemon/8.10.2/com.xipher.wrapper.app-main-74:/layout/item_checklist_task.xml"
+    },
+    {
+        "merged": "/root/.gradle/daemon/8.10.2/com.xipher.wrapper.app-mergeReleaseResources-72:/layout/activity_chat.xml",
+        "source": "/root/.gradle/daemon/8.10.2/com.xipher.wrapper.app-main-74:/layout/activity_chat.xml"
+    },
+    {
+        "merged": "/root/.gradle/daemon/8.10.2/com.xipher.wrapper.app-mergeReleaseResources-72:/layout/item_checklist_editor_row.xml",
+        "source": "/root/.gradle/daemon/8.10.2/com.xipher.wrapper.app-main-74:/layout/item_checklist_editor_row.xml"
+    },
+    {
+        "merged": "/root/.gradle/daemon/8.10.2/com.xipher.wrapper.app-mergeReleaseResources-72:/layout/item_settings_row.xml",
+        "source": "/root/.gradle/daemon/8.10.2/com.xipher.wrapper.app-main-74:/layout/item_settings_row.xml"
+    },
+    {
+        "merged": "/root/.gradle/daemon/8.10.2/com.xipher.wrapper.app-mergeReleaseResources-72:/layout/activity_notifications_settings.xml",
+        "source": "/root/.gradle/daemon/8.10.2/com.xipher.wrapper.app-main-74:/layout/activity_notifications_settings.xml"
+    },
+    {
+        "merged": "/root/.gradle/daemon/8.10.2/com.xipher.wrapper.app-mergeReleaseResources-72:/layout/fragment_group_overview.xml",
+        "source": "/root/.gradle/daemon/8.10.2/com.xipher.wrapper.app-main-74:/layout/fragment_group_overview.xml"
+    },
+    {
+        "merged": "/root/.gradle/daemon/8.10.2/com.xipher.wrapper.app-mergeReleaseResources-72:/layout/bottom_sheet_folder_editor.xml",
+        "source": "/root/.gradle/daemon/8.10.2/com.xipher.wrapper.app-main-74:/layout/bottom_sheet_folder_editor.xml"
+    },
+    {
+        "merged": "/root/.gradle/daemon/8.10.2/com.xipher.wrapper.app-mergeReleaseResources-72:/layout/bottom_sheet_member_actions.xml",
+        "source": "/root/.gradle/daemon/8.10.2/com.xipher.wrapper.app-main-74:/layout/bottom_sheet_member_actions.xml"
+    },
+    {
+        "merged": "/root/.gradle/daemon/8.10.2/com.xipher.wrapper.app-mergeReleaseResources-72:/layout/activity_chat_detail.xml",
+        "source": "/root/.gradle/daemon/8.10.2/com.xipher.wrapper.app-main-74:/layout/activity_chat_detail.xml"
+    },
+    {
+        "merged": "/root/.gradle/daemon/8.10.2/com.xipher.wrapper.app-mergeReleaseResources-72:/layout/sheet_profile_menu.xml",
+        "source": "/root/.gradle/daemon/8.10.2/com.xipher.wrapper.app-main-74:/layout/sheet_profile_menu.xml"
+    },
+    {
+        "merged": "/root/.gradle/daemon/8.10.2/com.xipher.wrapper.app-mergeReleaseResources-72:/layout/bottom_sheet_folders.xml",
+        "source": "/root/.gradle/daemon/8.10.2/com.xipher.wrapper.app-main-74:/layout/bottom_sheet_folders.xml"
+    },
+    {
+        "merged": "/root/.gradle/daemon/8.10.2/com.xipher.wrapper.app-mergeReleaseResources-72:/layout/activity_channel_catalog.xml",
+        "source": "/root/.gradle/daemon/8.10.2/com.xipher.wrapper.app-main-74:/layout/activity_channel_catalog.xml"
+    },
+    {
+        "merged": "/root/.gradle/daemon/8.10.2/com.xipher.wrapper.app-mergeReleaseResources-72:/layout/fragment_group_members.xml",
+        "source": "/root/.gradle/daemon/8.10.2/com.xipher.wrapper.app-main-74:/layout/fragment_group_members.xml"
+    },
+    {
+        "merged": "/root/.gradle/daemon/8.10.2/com.xipher.wrapper.app-mergeReleaseResources-72:/layout/fragment_group_settings.xml",
+        "source": "/root/.gradle/daemon/8.10.2/com.xipher.wrapper.app-main-74:/layout/fragment_group_settings.xml"
+    },
+    {
+        "merged": "/root/.gradle/daemon/8.10.2/com.xipher.wrapper.app-mergeReleaseResources-72:/layout/fragment_channel_members.xml",
+        "source": "/root/.gradle/daemon/8.10.2/com.xipher.wrapper.app-main-74:/layout/fragment_channel_members.xml"
+    },
+    {
+        "merged": "/root/.gradle/daemon/8.10.2/com.xipher.wrapper.app-mergeReleaseResources-72:/layout/activity_channel_management.xml",
+        "source": "/root/.gradle/daemon/8.10.2/com.xipher.wrapper.app-main-74:/layout/activity_channel_management.xml"
+    },
+    {
+        "merged": "/root/.gradle/daemon/8.10.2/com.xipher.wrapper.app-mergeReleaseResources-72:/layout/item_verification_requirement.xml",
+        "source": "/root/.gradle/daemon/8.10.2/com.xipher.wrapper.app-main-74:/layout/item_verification_requirement.xml"
+    },
+    {
+        "merged": "/root/.gradle/daemon/8.10.2/com.xipher.wrapper.app-mergeReleaseResources-72:/layout/activity_profile.xml",
+        "source": "/root/.gradle/daemon/8.10.2/com.xipher.wrapper.app-main-74:/layout/activity_profile.xml"
+    },
+    {
+        "merged": "/root/.gradle/daemon/8.10.2/com.xipher.wrapper.app-mergeReleaseResources-72:/layout/bottom_sheet_attachments.xml",
+        "source": "/root/.gradle/daemon/8.10.2/com.xipher.wrapper.app-main-74:/layout/bottom_sheet_attachments.xml"
+    },
+    {
+        "merged": "/root/.gradle/daemon/8.10.2/com.xipher.wrapper.app-mergeReleaseResources-72:/layout/item_group_member.xml",
+        "source": "/root/.gradle/daemon/8.10.2/com.xipher.wrapper.app-main-74:/layout/item_group_member.xml"
+    },
+    {
+        "merged": "/root/.gradle/daemon/8.10.2/com.xipher.wrapper.app-mergeReleaseResources-72:/layout/dialog_seed_phrase.xml",
+        "source": "/root/.gradle/daemon/8.10.2/com.xipher.wrapper.app-main-74:/layout/dialog_seed_phrase.xml"
+    },
+    {
+        "merged": "/root/.gradle/daemon/8.10.2/com.xipher.wrapper.app-mergeReleaseResources-72:/layout/activity_create_chat.xml",
+        "source": "/root/.gradle/daemon/8.10.2/com.xipher.wrapper.app-main-74:/layout/activity_create_chat.xml"
+    },
+    {
+        "merged": "/root/.gradle/daemon/8.10.2/com.xipher.wrapper.app-mergeReleaseResources-72:/layout/activity_group_info.xml",
+        "source": "/root/.gradle/daemon/8.10.2/com.xipher.wrapper.app-main-74:/layout/activity_group_info.xml"
+    },
+    {
+        "merged": "com.xipher.wrapper.app-mergeReleaseResources-72:/layout/drawer_menu.xml",
+        "source": "com.xipher.wrapper.app-main-74:/layout/drawer_menu.xml"
+    },
+    {
+        "merged": "/root/.gradle/daemon/8.10.2/com.xipher.wrapper.app-mergeReleaseResources-72:/layout/view_transfer_loader.xml",
+        "source": "/root/.gradle/daemon/8.10.2/com.xipher.wrapper.app-main-74:/layout/view_transfer_loader.xml"
+    },
+    {
+        "merged": "/root/.gradle/daemon/8.10.2/com.xipher.wrapper.app-mergeReleaseResources-72:/layout/activity_calls.xml",
+        "source": "/root/.gradle/daemon/8.10.2/com.xipher.wrapper.app-main-74:/layout/activity_calls.xml"
+    },
+    {
+        "merged": "/root/.gradle/daemon/8.10.2/com.xipher.wrapper.app-mergeReleaseResources-72:/layout/activity_map.xml",
+        "source": "/root/.gradle/daemon/8.10.2/com.xipher.wrapper.app-main-74:/layout/activity_map.xml"
+    },
+    {
+        "merged": "/root/.gradle/daemon/8.10.2/com.xipher.wrapper.app-mergeReleaseResources-72:/layout/activity_call.xml",
+        "source": "/root/.gradle/daemon/8.10.2/com.xipher.wrapper.app-main-74:/layout/activity_call.xml"
+    },
+    {
+        "merged": "/root/.gradle/daemon/8.10.2/com.xipher.wrapper.app-mergeReleaseResources-72:/layout/dialog_import_wallet.xml",
+        "source": "/root/.gradle/daemon/8.10.2/com.xipher.wrapper.app-main-74:/layout/dialog_import_wallet.xml"
+    },
+    {
+        "merged": "/root/.gradle/daemon/8.10.2/com.xipher.wrapper.app-mergeReleaseResources-72:/layout/activity_premium.xml",
+        "source": "/root/.gradle/daemon/8.10.2/com.xipher.wrapper.app-main-74:/layout/activity_premium.xml"
+    },
+    {
+        "merged": "/root/.gradle/daemon/8.10.2/com.xipher.wrapper.app-mergeReleaseResources-72:/layout/bottom_sheet_message_ttl.xml",
+        "source": "/root/.gradle/daemon/8.10.2/com.xipher.wrapper.app-main-74:/layout/bottom_sheet_message_ttl.xml"
+    },
+    {
+        "merged": "/root/.gradle/daemon/8.10.2/com.xipher.wrapper.app-mergeReleaseResources-72:/layout/activity_auth.xml",
+        "source": "/root/.gradle/daemon/8.10.2/com.xipher.wrapper.app-main-74:/layout/activity_auth.xml"
+    },
+    {
+        "merged": "/root/.gradle/daemon/8.10.2/com.xipher.wrapper.app-mergeReleaseResources-72:/layout/item_message.xml",
+        "source": "/root/.gradle/daemon/8.10.2/com.xipher.wrapper.app-main-74:/layout/item_message.xml"
+    },
+    {
+        "merged": "/root/.gradle/daemon/8.10.2/com.xipher.wrapper.app-mergeReleaseResources-72:/layout/item_folder_row.xml",
+        "source": "/root/.gradle/daemon/8.10.2/com.xipher.wrapper.app-main-74:/layout/item_folder_row.xml"
+    },
+    {
+        "merged": "/root/.gradle/daemon/8.10.2/com.xipher.wrapper.app-mergeReleaseResources-72:/layout/item_chat_unread_divider.xml",
+        "source": "/root/.gradle/daemon/8.10.2/com.xipher.wrapper.app-main-74:/layout/item_chat_unread_divider.xml"
+    },
+    {
+        "merged": "/root/.gradle/daemon/8.10.2/com.xipher.wrapper.app-mergeReleaseResources-72:/layout/drawer_menu.xml",
+        "source": "/root/.gradle/daemon/8.10.2/com.xipher.wrapper.app-main-74:/layout/drawer_menu.xml"
+    },
+    {
+        "merged": "/root/.gradle/daemon/8.10.2/com.xipher.wrapper.app-mergeReleaseResources-72:/layout/item_folder_chat_select.xml",
+        "source": "/root/.gradle/daemon/8.10.2/com.xipher.wrapper.app-main-74:/layout/item_folder_chat_select.xml"
+    },
+    {
+        "merged": "/root/.gradle/daemon/8.10.2/com.xipher.wrapper.app-mergeReleaseResources-72:/layout/bottom_sheet_verification.xml",
+        "source": "/root/.gradle/daemon/8.10.2/com.xipher.wrapper.app-main-74:/layout/bottom_sheet_verification.xml"
+    },
+    {
+        "merged": "/root/.gradle/daemon/8.10.2/com.xipher.wrapper.app-mergeReleaseResources-72:/layout/activity_premium_payment.xml",
+        "source": "/root/.gradle/daemon/8.10.2/com.xipher.wrapper.app-main-74:/layout/activity_premium_payment.xml"
+    },
+    {
+        "merged": "/root/.gradle/daemon/8.10.2/com.xipher.wrapper.app-mergeReleaseResources-72:/layout/activity_pin_unlock.xml",
+        "source": "/root/.gradle/daemon/8.10.2/com.xipher.wrapper.app-main-74:/layout/activity_pin_unlock.xml"
+    },
+    {
+        "merged": "/root/.gradle/daemon/8.10.2/com.xipher.wrapper.app-mergeReleaseResources-72:/layout/activity_location_share.xml",
+        "source": "/root/.gradle/daemon/8.10.2/com.xipher.wrapper.app-main-74:/layout/activity_location_share.xml"
+    },
+    {
+        "merged": "/root/.gradle/daemon/8.10.2/com.xipher.wrapper.app-mergeReleaseResources-72:/layout/dialog_receive.xml",
+        "source": "/root/.gradle/daemon/8.10.2/com.xipher.wrapper.app-main-74:/layout/dialog_receive.xml"
+    },
+    {
+        "merged": "/root/.gradle/daemon/8.10.2/com.xipher.wrapper.app-mergeReleaseResources-72:/layout/activity_settings_new.xml",
+        "source": "/root/.gradle/daemon/8.10.2/com.xipher.wrapper.app-main-74:/layout/activity_settings_new.xml"
+    },
+    {
+        "merged": "/root/.gradle/daemon/8.10.2/com.xipher.wrapper.app-mergeReleaseResources-72:/layout/activity_wallet.xml",
+        "source": "/root/.gradle/daemon/8.10.2/com.xipher.wrapper.app-main-74:/layout/activity_wallet.xml"
+    },
+    {
+        "merged": "/root/.gradle/daemon/8.10.2/com.xipher.wrapper.app-mergeReleaseResources-72:/layout/activity_settings.xml",
+        "source": "/root/.gradle/daemon/8.10.2/com.xipher.wrapper.app-main-74:/layout/activity_settings.xml"
+    },
+    {
+        "merged": "/root/.gradle/daemon/8.10.2/com.xipher.wrapper.app-mergeReleaseResources-72:/layout/bottom_sheet_channel_member_actions.xml",
+        "source": "/root/.gradle/daemon/8.10.2/com.xipher.wrapper.app-main-74:/layout/bottom_sheet_channel_member_actions.xml"
+    },
+    {
+        "merged": "/root/.gradle/daemon/8.10.2/com.xipher.wrapper.app-mergeReleaseResources-72:/layout/dialog_send.xml",
+        "source": "/root/.gradle/daemon/8.10.2/com.xipher.wrapper.app-main-74:/layout/dialog_send.xml"
+    },
+    {
+        "merged": "/root/.gradle/daemon/8.10.2/com.xipher.wrapper.app-mergeReleaseResources-72:/layout/activity_faq.xml",
+        "source": "/root/.gradle/daemon/8.10.2/com.xipher.wrapper.app-main-74:/layout/activity_faq.xml"
+    },
+    {
+        "merged": "/root/.gradle/daemon/8.10.2/com.xipher.wrapper.app-mergeReleaseResources-72:/layout/item_chat.xml",
+        "source": "/root/.gradle/daemon/8.10.2/com.xipher.wrapper.app-main-74:/layout/item_chat.xml"
+    },
+    {
+        "merged": "/root/.gradle/daemon/8.10.2/com.xipher.wrapper.app-mergeReleaseResources-72:/layout/item_catalog_channel.xml",
+        "source": "/root/.gradle/daemon/8.10.2/com.xipher.wrapper.app-main-74:/layout/item_catalog_channel.xml"
+    },
+    {
+        "merged": "/root/.gradle/daemon/8.10.2/com.xipher.wrapper.app-mergeReleaseResources-72:/layout/activity_main.xml",
+        "source": "/root/.gradle/daemon/8.10.2/com.xipher.wrapper.app-main-74:/layout/activity_main.xml"
+    },
+    {
+        "merged": "/root/.gradle/daemon/8.10.2/com.xipher.wrapper.app-mergeReleaseResources-72:/layout/fragment_channel_overview.xml",
+        "source": "/root/.gradle/daemon/8.10.2/com.xipher.wrapper.app-main-74:/layout/fragment_channel_overview.xml"
+    },
+    {
+        "merged": "/root/.gradle/daemon/8.10.2/com.xipher.wrapper.app-mergeReleaseResources-72:/layout/activity_channel_info.xml",
+        "source": "/root/.gradle/daemon/8.10.2/com.xipher.wrapper.app-main-74:/layout/activity_channel_info.xml"
+    }
+]

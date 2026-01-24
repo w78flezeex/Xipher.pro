@@ -1,0 +1,7 @@
+/root/xipher/build/CMakeFiles/xipher_server.dir
+/root/xipher/build/CMakeFiles/edit_cache.dir
+/root/xipher/build/CMakeFiles/rebuild_cache.dir
+/root/xipher/build/CMakeFiles/list_install_components.dir
+/root/xipher/build/CMakeFiles/install.dir
+/root/xipher/build/CMakeFiles/install/local.dir
+/root/xipher/build/CMakeFiles/install/strip.dir

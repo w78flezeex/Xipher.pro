@@ -1,0 +1,1446 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" href="/xipher.ico" type="image/x-icon">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Xipher Bot API - Документация</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <style>
+        .api-docs {
+            padding: 2rem 0;
+            background: var(--black-primary);
+        }
+        
+        .api-sidebar {
+            position: fixed;
+            left: 0;
+            top: 80px;
+            width: 280px;
+            height: calc(100vh - 80px);
+            background: var(--black-secondary);
+            border-right: 1px solid var(--border-color);
+            overflow-y: auto;
+            padding: 2rem 0;
+        }
+        
+        .api-sidebar::-webkit-scrollbar {
+            width: 6px;
+        }
+        
+        .api-sidebar::-webkit-scrollbar-track {
+            background: var(--black-primary);
+        }
+        
+        .api-sidebar::-webkit-scrollbar-thumb {
+            background: var(--purple-primary);
+            border-radius: 3px;
+        }
+        
+        .api-content {
+            margin-left: 280px;
+            padding: 2rem 4rem;
+            max-width: 1000px;
+        }
+        
+        .sidebar-section {
+            margin-bottom: 2rem;
+        }
+        
+        .sidebar-title {
+            padding: 0 1.5rem;
+            font-size: 0.85rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            margin-bottom: 0.75rem;
+            letter-spacing: 1px;
+        }
+        
+        .sidebar-link {
+            display: block;
+            padding: 0.75rem 1.5rem;
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            border-left: 3px solid transparent;
+        }
+        
+        .sidebar-link:hover {
+            color: var(--text-primary);
+            background: var(--black-tertiary);
+            border-left-color: var(--purple-primary);
+        }
+        
+        .sidebar-link.active {
+            color: var(--purple-primary);
+            background: rgba(147, 51, 234, 0.1);
+            border-left-color: var(--purple-primary);
+        }
+        
+        .api-section {
+            margin-bottom: 4rem;
+            scroll-margin-top: 100px;
+        }
+        
+        .api-section-title {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+            background: var(--gradient-purple);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .api-section-description {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+            line-height: 1.8;
+        }
+        
+        .method-card {
+            background: var(--gradient-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            transition: all 0.3s ease;
+        }
+        
+        .method-card:hover {
+            border-color: var(--border-hover);
+            box-shadow: var(--shadow-glow);
+        }
+        
+        .method-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .method-badge {
+            padding: 0.25rem 0.75rem;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+        
+        .method-badge.get {
+            background: #10b981;
+            color: white;
+        }
+        
+        .method-badge.post {
+            background: var(--purple-primary);
+            color: white;
+        }
+        
+        .method-name {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+        
+        .method-description {
+            color: var(--text-secondary);
+            margin-bottom: 1.5rem;
+            line-height: 1.7;
+        }
+        
+        .params-section {
+            margin-top: 2rem;
+        }
+        
+        .params-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+        }
+        
+        .param-item {
+            display: grid;
+            grid-template-columns: 200px 1fr;
+            gap: 1rem;
+            padding: 1rem;
+            background: var(--black-tertiary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            margin-bottom: 0.75rem;
+        }
+        
+        .param-name {
+            font-weight: 700;
+            color: var(--purple-primary);
+            font-family: 'Courier New', monospace;
+        }
+        
+        .param-info {
+            color: var(--text-secondary);
+        }
+        
+        .param-type {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            margin-top: 0.25rem;
+        }
+        
+        .code-example {
+            margin-top: 1.5rem;
+            background: var(--black-primary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        
+        .code-header {
+            padding: 0.75rem 1rem;
+            background: var(--black-tertiary);
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+        
+        .code-content {
+            padding: 1.5rem;
+            overflow-x: auto;
+        }
+        
+        .code-content pre {
+            margin: 0;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+        
+        .api-hero {
+            background: var(--gradient-hero);
+            padding: 4rem 0;
+            margin-bottom: 2rem;
+        }
+        
+        .api-hero-content {
+            margin-left: 280px;
+            padding: 0 4rem;
+            max-width: 1000px;
+        }
+        
+        .api-hero h1 {
+            font-size: 3.5rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+            background: var(--gradient-purple);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .api-hero p {
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+            line-height: 1.8;
+        }
+        
+        .quick-start {
+            background: var(--gradient-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 2rem;
+            margin: 2rem 0;
+        }
+        
+        .quick-start-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+        }
+        
+        @media (max-width: 1024px) {
+            .api-sidebar {
+                display: none;
+            }
+            
+            .api-content, .api-hero-content {
+                margin-left: 0;
+                padding: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-content">
+                <div class="logo">
+                    <a href="/" style="text-decoration: none; color: inherit;"><span class="logo-text">Xipher</span></a>
+                </div>
+                <div class="nav-links">
+                    <a href="/">Главная</a>
+                    <a href="/api">API</a>
+                    <a href="/login" class="btn-secondary">Войти</a>
+                    <a href="/register" class="btn-primary">Регистрация</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="api-sidebar">
+        <div class="sidebar-section">
+            <div class="sidebar-title">Начало работы</div>
+            <a href="#getting-started" class="sidebar-link">Быстрый старт</a>
+            <a href="#authentication" class="sidebar-link">Аутентификация</a>
+            <a href="#updates" class="sidebar-link">Получение обновлений</a>
+        </div>
+        <div class="sidebar-section">
+            <div class="sidebar-title">Методы</div>
+            <a href="#messaging" class="sidebar-link">Сообщения</a>
+            <a href="#media" class="sidebar-link">Медиа</a>
+            <a href="#keyboards" class="sidebar-link">Клавиатуры</a>
+            <a href="#admin" class="sidebar-link">Администрирование</a>
+            <a href="#payments" class="sidebar-link">Платежи</a>
+            <a href="#files" class="sidebar-link">Файлы</a>
+        </div>
+        <div class="sidebar-section">
+            <div class="sidebar-title">Расширенные</div>
+            <a href="#webhooks" class="sidebar-link">Webhooks</a>
+            <a href="#inline-mode" class="sidebar-link">Inline Mode</a>
+            <a href="#mini-apps" class="sidebar-link">Mini Apps</a>
+            <a href="#bot-builder" class="sidebar-link">Bot Builder</a>
+        </div>
+    </div>
+
+    <div class="api-hero">
+        <div class="api-hero-content">
+            <h1>Xipher Bot API</h1>
+            <p>Мощный API для создания ботов с 50,000+ функциями. Создавайте ботов для автоматизации, игр, платежей и многого другого.</p>
+        </div>
+    </div>
+
+    <div class="api-docs">
+        <div class="api-content">
+            <section id="getting-started" class="api-section">
+                <h2 class="api-section-title">Быстрый старт</h2>
+                <p class="api-section-description">Начните создавать ботов за несколько минут. Все запросы к API выполняются через HTTPS.</p>
+                
+                <div class="quick-start">
+                    <h3 class="quick-start-title">1. Создайте бота</h3>
+                    <p>Перейдите на страницу <a href="/bots" style="color: var(--purple-primary);">/bots</a> и создайте нового бота. Вы получите токен для доступа к API. Токен можно посмотреть, нажав кнопку "Показать токен" (потребуется ввести пароль от аккаунта).</p>
+                    
+                    <h3 class="quick-start-title" style="margin-top: 1.5rem;">2. Базовый запрос</h3>
+                    <p>Все запросы к API имеют следующий формат:</p>
+                    <div class="code-example">
+                        <div class="code-header">
+                            <i class="fas fa-link"></i>
+                            <span>URL</span>
+                        </div>
+                        <div class="code-content">
+                            <pre><code>https://api.xipher.pro/bot&lt;token&gt;/METHOD_NAME</code></pre>
+                        </div>
+                    </div>
+                    <p style="margin-top: 1rem; color: var(--text-muted); font-size: 0.9rem;">
+                        <strong>Важно:</strong> Токен вставляется <strong>без</strong> символов <code>&lt;</code> и <code>&gt;</code>. 
+                        Например, если токен <code>abc123</code>, то URL будет: <code>https://api.xipher.pro/botabc123/getMe</code>
+                    </p>
+                    
+                    <h3 class="quick-start-title" style="margin-top: 1.5rem;">3. Пример на Python</h3>
+                    <div class="code-example">
+                        <div class="code-header">
+                            <i class="fab fa-python"></i>
+                            <span>Python</span>
+                        </div>
+                        <div class="code-content">
+                            <pre><code class="language-python">import requests
+
+TOKEN = "YOUR_BOT_TOKEN"  # Получите токен на странице /bots
+BASE_URL = f"https://api.xipher.pro/bot{TOKEN}"
+
+# Получить информацию о боте
+response = requests.get(f"{BASE_URL}/getMe")
+bot_info = response.json()
+print(bot_info)
+
+# Отправить сообщение
+# chat_id - это user_id получателя (UUID строка)
+response = requests.post(f"{BASE_URL}/sendMessage", json={
+    "chat_id": "user-uuid-here",  # UUID пользователя
+    "text": "Привет! 👋"
+})
+print(response.json())</code></pre>
+                        </div>
+                    </div>
+                    
+                    <h3 class="quick-start-title" style="margin-top: 1.5rem;">4. Реализованные методы</h3>
+                    <p>Следующие методы Bot API полностью реализованы и готовы к использованию:</p>
+                    <ul style="color: var(--text-secondary); line-height: 2;">
+                        <li><strong>getMe</strong> - получить информацию о боте</li>
+                        <li><strong>getUpdates</strong> - получить обновления (Long Polling)</li>
+                        <li><strong>setWebhook</strong> - установить webhook</li>
+                        <li><strong>deleteWebhook</strong> - удалить webhook</li>
+                        <li><strong>getWebhookInfo</strong> - получить информацию о webhook</li>
+                        <li><strong>sendMessage</strong> - отправить текстовое сообщение</li>
+                        <li><strong>editMessageText</strong> - редактировать сообщение</li>
+                        <li><strong>deleteMessage</strong> - удалить сообщение</li>
+                        <li><strong>forwardMessage</strong> - переслать сообщение</li>
+                        <li><strong>copyMessage</strong> - скопировать сообщение</li>
+                        <li><strong>sendPhoto</strong> - отправить фото</li>
+                        <li><strong>sendAudio</strong> - отправить аудио</li>
+                        <li><strong>sendVideo</strong> - отправить видео</li>
+                        <li><strong>sendDocument</strong> - отправить документ</li>
+                        <li><strong>sendVoice</strong> - отправить голосовое сообщение</li>
+                    </ul>
+                </div>
+            </section>
+
+            <section id="authentication" class="api-section">
+                <h2 class="api-section-title">Аутентификация</h2>
+                <p class="api-section-description">Все запросы к API требуют токен бота в URL. Токен выдается при создании бота на странице <a href="/bots" style="color: var(--purple-primary);">/bots</a>. Для просмотра токена нажмите кнопку "Показать токен" и введите пароль от аккаунта.</p>
+                
+                <div class="method-card">
+                    <div class="method-header">
+                        <span class="method-badge get">GET</span>
+                        <span class="method-name">getMe</span>
+                    </div>
+                    <p class="method-description">Проверяет токен бота и возвращает основную информацию о боте.</p>
+                    
+                    <div class="code-example">
+                        <div class="code-header">
+                            <i class="fas fa-code"></i>
+                            <span>Пример запроса</span>
+                        </div>
+                        <div class="code-content">
+                            <pre><code class="language-bash">curl https://api.xipher.pro/bot&lt;token&gt;/getMe</code></pre>
+                        </div>
+                    </div>
+                    
+                    <div class="code-example" style="margin-top: 1rem;">
+                        <div class="code-header">
+                            <i class="fas fa-code"></i>
+                            <span>Ответ</span>
+                        </div>
+                        <div class="code-content">
+                            <pre><code class="language-json">{
+  "ok": true,
+  "result": {
+    "id": 123456789,
+    "is_bot": true,
+    "first_name": "My Bot",
+    "username": "mybot",
+    "can_join_groups": true,
+    "can_read_all_group_messages": false
+  }
+}</code></pre>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="keyboards" class="api-section">
+                <h2 class="api-section-title">Клавиатуры (Inline + Reply)</h2>
+                <p class="api-section-description">Inline keyboard добавляет кнопки под сообщением, а Reply keyboard показывает нижние кнопки в чате (как в Telegram).</p>
+                
+                <div class="method-card">
+                    <div class="method-header">
+                        <span class="method-badge info">INFO</span>
+                        <span class="method-name">Формат reply_markup</span>
+                    </div>
+                    <p class="method-description">Параметр <code>reply_markup</code> используется в методах <code>sendMessage</code>, <code>sendPhoto</code> и других для добавления кнопок.</p>
+                    
+                    <div class="code-example">
+                        <div class="code-header">
+                            <i class="fas fa-code"></i>
+                            <span>Структура inline_keyboard</span>
+                        </div>
+                        <div class="code-content">
+                            <pre><code class="language-json">{
+  "inline_keyboard": [
+    [
+      {"text": "Кнопка 1", "callback_data": "button1"},
+      {"text": "Кнопка 2", "callback_data": "button2"}
+    ],
+    [
+      {"text": "Открыть сайт", "url": "https://example.com"}
+    ]
+  ]
+}</code></pre>
+                        </div>
+                    </div>
+                    
+                    <div class="params-section" style="margin-top: 1rem;">
+                        <h3 class="params-title">Параметры кнопки</h3>
+                        <div class="param-item">
+                            <div class="param-name">text</div>
+                            <div class="param-info">
+                                Текст на кнопке
+                                <div class="param-type">String, обязательный</div>
+                            </div>
+                        </div>
+                        <div class="param-item">
+                            <div class="param-name">callback_data</div>
+                            <div class="param-info">
+                                Данные, которые будут отправлены боту при нажатии (до 64 байт)
+                                <div class="param-type">String, опциональный</div>
+                            </div>
+                        </div>
+                        <div class="param-item">
+                            <div class="param-name">url</div>
+                            <div class="param-info">
+                                URL для открытия при нажатии (вместо callback_data)
+                                <div class="param-type">String, опциональный</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="code-example" style="margin-top: 1rem;">
+                        <div class="code-header">
+                            <i class="fab fa-python"></i>
+                            <span>Пример использования</span>
+                        </div>
+                        <div class="code-content">
+                            <pre><code class="language-python">import requests
+
+TOKEN = "YOUR_BOT_TOKEN"
+BASE_URL = f"https://api.xipher.pro/bot{TOKEN}"
+
+# Создать клавиатуру с кнопками
+keyboard = {
+    "inline_keyboard": [
+        [
+            {"text": "✅ Да", "callback_data": "yes"},
+            {"text": "❌ Нет", "callback_data": "no"}
+        ],
+        [
+            {"text": "📖 Документация", "url": "https://xipher.pro/api"}
+        ]
+    ]
+}
+
+# Отправить сообщение с кнопками
+response = requests.post(f"{BASE_URL}/sendMessage", json={
+    "chat_id": "USER_UUID",
+    "text": "Хотите продолжить?",
+    "reply_markup": keyboard
+})</code></pre>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="method-card">
+                    <div class="method-header">
+                        <span class="method-badge info">INFO</span>
+                        <span class="method-name">Reply Keyboard (нижние кнопки)</span>
+                    </div>
+                    <p class="method-description">Reply keyboard отображается внизу чата и отправляет текст кнопки как сообщение пользователя.</p>
+
+                    <div class="code-example">
+                        <div class="code-header">
+                            <i class="fas fa-code"></i>
+                            <span>Структура keyboard</span>
+                        </div>
+                        <div class="code-content">
+                            <pre><code class="language-json">{
+  "keyboard": [
+    [{"text": "Ответить пользователю"}],
+    [{"text": "История"}, {"text": "Открыть чат"}]
+  ],
+  "resize_keyboard": true,
+  "one_time_keyboard": false,
+  "input_field_placeholder": "Выберите действие"
+}</code></pre>
+                        </div>
+                    </div>
+
+                    <div class="params-section" style="margin-top: 1rem;">
+                        <h3 class="params-title">Параметры</h3>
+                        <div class="param-item">
+                            <div class="param-name">keyboard</div>
+                            <div class="param-info">
+                                Массив рядов кнопок (каждый ряд — массив кнопок)
+                                <div class="param-type">Array, обязательный</div>
+                            </div>
+                        </div>
+                        <div class="param-item">
+                            <div class="param-name">resize_keyboard</div>
+                            <div class="param-info">
+                                Уменьшает высоту кнопок
+                                <div class="param-type">Boolean, опциональный</div>
+                            </div>
+                        </div>
+                        <div class="param-item">
+                            <div class="param-name">one_time_keyboard</div>
+                            <div class="param-info">
+                                Скрывает клавиатуру после нажатия
+                                <div class="param-type">Boolean, опциональный</div>
+                            </div>
+                        </div>
+                        <div class="param-item">
+                            <div class="param-name">input_field_placeholder</div>
+                            <div class="param-info">
+                                Плейсхолдер в поле ввода
+                                <div class="param-type">String, опциональный</div>
+                            </div>
+                        </div>
+                        <div class="param-item">
+                            <div class="param-name">remove_keyboard</div>
+                            <div class="param-info">
+                                Убирает активную клавиатуру
+                                <div class="param-type">Boolean, опциональный</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="code-example" style="margin-top: 1rem;">
+                        <div class="code-header">
+                            <i class="fab fa-python"></i>
+                            <span>Пример использования</span>
+                        </div>
+                        <div class="code-content">
+                            <pre><code class="language-python">import requests
+
+TOKEN = "YOUR_BOT_TOKEN"
+BASE_URL = f"https://api.xipher.pro/bot{TOKEN}"
+
+keyboard = {
+    "keyboard": [
+        [{"text": "Ответить пользователю"}],
+        [{"text": "История"}, {"text": "Открыть чат"}]
+    ],
+    "resize_keyboard": True,
+    "one_time_keyboard": False
+}
+
+requests.post(f"{BASE_URL}/sendMessage", json={
+    "chat_id": "USER_UUID",
+    "text": "Новый вопрос поддержки",
+    "reply_markup": keyboard
+})</code></pre>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="updates" class="api-section">
+                <h2 class="api-section-title">Получение обновлений</h2>
+                <p class="api-section-description">Есть два способа получения обновлений: Long Polling (getUpdates) и Webhooks.</p>
+                
+                <div class="method-card">
+                    <div class="method-header">
+                        <span class="method-badge get">GET</span>
+                        <span class="method-name">getUpdates</span>
+                    </div>
+                    <p class="method-description">Получает обновления через Long Polling. Используется для получения новых сообщений, callback query и других событий.</p>
+                    
+                    <div class="params-section">
+                        <h3 class="params-title">Параметры</h3>
+                        <div class="param-item">
+                            <div class="param-name">offset</div>
+                            <div class="param-info">
+                                Идентификатор первого обновления для возврата
+                                <div class="param-type">Integer, опциональный</div>
+                            </div>
+                        </div>
+                        <div class="param-item">
+                            <div class="param-name">limit</div>
+                            <div class="param-info">
+                                Количество обновлений для получения (1-100)
+                                <div class="param-type">Integer, опциональный, по умолчанию 100</div>
+                            </div>
+                        </div>
+                        <div class="param-item">
+                            <div class="param-name">timeout</div>
+                            <div class="param-info">
+                                Таймаут в секундах для Long Polling
+                                <div class="param-type">Integer, опциональный, по умолчанию 0</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="code-example">
+                        <div class="code-header">
+                            <i class="fab fa-python"></i>
+                            <span>Python</span>
+                        </div>
+                        <div class="code-content">
+                            <pre><code class="language-python">import requests
+
+TOKEN = "YOUR_BOT_TOKEN"
+BASE_URL = f"https://api.xipher.pro/bot{TOKEN}"
+
+# Получить обновления
+response = requests.get(f"{BASE_URL}/getUpdates?offset=0&limit=100&timeout=30")
+updates = response.json()
+print(updates)</code></pre>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="messaging" class="api-section">
+                <h2 class="api-section-title">Работа с сообщениями</h2>
+                <p class="api-section-description">Отправка, редактирование и управление сообщениями в чатах.</p>
+                
+                <div class="method-card">
+                    <div class="method-header">
+                        <span class="method-badge post">POST</span>
+                        <span class="method-name">sendMessage</span>
+                    </div>
+                    <p class="method-description">Отправляет текстовое сообщение в указанный чат.</p>
+                    
+                    <div class="params-section">
+                        <h3 class="params-title">Параметры</h3>
+                        <div class="param-item">
+                            <div class="param-name">chat_id</div>
+                            <div class="param-info">
+                                Уникальный идентификатор чата (UUID пользователя в формате строки)
+                                <div class="param-type">String (UUID), обязательный</div>
+                                <div style="margin-top: 0.5rem; color: var(--text-muted); font-size: 0.85rem;">
+                                    <strong>Примечание:</strong> В Xipher используется UUID формат для идентификаторов пользователей, а не числовые ID.
+                                </div>
+                            </div>
+                        </div>
+                        <div class="param-item">
+                            <div class="param-name">text</div>
+                            <div class="param-info">
+                                Текст сообщения (до 4096 символов)
+                                <div class="param-type">String, обязательный</div>
+                            </div>
+                        </div>
+                        <div class="param-item">
+                            <div class="param-name">parse_mode</div>
+                            <div class="param-info">
+                                Режим форматирования: "MarkdownV2", "HTML" или "None"
+                                <div class="param-type">String, опциональный</div>
+                            </div>
+                        </div>
+                        <div class="param-item">
+                            <div class="param-name">reply_to_message_id</div>
+                            <div class="param-info">
+                                ID сообщения, на которое отвечаем
+                                <div class="param-type">Integer, опциональный</div>
+                            </div>
+                        </div>
+                        <div class="param-item">
+                            <div class="param-name">reply_markup</div>
+                            <div class="param-info">
+                                Inline keyboard под сообщением или Reply keyboard (нижние кнопки)
+                                <div class="param-type">Object, опциональный</div>
+                                <div style="margin-top: 0.5rem; color: var(--text-muted); font-size: 0.85rem;">
+                                    <strong>Формат:</strong> <code>{"inline_keyboard": [[{"text": "Кнопка", "callback_data": "data"}]]}</code><br>
+                                    <strong>Reply keyboard:</strong> <code>{"keyboard": [[{"text": "Кнопка"}]], "resize_keyboard": true}</code><br>
+                                    См. раздел <a href="#keyboards" style="color: var(--purple-primary);">Клавиатуры</a> для подробностей.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="code-example">
+                        <div class="code-header">
+                            <i class="fab fa-python"></i>
+                            <span>Python</span>
+                        </div>
+                        <div class="code-content">
+                            <pre><code class="language-python">import requests
+
+TOKEN = "YOUR_BOT_TOKEN"
+BASE_URL = f"https://api.xipher.pro/bot{TOKEN}"
+
+response = requests.post(f"{BASE_URL}/sendMessage", json={
+    "chat_id": "user-uuid-here",  # UUID пользователя (строка)
+    "text": "Привет! Это мой первый бот 🤖",
+    "parse_mode": "HTML"
+})
+
+print(response.json())</code></pre>
+                        </div>
+                    </div>
+                    
+                    <div class="code-example" style="margin-top: 1rem;">
+                        <div class="code-header">
+                            <i class="fab fa-python"></i>
+                            <span>Пример с кнопками</span>
+                        </div>
+                        <div class="code-content">
+                            <pre><code class="language-python">import requests
+
+TOKEN = "YOUR_BOT_TOKEN"
+BASE_URL = f"https://api.xipher.pro/bot{TOKEN}"
+
+# Отправить сообщение с inline кнопками
+response = requests.post(f"{BASE_URL}/sendMessage", json={
+    "chat_id": "user-uuid-here",
+    "text": "Выберите действие:",
+    "reply_markup": {
+        "inline_keyboard": [
+            [
+                {"text": "✅ Принять", "callback_data": "accept"},
+                {"text": "❌ Отклонить", "callback_data": "reject"}
+            ],
+            [
+                {"text": "🌐 Открыть сайт", "url": "https://xipher.pro"}
+            ]
+        ]
+    }
+})
+
+print(response.json())</code></pre>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="method-card">
+                    <div class="method-header">
+                        <span class="method-badge post">POST</span>
+                        <span class="method-name">editMessageText</span>
+                    </div>
+                    <p class="method-description">Редактирует текст отправленного сообщения.</p>
+                    
+                    <div class="params-section">
+                        <h3 class="params-title">Параметры</h3>
+                        <div class="param-item">
+                            <div class="param-name">chat_id</div>
+                            <div class="param-info">
+                                ID чата, где находится сообщение
+                                <div class="param-type">Integer или String, обязательный</div>
+                            </div>
+                        </div>
+                        <div class="param-item">
+                            <div class="param-name">message_id</div>
+                            <div class="param-info">
+                                ID сообщения для редактирования
+                                <div class="param-type">Integer, обязательный</div>
+                            </div>
+                        </div>
+                        <div class="param-item">
+                            <div class="param-name">text</div>
+                            <div class="param-info">
+                                Новый текст сообщения
+                                <div class="param-type">String, обязательный</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="method-card">
+                    <div class="method-header">
+                        <span class="method-badge post">POST</span>
+                        <span class="method-name">deleteMessage</span>
+                    </div>
+                    <p class="method-description">Удаляет сообщение из чата.</p>
+                    
+                    <div class="params-section">
+                        <h3 class="params-title">Параметры</h3>
+                        <div class="param-item">
+                            <div class="param-name">chat_id</div>
+                            <div class="param-info">
+                                ID чата
+                                <div class="param-type">Integer или String, обязательный</div>
+                            </div>
+                        </div>
+                        <div class="param-item">
+                            <div class="param-name">message_id</div>
+                            <div class="param-info">
+                                ID сообщения для удаления
+                                <div class="param-type">Integer, обязательный</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="method-card">
+                    <div class="method-header">
+                        <span class="method-badge post">POST</span>
+                        <span class="method-name">forwardMessage</span>
+                    </div>
+                    <p class="method-description">Пересылает сообщение из одного чата в другой. Сохраняет информацию об исходном отправителе.</p>
+                    
+                    <div class="params-section">
+                        <h3 class="params-title">Параметры</h3>
+                        <div class="param-item">
+                            <div class="param-name">chat_id</div>
+                            <div class="param-info">
+                                ID чата, куда пересылать
+                                <div class="param-type">Integer или String, обязательный</div>
+                            </div>
+                        </div>
+                        <div class="param-item">
+                            <div class="param-name">from_chat_id</div>
+                            <div class="param-info">
+                                ID чата, откуда пересылать
+                                <div class="param-type">Integer или String, обязательный</div>
+                            </div>
+                        </div>
+                        <div class="param-item">
+                            <div class="param-name">message_id</div>
+                            <div class="param-info">
+                                ID сообщения для пересылки
+                                <div class="param-type">Integer, обязательный</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="method-card">
+                    <div class="method-header">
+                        <span class="method-badge post">POST</span>
+                        <span class="method-name">copyMessage</span>
+                    </div>
+                    <p class="method-description">Копирует сообщение из одного чата в другой. Не сохраняет информацию об исходном отправителе.</p>
+                    
+                    <div class="params-section">
+                        <h3 class="params-title">Параметры</h3>
+                        <div class="param-item">
+                            <div class="param-name">chat_id</div>
+                            <div class="param-info">
+                                ID чата, куда копировать
+                                <div class="param-type">Integer или String, обязательный</div>
+                            </div>
+                        </div>
+                        <div class="param-item">
+                            <div class="param-name">from_chat_id</div>
+                            <div class="param-info">
+                                ID чата, откуда копировать
+                                <div class="param-type">Integer или String, обязательный</div>
+                            </div>
+                        </div>
+                        <div class="param-item">
+                            <div class="param-name">message_id</div>
+                            <div class="param-info">
+                                ID сообщения для копирования
+                                <div class="param-type">Integer, обязательный</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="media" class="api-section">
+                <h2 class="api-section-title">Медиа и файлы</h2>
+                <p class="api-section-description">Отправка фотографий, видео, аудио, документов и других медиафайлов.</p>
+                
+                <div class="method-card">
+                    <div class="method-header">
+                        <span class="method-badge post">POST</span>
+                        <span class="method-name">sendPhoto</span>
+                    </div>
+                    <p class="method-description">Отправляет фотографию в чат. Поддерживаются файлы до 10 ГБ.</p>
+                    
+                    <div class="params-section">
+                        <h3 class="params-title">Параметры</h3>
+                        <div class="param-item">
+                            <div class="param-name">chat_id</div>
+                            <div class="param-info">
+                                ID чата
+                                <div class="param-type">Integer или String, обязательный</div>
+                            </div>
+                        </div>
+                        <div class="param-item">
+                            <div class="param-name">photo</div>
+                            <div class="param-info">
+                                Файл для отправки (file_id, URL или multipart/form-data)
+                                <div class="param-type">InputFile или String, обязательный</div>
+                            </div>
+                        </div>
+                        <div class="param-item">
+                            <div class="param-name">caption</div>
+                            <div class="param-info">
+                                Подпись к фотографии (до 1024 символов)
+                                <div class="param-type">String, опциональный</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="method-card">
+                    <div class="method-header">
+                        <span class="method-badge post">POST</span>
+                        <span class="method-name">sendAudio</span>
+                    </div>
+                    <p class="method-description">Отправляет аудиофайл в чат.</p>
+                    
+                    <div class="params-section">
+                        <h3 class="params-title">Параметры</h3>
+                        <div class="param-item">
+                            <div class="param-name">chat_id</div>
+                            <div class="param-info">
+                                ID чата
+                                <div class="param-type">Integer или String, обязательный</div>
+                            </div>
+                        </div>
+                        <div class="param-item">
+                            <div class="param-name">audio</div>
+                            <div class="param-info">
+                                Аудиофайл для отправки (file_id, URL или multipart/form-data)
+                                <div class="param-type">InputFile или String, обязательный</div>
+                            </div>
+                        </div>
+                        <div class="param-item">
+                            <div class="param-name">caption</div>
+                            <div class="param-info">
+                                Подпись к аудио (до 1024 символов)
+                                <div class="param-type">String, опциональный</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="method-card">
+                    <div class="method-header">
+                        <span class="method-badge post">POST</span>
+                        <span class="method-name">sendDocument</span>
+                    </div>
+                    <p class="method-description">Отправляет документ любого формата (до 10 ГБ).</p>
+                </div>
+
+                <div class="method-card">
+                    <div class="method-header">
+                        <span class="method-badge post">POST</span>
+                        <span class="method-name">sendVideo</span>
+                    </div>
+                    <p class="method-description">Отправляет видеофайл.</p>
+                </div>
+
+                <div class="method-card">
+                    <div class="method-header">
+                        <span class="method-badge post">POST</span>
+                        <span class="method-name">sendVoice</span>
+                    </div>
+                    <p class="method-description">Отправляет голосовое сообщение (OGG Opus).</p>
+                </div>
+            </section>
+
+            <section id="keyboards" class="api-section">
+                <h2 class="api-section-title">Клавиатуры и кнопки</h2>
+                <p class="api-section-description">Inline и Reply клавиатуры для взаимодействия с пользователями (кнопки под сообщением и нижние кнопки).</p>
+                
+                <div class="method-card">
+                    <div class="method-header">
+                        <span class="method-badge post">POST</span>
+                        <span class="method-name">InlineKeyboardMarkup</span>
+                    </div>
+                    <p class="method-description">Создает кнопки под сообщением. Кнопки могут открывать URL, отправлять callback или запускать Mini Apps.</p>
+                    
+                    <div class="code-example">
+                        <div class="code-header">
+                            <i class="fab fa-python"></i>
+                            <span>Пример</span>
+                        </div>
+                        <div class="code-content">
+                            <pre><code class="language-python">import requests
+
+TOKEN = "YOUR_BOT_TOKEN"
+BASE_URL = f"https://api.xipher.pro/bot{TOKEN}"
+
+keyboard = {
+    "inline_keyboard": [
+        [
+            {"text": "Кнопка 1", "callback_data": "button1"},
+            {"text": "Кнопка 2", "callback_data": "button2"}
+        ],
+        [
+            {"text": "Открыть сайт", "url": "https://example.com"}
+        ]
+    ]
+}
+
+requests.post(f"{BASE_URL}/sendMessage", json={
+    "chat_id": 123456789,
+    "text": "Выберите действие:",
+    "reply_markup": keyboard
+})</code></pre>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="method-card">
+                    <div class="method-header">
+                        <span class="method-badge post">POST</span>
+                        <span class="method-name">ReplyKeyboardMarkup</span>
+                    </div>
+                    <p class="method-description">Нижняя клавиатура (как в Telegram). Нажатие отправляет текст кнопки.</p>
+
+                    <div class="code-example">
+                        <div class="code-header">
+                            <i class="fab fa-python"></i>
+                            <span>Пример</span>
+                        </div>
+                        <div class="code-content">
+                            <pre><code class="language-python">import requests
+
+TOKEN = "YOUR_BOT_TOKEN"
+BASE_URL = f"https://api.xipher.pro/bot{TOKEN}"
+
+keyboard = {
+    "keyboard": [
+        [{"text": "Ответить пользователю"}],
+        [{"text": "История"}, {"text": "Открыть чат"}]
+    ],
+    "resize_keyboard": True
+}
+
+requests.post(f"{BASE_URL}/sendMessage", json={
+    "chat_id": 123456789,
+    "text": "Новый вопрос поддержки",
+    "reply_markup": keyboard
+})</code></pre>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="method-card">
+                    <div class="method-header">
+                        <span class="method-badge post">POST</span>
+                        <span class="method-name">answerCallbackQuery</span>
+                    </div>
+                    <p class="method-description">Отвечает на нажатие inline-кнопки. Может показать уведомление или открыть URL.</p>
+                </div>
+            </section>
+
+            <section id="admin" class="api-section">
+                <h2 class="api-section-title">Администрирование</h2>
+                <p class="api-section-description">Управление чатами, пользователями и правами доступа.</p>
+                
+                <div class="method-card">
+                    <div class="method-header">
+                        <span class="method-badge post">POST</span>
+                        <span class="method-name">banChatMember</span>
+                    </div>
+                    <p class="method-description">Банит пользователя в группе или канале.</p>
+                </div>
+
+                <div class="method-card">
+                    <div class="method-header">
+                        <span class="method-badge post">POST</span>
+                        <span class="method-name">promoteChatMember</span>
+                    </div>
+                    <p class="method-description">Назначает пользователя администратором с настраиваемыми правами.</p>
+                </div>
+
+                <div class="method-card">
+                    <div class="method-header">
+                        <span class="method-badge post">POST</span>
+                        <span class="method-name">setChatTitle</span>
+                    </div>
+                    <p class="method-description">Изменяет название группы или канала.</p>
+                </div>
+
+                <div class="method-card">
+                    <div class="method-header">
+                        <span class="method-badge post">POST</span>
+                        <span class="method-name">pinMessage</span>
+                    </div>
+                    <p class="method-description">Закрепляет сообщение в чате.</p>
+                </div>
+            </section>
+
+            <section id="payments" class="api-section">
+                <h2 class="api-section-title">Платежи и криптовалюты</h2>
+                <p class="api-section-description">Интеграция платежей с поддержкой криптовалют (USDT, TON, BTC).</p>
+                
+                <div class="method-card">
+                    <div class="method-header">
+                        <span class="method-badge post">POST</span>
+                        <span class="method-name">sendInvoice</span>
+                    </div>
+                    <p class="method-description">Отправляет счет на оплату в чат.</p>
+                    
+                    <div class="params-section">
+                        <h3 class="params-title">Параметры</h3>
+                        <div class="param-item">
+                            <div class="param-name">chat_id</div>
+                            <div class="param-info">
+                                ID чата
+                                <div class="param-type">Integer или String, обязательный</div>
+                            </div>
+                        </div>
+                        <div class="param-item">
+                            <div class="param-name">title</div>
+                            <div class="param-info">
+                                Название товара
+                                <div class="param-type">String, обязательный</div>
+                            </div>
+                        </div>
+                        <div class="param-item">
+                            <div class="param-name">description</div>
+                            <div class="param-info">
+                                Описание товара
+                                <div class="param-type">String, обязательный</div>
+                            </div>
+                        </div>
+                        <div class="param-item">
+                            <div class="param-name">currency</div>
+                            <div class="param-info">
+                                Валюта: "USDT", "TON", "BTC" или "RUB"
+                                <div class="param-type">String, обязательный</div>
+                            </div>
+                        </div>
+                        <div class="param-item">
+                            <div class="param-name">prices</div>
+                            <div class="param-info">
+                                Массив цен
+                                <div class="param-type">Array of LabeledPrice, обязательный</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="method-card">
+                    <div class="method-header">
+                        <span class="method-badge post">POST</span>
+                        <span class="method-name">createInvoiceLink</span>
+                    </div>
+                    <p class="method-description">Создает ссылку на оплату для использования в кнопках или вне мессенджера.</p>
+                </div>
+
+                <div class="method-card">
+                    <div class="method-header">
+                        <span class="method-badge post">POST</span>
+                        <span class="method-name">answerPreCheckoutQuery</span>
+                    </div>
+                    <p class="method-description">Подтверждает или отклоняет запрос на оплату перед списанием средств.</p>
+                </div>
+            </section>
+
+            <section id="files" class="api-section">
+                <h2 class="api-section-title">Работа с файлами</h2>
+                <p class="api-section-description">Получение информации о файлах и управление стикерами.</p>
+                
+                <div class="method-card">
+                    <div class="method-header">
+                        <span class="method-badge get">GET</span>
+                        <span class="method-name">getFile</span>
+                    </div>
+                    <p class="method-description">Получает информацию о файле по его file_id.</p>
+                </div>
+
+                <div class="method-card">
+                    <div class="method-header">
+                        <span class="method-badge post">POST</span>
+                        <span class="method-name">createNewStickerSet</span>
+                    </div>
+                    <p class="method-description">Создает новый набор стикеров.</p>
+                </div>
+            </section>
+
+            <section id="webhooks" class="api-section">
+                <h2 class="api-section-title">Webhooks</h2>
+                <p class="api-section-description">Настройка webhooks для получения обновлений в реальном времени.</p>
+                
+                <div class="method-card">
+                    <div class="method-header">
+                        <span class="method-badge post">POST</span>
+                        <span class="method-name">setWebhook</span>
+                    </div>
+                    <p class="method-description">Устанавливает URL для получения обновлений через webhook.</p>
+                    
+                    <div class="params-section">
+                        <h3 class="params-title">Параметры</h3>
+                        <div class="param-item">
+                            <div class="param-name">url</div>
+                            <div class="param-info">
+                                HTTPS URL для отправки обновлений
+                                <div class="param-type">String, обязательный</div>
+                            </div>
+                        </div>
+                        <div class="param-item">
+                            <div class="param-name">secret_token</div>
+                            <div class="param-info">
+                                Секретный токен для проверки подлинности
+                                <div class="param-type">String, опциональный</div>
+                            </div>
+                        </div>
+                        <div class="param-item">
+                            <div class="param-name">allowed_updates</div>
+                            <div class="param-info">
+                                Массив типов обновлений для получения
+                                <div class="param-type">Array of String, опциональный</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="code-example">
+                        <div class="code-header">
+                            <i class="fab fa-python"></i>
+                            <span>Пример</span>
+                        </div>
+                        <div class="code-content">
+                            <pre><code class="language-python">import requests
+
+TOKEN = "YOUR_BOT_TOKEN"
+BASE_URL = f"https://api.xipher.pro/bot{TOKEN}"
+
+requests.post(f"{BASE_URL}/setWebhook", json={
+    "url": "https://yourdomain.com/webhook",
+    "secret_token": "your_secret_token",
+    "allowed_updates": ["message", "callback_query"]
+})</code></pre>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="method-card">
+                    <div class="method-header">
+                        <span class="method-badge get">GET</span>
+                        <span class="method-name">getWebhookInfo</span>
+                    </div>
+                    <p class="method-description">Получает информацию о текущем webhook.</p>
+                </div>
+
+                <div class="method-card">
+                    <div class="method-header">
+                        <span class="method-badge post">POST</span>
+                        <span class="method-name">deleteWebhook</span>
+                    </div>
+                    <p class="method-description">Удаляет webhook и переключает бота на Long Polling.</p>
+                </div>
+            </section>
+
+            <section id="inline-mode" class="api-section">
+                <h2 class="api-section-title">Inline Mode</h2>
+                <p class="api-section-description">Позволяет пользователям использовать бота в любом чате через @username.</p>
+                
+                <div class="method-card">
+                    <div class="method-header">
+                        <span class="method-badge post">POST</span>
+                        <span class="method-name">answerInlineQuery</span>
+                    </div>
+                    <p class="method-description">Отвечает на inline-запрос пользователя.</p>
+                </div>
+            </section>
+
+            <section id="mini-apps" class="api-section">
+                <h2 class="api-section-title">Mini Apps</h2>
+                <p class="api-section-description">Создание веб-приложений, которые работают внутри мессенджера.</p>
+                
+                <div class="method-card">
+                    <div class="method-header">
+                        <span class="method-badge post">POST</span>
+                        <span class="method-name">openWebview</span>
+                    </div>
+                    <p class="method-description">Открывает веб-страницу внутри мессенджера (на весь экран или половину).</p>
+                </div>
+            </section>
+
+            <section id="bot-builder" class="api-section">
+                <h2 class="api-section-title">Bot Builder (No-Code)</h2>
+                <p class="api-section-description">Визуальный редактор для создания ботов без написания кода.</p>
+                
+                <div class="method-card">
+                    <div class="method-header">
+                        <span class="method-badge post">POST</span>
+                        <span class="method-name">saveBotFlow</span>
+                    </div>
+                    <p class="method-description">Сохраняет сценарий бота, созданный в визуальном редакторе.</p>
+                    
+                    <div class="code-example">
+                        <div class="code-header">
+                            <i class="fas fa-code"></i>
+                            <span>Пример JSON схемы</span>
+                        </div>
+                        <div class="code-content">
+                            <pre><code class="language-json">{
+  "nodes": [
+    {
+      "id": 1,
+      "type": "trigger_text",
+      "data": {"match": "/start"}
+    },
+    {
+      "id": 2,
+      "type": "send_message",
+      "data": {"text": "Привет! 👋"}
+    },
+    {
+      "id": 3,
+      "type": "send_buttons",
+      "data": {
+        "buttons": [
+          {"text": "Кнопка 1", "callback": "action1"},
+          {"text": "Кнопка 2", "callback": "action2"}
+        ]
+      }
+    }
+  ],
+  "edges": [
+    {"from": 1, "to": 2},
+    {"from": 2, "to": 3}
+  ]
+}</code></pre>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <span class="logo-text">Xipher</span>
+                </div>
+                <p>&copy; 2024 Xipher. Все права защищены.</p>
+                <div class="footer-links">
+                    <a href="/privacy">Политика конфиденциальности</a>
+                    <a href="/terms">Пользовательское соглашение</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Подсветка синтаксиса
+        hljs.highlightAll();
+        
+        // Активная ссылка в сайдбаре
+        document.querySelectorAll('.sidebar-link').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href');
+                const targetElement = document.querySelector(targetId);
+                
+                if (targetElement) {
+                    targetElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    
+                    // Обновляем активную ссылку
+                    document.querySelectorAll('.sidebar-link').forEach(l => l.classList.remove('active'));
+                    this.classList.add('active');
+                }
+            });
+        });
+        
+        // Обновление активной ссылки при прокрутке
+        const sections = document.querySelectorAll('.api-section');
+        const sidebarLinks = document.querySelectorAll('.sidebar-link');
+        
+        window.addEventListener('scroll', () => {
+            let current = '';
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                const sectionHeight = section.clientHeight;
+                if (window.pageYOffset >= sectionTop - 200) {
+                    current = section.getAttribute('id');
+                }
+            });
+            
+            sidebarLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href') === `#${current}`) {
+                    link.classList.add('active');
+                }
+            });
+        });
+    </script>
+</body>
+</html>

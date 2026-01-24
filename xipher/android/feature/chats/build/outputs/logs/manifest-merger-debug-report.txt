@@ -1,0 +1,16 @@
+-- Merging decision tree log ---
+manifest
+ADDED from /root/xipher/android/feature/chats/build/intermediates/tmp/ProcessLibraryManifest/debug/tempAndroidManifest12182332611054925264.xml:2:13-83
+INJECTED from /root/xipher/android/feature/chats/build/intermediates/tmp/ProcessLibraryManifest/debug/tempAndroidManifest12182332611054925264.xml:2:13-83
+	package
+		INJECTED from /root/xipher/android/feature/chats/build/intermediates/tmp/ProcessLibraryManifest/debug/tempAndroidManifest12182332611054925264.xml
+	xmlns:android
+		ADDED from /root/xipher/android/feature/chats/build/intermediates/tmp/ProcessLibraryManifest/debug/tempAndroidManifest12182332611054925264.xml:2:23-81
+uses-sdk
+INJECTED from /root/xipher/android/feature/chats/build/intermediates/tmp/ProcessLibraryManifest/debug/tempAndroidManifest12182332611054925264.xml reason: use-sdk injection requested
+INJECTED from /root/xipher/android/feature/chats/build/intermediates/tmp/ProcessLibraryManifest/debug/tempAndroidManifest12182332611054925264.xml
+INJECTED from /root/xipher/android/feature/chats/build/intermediates/tmp/ProcessLibraryManifest/debug/tempAndroidManifest12182332611054925264.xml
+	android:targetSdkVersion
+		INJECTED from /root/xipher/android/feature/chats/build/intermediates/tmp/ProcessLibraryManifest/debug/tempAndroidManifest12182332611054925264.xml
+	android:minSdkVersion
+		INJECTED from /root/xipher/android/feature/chats/build/intermediates/tmp/ProcessLibraryManifest/debug/tempAndroidManifest12182332611054925264.xml

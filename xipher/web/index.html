@@ -1,0 +1,1986 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" href="/xipher.ico" type="image/x-icon">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Xipher — защищённый мессенджер с ботами, звонками и API.">
+    <meta name="theme-color" content="#229ED9">
+    <title>Xipher — secure messenger</title>
+    <style>
+        :root {
+            --accent: #229ED9;
+            --accent-dark: #1b7fb3;
+            --bg: #ffffff;
+            --bg-alt: #f5f7fb;
+            --text: #0d1b2a;
+            --muted: #5b6775;
+            --border: #e3e7ee;
+            --surface: #ffffff;
+            --shadow: 0 10px 28px rgba(13, 27, 42, 0.08);
+            --radius: 12px;
+            --success: #22c55e;
+            --danger: #ef4444;
+            --hero-bg: linear-gradient(135deg, #0b1420 0%, #0f2433 55%, #0f2b3d 100%);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: "Inter", "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+            color: var(--text);
+            background: var(--bg);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        img {
+            max-width: 100%;
+            display: block;
+        }
+
+        button,
+        input {
+            font-family: inherit;
+        }
+
+        .container {
+            width: min(1120px, 92vw);
+            margin: 0 auto;
+        }
+
+        .section {
+            padding: 72px 0;
+        }
+
+        .section.alt {
+            background: var(--bg-alt);
+        }
+
+        .section-head {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 32px;
+        }
+
+        .section-head h2 {
+            font-size: clamp(1.6rem, 2.8vw, 2.4rem);
+            font-weight: 700;
+        }
+
+        .section-head p {
+            color: var(--muted);
+            max-width: 720px;
+        }
+
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            border: 0;
+        }
+
+        /* Header */
+        .site-header {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: rgba(255, 255, 255, 0.96);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .header-inner {
+            display: grid;
+            grid-template-columns: auto 1fr auto;
+            align-items: center;
+            gap: 16px;
+            padding: 16px 0;
+        }
+
+        .logo {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 700;
+            font-size: 1.1rem;
+        }
+
+        .logo-mark {
+            width: 34px;
+            height: 34px;
+            border-radius: 10px;
+            display: grid;
+            place-items: center;
+            background: linear-gradient(135deg, #229ED9 0%, #59c0ee 100%);
+            color: #ffffff;
+            font-weight: 700;
+        }
+
+        .site-nav {
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            gap: 16px;
+            flex-wrap: wrap;
+            font-size: 0.95rem;
+        }
+
+        .site-nav a {
+            color: var(--muted);
+        }
+
+        .site-nav a:hover,
+        .site-nav a:focus-visible {
+            color: var(--accent-dark);
+        }
+
+        .lang-toggle {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 4px;
+            border-radius: 999px;
+            border: 1px solid var(--border);
+            background: #ffffff;
+        }
+
+        .lang-toggle button {
+            padding: 6px 10px;
+            border-radius: 999px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--muted);
+            border: none;
+            background: none;
+            cursor: pointer;
+        }
+
+        .lang-toggle button.is-active {
+            background: var(--accent);
+            color: #ffffff;
+        }
+
+        .lang-divider {
+            color: var(--border);
+            font-size: 0.9rem;
+        }
+
+        /* Buttons */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 14px 22px;
+            border-radius: 10px;
+            font-weight: 600;
+            border: 1px solid transparent;
+            cursor: pointer;
+        }
+
+        .btn.primary {
+            background: var(--accent);
+            color: #ffffff;
+        }
+
+        .btn.primary:hover,
+        .btn.primary:focus-visible {
+            background: var(--accent-dark);
+        }
+
+        .btn.outline {
+            border-color: #ffffff;
+            color: #ffffff;
+            background: transparent;
+        }
+
+        .btn.ghost {
+            border-color: var(--border);
+            color: var(--text);
+            background: #ffffff;
+        }
+
+        .btn.light {
+            background: #ffffff;
+            color: #0b1420;
+            border-color: #ffffff;
+        }
+
+        /* Cards */
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 20px;
+        }
+
+        .card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 20px;
+            box-shadow: var(--shadow);
+        }
+
+        .card h3 {
+            margin-bottom: 10px;
+            font-size: 1.1rem;
+        }
+
+        .card p {
+            color: var(--muted);
+        }
+
+        .card-icon {
+            font-size: 1.4rem;
+            margin-bottom: 12px;
+        }
+
+        /* Hero */
+        .hero {
+            background: var(--hero-bg);
+            color: #ffffff;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+        }
+
+        .hero-inner {
+            padding: 120px 0 96px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .hero-kicker {
+            font-size: 0.95rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .hero h1 {
+            font-size: clamp(2.2rem, 4vw, 3.4rem);
+            line-height: 1.15;
+        }
+
+        .hero-subtitle {
+            font-size: clamp(1.05rem, 1.8vw, 1.25rem);
+            color: rgba(255, 255, 255, 0.85);
+            max-width: 640px;
+        }
+
+        .hero-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 14px;
+            margin-top: 6px;
+        }
+
+        .hero-note {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.95rem;
+        }
+
+        .hero-points {
+            list-style: none;
+            display: grid;
+            gap: 6px;
+            margin-top: 10px;
+        }
+
+        .hero-points li {
+            font-size: 0.95rem;
+            color: rgba(255, 255, 255, 0.82);
+        }
+
+        /* Now section */
+        .checklist {
+            list-style: none;
+            display: grid;
+            gap: 8px;
+            margin-top: 12px;
+        }
+
+        .checklist li {
+            position: relative;
+            padding-left: 26px;
+            color: var(--text);
+        }
+
+        .checklist li::before {
+            content: "✅";
+            position: absolute;
+            left: 0;
+            top: 0;
+        }
+
+        .checklist li span {
+            color: var(--muted);
+        }
+
+        /* Roadmap */
+        .roadmap {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 20px;
+        }
+
+        .roadmap-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            color: var(--muted);
+            font-size: 0.9rem;
+        }
+
+        .progress {
+            margin-top: 14px;
+            height: 8px;
+            background: var(--border);
+            border-radius: 999px;
+            overflow: hidden;
+        }
+
+        .progress span {
+            display: block;
+            height: 100%;
+            width: var(--progress);
+            background: var(--accent);
+        }
+
+        /* Social */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 18px;
+            margin-bottom: 24px;
+        }
+
+        .stat-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 18px;
+            box-shadow: var(--shadow);
+        }
+
+        .stat-number {
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: var(--text);
+        }
+
+        .stat-label {
+            color: var(--muted);
+            font-size: 0.9rem;
+        }
+
+        .use-list {
+            list-style: none;
+            display: grid;
+            gap: 10px;
+        }
+
+        .use-list li {
+            display: flex;
+            align-items: flex-start;
+            gap: 8px;
+            color: var(--text);
+        }
+
+        /* Compare */
+        .compare-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 12px;
+            background: var(--surface);
+            border-radius: var(--radius);
+            overflow: hidden;
+            box-shadow: var(--shadow);
+        }
+
+        .compare-table th,
+        .compare-table td {
+            padding: 14px 16px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .compare-table th {
+            background: var(--bg-alt);
+            text-align: left;
+            font-weight: 600;
+        }
+
+        .compare-table td:nth-child(2),
+        .compare-table td:nth-child(3),
+        .compare-table td:nth-child(4),
+        .compare-table th:nth-child(2),
+        .compare-table th:nth-child(3),
+        .compare-table th:nth-child(4) {
+            text-align: center;
+        }
+
+        .compare-note {
+            margin-top: 16px;
+            color: var(--muted);
+        }
+
+        /* Install */
+        .steps {
+            list-style: decimal;
+            padding-left: 18px;
+            display: grid;
+            gap: 8px;
+            color: var(--muted);
+            margin: 12px 0 16px;
+        }
+
+        /* FAQ */
+        .faq-list {
+            display: grid;
+            gap: 12px;
+        }
+
+        .faq-item {
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 14px 18px;
+            background: var(--surface);
+        }
+
+        .faq-item summary {
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .faq-item p {
+            margin-top: 10px;
+            color: var(--muted);
+        }
+
+        /* Open Source */
+        .opensource {
+            background: linear-gradient(135deg, #0d1117 0%, #161b22 100%);
+            color: #ffffff;
+        }
+
+        .opensource .section-head h2,
+        .opensource .section-head p {
+            color: #ffffff;
+        }
+
+        .opensource .section-head p {
+            opacity: 0.8;
+        }
+
+        .opensource-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            align-items: center;
+        }
+
+        @media (max-width: 768px) {
+            .opensource-content {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+        }
+
+        .opensource-text {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .opensource-text h3 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #ffffff;
+        }
+
+        .opensource-text p {
+            color: rgba(255, 255, 255, 0.75);
+            font-size: 1.05rem;
+            line-height: 1.7;
+        }
+
+        .opensource-badges {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        @media (max-width: 768px) {
+            .opensource-badges {
+                justify-content: center;
+            }
+        }
+
+        .opensource-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 16px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 8px;
+            color: #ffffff;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+
+        .opensource-badge:hover {
+            background: rgba(255, 255, 255, 0.15);
+            border-color: rgba(255, 255, 255, 0.25);
+        }
+
+        .opensource-badge svg {
+            width: 18px;
+            height: 18px;
+        }
+
+        .github-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 14px 24px;
+            background: #ffffff;
+            color: #0d1117;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 1rem;
+            text-decoration: none;
+            transition: all 0.2s ease;
+        }
+
+        .github-btn:hover {
+            background: #f0f0f0;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+        }
+
+        .github-btn svg {
+            width: 22px;
+            height: 22px;
+        }
+
+        .opensource-visual {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 24px;
+        }
+
+        .code-preview {
+            background: #0d1117;
+            border: 1px solid #30363d;
+            border-radius: 12px;
+            padding: 20px;
+            font-family: 'Fira Code', 'Monaco', monospace;
+            font-size: 0.85rem;
+            color: #c9d1d9;
+            width: 100%;
+            max-width: 400px;
+            overflow-x: auto;
+        }
+
+        .code-preview .comment {
+            color: #8b949e;
+        }
+
+        .code-preview .keyword {
+            color: #ff7b72;
+        }
+
+        .code-preview .string {
+            color: #a5d6ff;
+        }
+
+        .code-preview .function {
+            color: #d2a8ff;
+        }
+
+        .trust-points {
+            display: grid;
+            gap: 12px;
+            width: 100%;
+            max-width: 400px;
+        }
+
+        .trust-point {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 16px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 0.95rem;
+        }
+
+        .trust-point-icon {
+            font-size: 1.3rem;
+        }
+
+        /* CTA */
+        .cta {
+            background: var(--bg-alt);
+        }
+
+        .cta-inner {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .cta-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 14px;
+        }
+
+        .newsletter {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .newsletter input {
+            flex: 1 1 220px;
+            padding: 12px 14px;
+            border-radius: 10px;
+            border: 1px solid var(--border);
+        }
+
+        .newsletter-note {
+            color: var(--muted);
+            font-size: 0.9rem;
+        }
+
+        /* Footer */
+        .site-footer {
+            padding: 28px 0 40px;
+            border-top: 1px solid var(--border);
+            background: var(--bg);
+        }
+
+        .footer-inner {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            color: var(--muted);
+            font-size: 0.9rem;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .footer-company {
+            flex-basis: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            color: var(--muted);
+            font-size: 0.85rem;
+        }
+
+        .footer-company span {
+            display: block;
+        }
+
+        /* Modal */
+        .modal {
+            position: fixed;
+            inset: 0;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 24px;
+            background: rgba(6, 10, 18, 0.7);
+            z-index: 200;
+        }
+
+        .modal.is-open {
+            display: flex;
+        }
+
+        .modal-card {
+            background: #ffffff;
+            border-radius: 16px;
+            padding: 24px;
+            max-width: 520px;
+            width: 100%;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.25);
+        }
+
+        .modal-card h3 {
+            margin-bottom: 8px;
+        }
+
+        .modal-card p {
+            color: var(--muted);
+        }
+
+        .modal-steps {
+            margin: 16px 0 20px;
+            padding-left: 20px;
+            display: grid;
+            gap: 8px;
+        }
+
+        .modal-close {
+            margin-top: 12px;
+        }
+
+        body.modal-open {
+            overflow: hidden;
+        }
+
+        @media (max-width: 900px) {
+            .header-inner {
+                grid-template-columns: 1fr;
+            }
+            .site-nav {
+                justify-content: flex-start;
+            }
+        }
+
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --bg: #0b1117;
+                --bg-alt: #0f1722;
+                --text: #e6edf6;
+                --muted: #a0acb8;
+                --border: #1e2a38;
+                --surface: #111a24;
+                --shadow: none;
+            }
+            .site-header {
+                background: rgba(11, 17, 23, 0.95);
+            }
+            .btn.ghost {
+                background: #141e2a;
+                color: var(--text);
+                border-color: #1f2b3a;
+            }
+            .modal-card {
+                background: #0f1722;
+                color: var(--text);
+            }
+            .modal-card p {
+                color: var(--muted);
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="site-header">
+        <div class="container header-inner">
+            <a class="logo" href="/" aria-label="Xipher">
+                <span class="logo-mark">X</span>
+                <span class="logo-text" data-i18n="brand"></span>
+            </a>
+            <nav class="site-nav" aria-label="Primary">
+                <a href="#why" data-i18n="nav.why"></a>
+                <a href="#now" data-i18n="nav.now"></a>
+                <a href="#soon" data-i18n="nav.soon"></a>
+                <a href="#compare" data-i18n="nav.compare"></a>
+                <a href="#opensource" data-i18n="nav.opensource"></a>
+                <a href="#install" data-i18n="nav.install"></a>
+                <a href="#faq" data-i18n="nav.faq"></a>
+                <a href="/login" data-i18n="nav.login"></a>
+            </nav>
+            <div class="lang-toggle" role="group" aria-labelledby="lang-label">
+                <span class="sr-only" id="lang-label" data-i18n="lang.label"></span>
+                <button type="button" data-lang="ru" data-i18n="lang.ru"></button>
+                <span class="lang-divider">/</span>
+                <button type="button" data-lang="en" data-i18n="lang.en"></button>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <!-- Hero -->
+        <section id="hero" class="hero">
+            <div class="container hero-inner">
+                <div class="hero-kicker" data-i18n="hero.kicker"></div>
+                <h1 data-i18n="hero.title"></h1>
+                <p class="hero-subtitle" data-i18n="hero.subtitle"></p>
+                <div class="hero-actions">
+                    <a class="btn primary" href="https://www.rustore.ru/catalog/app/com.xipher.wrapper" data-i18n="hero.androidBtn"></a>
+                    <button class="btn outline" type="button" data-open-modal data-i18n="hero.iosBtn"></button>
+                </div>
+                <div class="hero-note" data-i18n="hero.note"></div>
+                <ul class="hero-points">
+                    <li data-i18n="hero.statFallback" data-stat-template="hero.stat" data-stat-key="users"></li>
+                    <li data-i18n="hero.roadmap1"></li>
+                    <li data-i18n="hero.roadmap2"></li>
+                    <li data-i18n="hero.roadmap3"></li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- Why Xipher -->
+        <section id="why" class="section">
+            <div class="container section-head">
+                <h2 data-i18n="why.title"></h2>
+                <p data-i18n="why.subtitle"></p>
+            </div>
+            <div class="container card-grid">
+                <article class="card">
+                    <div class="card-icon">🔒</div>
+                    <h3 data-i18n="why.cards.security.title"></h3>
+                    <p data-i18n="why.cards.security.text"></p>
+                </article>
+                <article class="card">
+                    <div class="card-icon">🚀</div>
+                    <h3 data-i18n="why.cards.familiar.title"></h3>
+                    <p data-i18n="why.cards.familiar.text"></p>
+                </article>
+                <article class="card">
+                    <div class="card-icon">🎯</div>
+                    <h3 data-i18n="why.cards.unique.title"></h3>
+                    <p data-i18n="why.cards.unique.text"></p>
+                </article>
+            </div>
+        </section>
+
+        <!-- What works now -->
+        <section id="now" class="section alt">
+            <div class="container section-head">
+                <h2 data-i18n="now.title"></h2>
+                <p data-i18n="now.subtitle"></p>
+            </div>
+            <div class="container card-grid">
+                <article class="card">
+                    <h3 data-i18n="now.categories.messenger.title"></h3>
+                    <ul class="checklist">
+                        <li data-i18n="now.categories.messenger.point1"></li>
+                        <li data-i18n="now.categories.messenger.point2"></li>
+                        <li data-i18n="now.categories.messenger.point3"></li>
+                        <li data-i18n="now.categories.messenger.point4"></li>
+                    </ul>
+                </article>
+                <article class="card">
+                    <h3 data-i18n="now.categories.calls.title"></h3>
+                    <ul class="checklist">
+                        <li data-i18n="now.categories.calls.point1"></li>
+                        <li data-i18n="now.categories.calls.point2"></li>
+                        <li data-i18n="now.categories.calls.point3"></li>
+                        <li data-i18n="now.categories.calls.point4"></li>
+                    </ul>
+                </article>
+                <article class="card">
+                    <h3 data-i18n="now.categories.bots.title"></h3>
+                    <ul class="checklist">
+                        <li data-i18n="now.categories.bots.point1"></li>
+                        <li data-i18n="now.categories.bots.point2"></li>
+                        <li data-i18n="now.categories.bots.point3"></li>
+                        <li data-i18n="now.categories.bots.point4"></li>
+                    </ul>
+                </article>
+                <article class="card">
+                    <h3 data-i18n="now.categories.ease.title"></h3>
+                    <ul class="checklist">
+                        <li data-i18n="now.categories.ease.point1"></li>
+                        <li data-i18n="now.categories.ease.point2"></li>
+                        <li data-i18n="now.categories.ease.point3"></li>
+                        <li data-i18n="now.categories.ease.point4"></li>
+                    </ul>
+                </article>
+                <article class="card">
+                    <h3 data-i18n="now.categories.security.title"></h3>
+                    <ul class="checklist">
+                        <li data-i18n="now.categories.security.point1"></li>
+                        <li data-i18n="now.categories.security.point2"></li>
+                        <li data-i18n="now.categories.security.point3"></li>
+                        <li data-i18n="now.categories.security.point4"></li>
+                    </ul>
+                </article>
+            </div>
+        </section>
+
+        <!-- Roadmap -->
+        <section id="soon" class="section">
+            <div class="container section-head">
+                <h2 data-i18n="soon.title"></h2>
+                <p data-i18n="soon.subtitle"></p>
+            </div>
+            <div class="container roadmap">
+                <article class="card">
+                    <div class="roadmap-header">
+                        <span data-i18n="soon.items.stego.month"></span>
+                        <span data-i18n="soon.items.stego.progress"></span>
+                    </div>
+                    <h3 data-i18n="soon.items.stego.title"></h3>
+                    <p data-i18n="soon.items.stego.text"></p>
+                    <div class="progress" style="--progress: 80%">
+                        <span></span>
+                    </div>
+                </article>
+                <article class="card">
+                    <div class="roadmap-header">
+                        <span data-i18n="soon.items.mesh.month"></span>
+                        <span data-i18n="soon.items.mesh.progress"></span>
+                    </div>
+                    <h3 data-i18n="soon.items.mesh.title"></h3>
+                    <p data-i18n="soon.items.mesh.text"></p>
+                    <div class="progress" style="--progress: 50%">
+                        <span></span>
+                    </div>
+                </article>
+                <article class="card">
+                    <div class="roadmap-header">
+                        <span data-i18n="soon.items.geolock.month"></span>
+                        <span data-i18n="soon.items.geolock.progress"></span>
+                    </div>
+                    <h3 data-i18n="soon.items.geolock.title"></h3>
+                    <p data-i18n="soon.items.geolock.text"></p>
+                    <div class="progress" style="--progress: 30%">
+                        <span></span>
+                    </div>
+                </article>
+            </div>
+        </section>
+
+        <!-- Social proof -->
+        <section id="social" class="section alt">
+            <div class="container section-head">
+                <h2 data-i18n="social.title"></h2>
+                <p data-i18n="social.subtitle"></p>
+            </div>
+            <div class="container stats-grid">
+                <div class="stat-card">
+                    <div class="stat-number" data-stat="active_24h">—</div>
+                    <div class="stat-label" data-i18n="social.stats.active"></div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" data-stat="messages_today">—</div>
+                    <div class="stat-label" data-i18n="social.stats.messages"></div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" data-stat="users">—</div>
+                    <div class="stat-label" data-i18n="social.stats.users"></div>
+                </div>
+            </div>
+            <div class="container">
+                <p data-i18n="social.groupsTitle"></p>
+                <ul class="use-list">
+                    <li><span>👨‍💻</span><span data-i18n="social.groups.dev"></span></li>
+                    <li><span>✏️</span><span data-i18n="social.groups.freelance"></span></li>
+                    <li><span>🔐</span><span data-i18n="social.groups.confidential"></span></li>
+                    <li><span>🌍</span><span data-i18n="social.groups.censorship"></span></li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- Compare -->
+        <section id="compare" class="section">
+            <div class="container section-head">
+                <h2 data-i18n="compare.title"></h2>
+                <p data-i18n="compare.subtitle"></p>
+            </div>
+            <div class="container">
+                <table class="compare-table">
+                    <thead>
+                        <tr>
+                            <th data-i18n="compare.feature"></th>
+                            <th data-i18n="compare.xipher"></th>
+                            <th data-i18n="compare.telegram"></th>
+                            <th data-i18n="compare.signal"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td data-i18n="compare.rows.panic"></td>
+                            <td data-i18n="compare.values.panic.x"></td>
+                            <td data-i18n="compare.values.panic.t"></td>
+                            <td data-i18n="compare.values.panic.s"></td>
+                        </tr>
+                        <tr>
+                            <td data-i18n="compare.rows.botide"></td>
+                            <td data-i18n="compare.values.botide.x"></td>
+                            <td data-i18n="compare.values.botide.t"></td>
+                            <td data-i18n="compare.values.botide.s"></td>
+                        </tr>
+                        <tr>
+                            <td data-i18n="compare.rows.e2ee"></td>
+                            <td data-i18n="compare.values.e2ee.x"></td>
+                            <td data-i18n="compare.values.e2ee.t"></td>
+                            <td data-i18n="compare.values.e2ee.s"></td>
+                        </tr>
+                        <tr>
+                            <td data-i18n="compare.rows.business"></td>
+                            <td data-i18n="compare.values.business.x"></td>
+                            <td data-i18n="compare.values.business.t"></td>
+                            <td data-i18n="compare.values.business.s"></td>
+                        </tr>
+                        <tr>
+                            <td data-i18n="compare.rows.mesh"></td>
+                            <td data-i18n="compare.values.mesh.x"></td>
+                            <td data-i18n="compare.values.mesh.t"></td>
+                            <td data-i18n="compare.values.mesh.s"></td>
+                        </tr>
+                        <tr>
+                            <td data-i18n="compare.rows.stego"></td>
+                            <td data-i18n="compare.values.stego.x"></td>
+                            <td data-i18n="compare.values.stego.t"></td>
+                            <td data-i18n="compare.values.stego.s"></td>
+                        </tr>
+                        <tr>
+                            <td data-i18n="compare.rows.bots"></td>
+                            <td data-i18n="compare.values.bots.x"></td>
+                            <td data-i18n="compare.values.bots.t"></td>
+                            <td data-i18n="compare.values.bots.s"></td>
+                        </tr>
+                    </tbody>
+                </table>
+                <p class="compare-note" data-i18n="compare.note"></p>
+            </div>
+        </section>
+
+        <!-- Install -->
+        <section id="install" class="section alt">
+            <div class="container section-head">
+                <h2 data-i18n="install.title"></h2>
+                <p data-i18n="install.subtitle"></p>
+            </div>
+            <div class="container card-grid">
+                <article class="card">
+                    <h3 data-i18n="install.android.title"></h3>
+                    <ol class="steps">
+                        <li data-i18n="install.android.step1"></li>
+                        <li data-i18n="install.android.step2"></li>
+                        <li data-i18n="install.android.step3"></li>
+                        <li data-i18n="install.android.step4"></li>
+                    </ol>
+                    <a class="btn primary" href="https://www.rustore.ru/catalog/app/com.xipher.wrapper" data-i18n="install.android.cta"></a>
+                </article>
+                <article class="card">
+                    <h3 data-i18n="install.ios.title"></h3>
+                    <ol class="steps">
+                        <li data-i18n="install.ios.step1"></li>
+                        <li data-i18n="install.ios.step2"></li>
+                        <li data-i18n="install.ios.step3"></li>
+                        <li data-i18n="install.ios.step4"></li>
+                    </ol>
+                    <button class="btn ghost" type="button" data-open-modal data-i18n="install.ios.cta"></button>
+                </article>
+                <article class="card">
+                    <h3 data-i18n="install.web.title"></h3>
+                    <ol class="steps">
+                        <li data-i18n="install.web.step1"></li>
+                        <li data-i18n="install.web.step2"></li>
+                        <li data-i18n="install.web.step3"></li>
+                        <li data-i18n="install.web.step4"></li>
+                    </ol>
+                    <a class="btn ghost" href="/login" data-i18n="install.web.cta"></a>
+                </article>
+            </div>
+        </section>
+
+        <!-- FAQ -->
+        <section id="faq" class="section">
+            <div class="container section-head">
+                <h2 data-i18n="faq.title"></h2>
+                <p data-i18n="faq.subtitle"></p>
+            </div>
+            <div class="container faq-list">
+                <details class="faq-item">
+                    <summary data-i18n="faq.q1"></summary>
+                    <p data-i18n="faq.a1"></p>
+                </details>
+                <details class="faq-item">
+                    <summary data-i18n="faq.q2"></summary>
+                    <p data-i18n="faq.a2"></p>
+                </details>
+                <details class="faq-item">
+                    <summary data-i18n="faq.q3"></summary>
+                    <p data-i18n="faq.a3"></p>
+                </details>
+                <details class="faq-item">
+                    <summary data-i18n="faq.q4"></summary>
+                    <p data-i18n="faq.a4"></p>
+                </details>
+                <details class="faq-item">
+                    <summary data-i18n="faq.q5"></summary>
+                    <p data-i18n="faq.a5"></p>
+                </details>
+                <details class="faq-item">
+                    <summary data-i18n="faq.q6"></summary>
+                    <p data-i18n="faq.a6"></p>
+                </details>
+                <details class="faq-item">
+                    <summary data-i18n="faq.q7"></summary>
+                    <p data-i18n="faq.a7"></p>
+                </details>
+                <details class="faq-item">
+                    <summary data-i18n="faq.q8"></summary>
+                    <p data-i18n="faq.a8"></p>
+                </details>
+            </div>
+        </section>
+
+        <!-- Open Source -->
+        <section id="opensource" class="section opensource">
+            <div class="container section-head">
+                <h2 data-i18n="opensource.title"></h2>
+                <p data-i18n="opensource.subtitle"></p>
+            </div>
+            <div class="container opensource-content">
+                <div class="opensource-text">
+                    <h3 data-i18n="opensource.headline"></h3>
+                    <p data-i18n="opensource.description"></p>
+                    <div class="opensource-badges">
+                        <span class="opensource-badge">
+                            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 1C5.925 1 1 5.925 1 12c0 4.86 3.152 8.983 7.523 10.437.55.101.75-.238.75-.53 0-.26-.009-.952-.014-1.87-3.062.665-3.708-1.475-3.708-1.475-.5-1.27-1.222-1.608-1.222-1.608-.999-.682.075-.669.075-.669 1.105.078 1.686 1.134 1.686 1.134.981 1.681 2.575 1.195 3.202.914.1-.71.384-1.195.699-1.47-2.445-.278-5.015-1.222-5.015-5.44 0-1.202.429-2.184 1.133-2.954-.114-.278-.491-1.397.108-2.912 0 0 .923-.296 3.025 1.128A10.54 10.54 0 0112 6.836c.935.005 1.876.126 2.756.37 2.1-1.424 3.022-1.128 3.022-1.128.6 1.515.223 2.634.11 2.912.706.77 1.132 1.752 1.132 2.954 0 4.228-2.574 5.159-5.025 5.432.395.34.747 1.011.747 2.037 0 1.47-.013 2.657-.013 3.017 0 .294.198.637.756.529C19.851 20.979 23 16.859 23 12c0-6.075-4.925-11-11-11z"/></svg>
+                            <span data-i18n="opensource.badge.verified"></span>
+                        </span>
+                        <span class="opensource-badge">
+                            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm-2 16l-4-4 1.41-1.41L10 14.17l6.59-6.59L18 9l-8 8z"/></svg>
+                            <span data-i18n="opensource.badge.e2ee"></span>
+                        </span>
+                        <span class="opensource-badge">
+                            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg>
+                            <span data-i18n="opensource.badge.auditable"></span>
+                        </span>
+                    </div>
+                    <a class="github-btn" href="https://github.com/w78flezeex/Xipher.pro" target="_blank" rel="noopener">
+                        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 1C5.925 1 1 5.925 1 12c0 4.86 3.152 8.983 7.523 10.437.55.101.75-.238.75-.53 0-.26-.009-.952-.014-1.87-3.062.665-3.708-1.475-3.708-1.475-.5-1.27-1.222-1.608-1.222-1.608-.999-.682.075-.669.075-.669 1.105.078 1.686 1.134 1.686 1.134.981 1.681 2.575 1.195 3.202.914.1-.71.384-1.195.699-1.47-2.445-.278-5.015-1.222-5.015-5.44 0-1.202.429-2.184 1.133-2.954-.114-.278-.491-1.397.108-2.912 0 0 .923-.296 3.025 1.128A10.54 10.54 0 0112 6.836c.935.005 1.876.126 2.756.37 2.1-1.424 3.022-1.128 3.022-1.128.6 1.515.223 2.634.11 2.912.706.77 1.132 1.752 1.132 2.954 0 4.228-2.574 5.159-5.025 5.432.395.34.747 1.011.747 2.037 0 1.47-.013 2.657-.013 3.017 0 .294.198.637.756.529C19.851 20.979 23 16.859 23 12c0-6.075-4.925-11-11-11z"/></svg>
+                        <span data-i18n="opensource.cta"></span>
+                    </a>
+                </div>
+                <div class="opensource-visual">
+                    <div class="code-preview">
+                        <span class="comment">// End-to-end encryption</span><br>
+                        <span class="keyword">const</span> encrypted = <span class="function">encryptMessage</span>(<br>
+                        &nbsp;&nbsp;message,<br>
+                        &nbsp;&nbsp;recipientPublicKey<br>
+                        );<br><br>
+                        <span class="comment">// Only recipient can read</span><br>
+                        <span class="keyword">const</span> decrypted = <span class="function">decryptMessage</span>(<br>
+                        &nbsp;&nbsp;encrypted,<br>
+                        &nbsp;&nbsp;myPrivateKey<br>
+                        );
+                    </div>
+                    <div class="trust-points">
+                        <div class="trust-point">
+                            <span class="trust-point-icon">🔍</span>
+                            <span data-i18n="opensource.trust.audit"></span>
+                        </div>
+                        <div class="trust-point">
+                            <span class="trust-point-icon">🛡️</span>
+                            <span data-i18n="opensource.trust.noBackdoor"></span>
+                        </div>
+                        <div class="trust-point">
+                            <span class="trust-point-icon">🌍</span>
+                            <span data-i18n="opensource.trust.community"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Final CTA -->
+        <section id="cta" class="section cta">
+            <div class="container cta-inner">
+                <div>
+                    <h2 data-i18n="cta.title"></h2>
+                    <p data-i18n="cta.subtitle"></p>
+                </div>
+                <div class="cta-actions">
+                    <a class="btn primary" href="https://www.rustore.ru/catalog/app/com.xipher.wrapper" data-i18n="cta.android"></a>
+                    <button class="btn ghost" type="button" data-open-modal data-i18n="cta.ios"></button>
+                </div>
+                <form class="newsletter" data-newsletter-form>
+                    <input type="email" name="email" autocomplete="email" data-i18n-placeholder="cta.newsletterPlaceholder" required>
+                    <button class="btn light" type="submit" data-i18n="cta.newsletterCta"></button>
+                </form>
+                <p class="newsletter-note" data-i18n="cta.newsletterNote" data-newsletter-status></p>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="site-footer">
+        <div class="container footer-inner">
+            <div class="footer-links">
+                <a href="/privacy" data-i18n="footer.privacy"></a>
+                <a href="/terms" data-i18n="footer.terms"></a>
+                <a href="/api.html" data-i18n="footer.api"></a>
+            </div>
+            <div data-i18n="footer.copyright"></div>
+            <div class="footer-company">
+                <span>A.E PAYMENT LTD — Company number: 16392700</span>
+                <span>71-75 Shelton Street, Covent Garden, London, United Kingdom, WC2H 9JQ</span>
+            </div>
+        </div>
+    </footer>
+
+    <!-- iPhone install modal -->
+    <div class="modal" id="ios-modal" role="dialog" aria-modal="true" aria-hidden="true">
+        <div class="modal-card">
+            <h3 data-i18n="modal.title"></h3>
+            <p data-i18n="modal.subtitle"></p>
+            <ol class="modal-steps">
+                <li data-i18n="modal.step1"></li>
+                <li data-i18n="modal.step2"></li>
+                <li data-i18n="modal.step3"></li>
+            </ol>
+            <button class="btn primary modal-close" type="button" data-close-modal data-i18n="modal.close"></button>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script>
+        const translations = {
+            en: {
+                meta: {
+                    title: "Xipher — secure messenger",
+                    description: "Xipher is a secure messenger with real privacy, bots, and calls."
+                },
+                brand: "Xipher",
+                nav: {
+                    why: "Why",
+                    now: "Now",
+                    soon: "Soon",
+                    compare: "Compare",
+                    opensource: "Source",
+                    install: "Install",
+                    faq: "FAQ",
+                    login: "Login"
+                },
+                lang: {
+                    ru: "RU",
+                    en: "EN",
+                    label: "Language"
+                },
+                hero: {
+                    kicker: "When regular Telegram is not enough",
+                    title: "Xipher — secure messenger",
+                    subtitle: "All chats are encrypted. No tracking. Feels like Telegram.",
+                    androidBtn: "Download on Android",
+                    iosBtn: "Install on iPhone",
+                    note: "Fast, safe, simple. That's it.",
+                    stat: "✅ {count} users already on Xipher",
+                    statFallback: "✅ Join the early access community",
+                    roadmap1: "🚀 Steganography in February",
+                    roadmap2: "🚀 Mesh network in March",
+                    roadmap3: "🚀 Geo-Lock in April"
+                },
+                why: {
+                    title: "Why Xipher?",
+                    subtitle: "Three clear reasons to switch.",
+                    cards: {
+                        security: {
+                            title: "All chats encrypted",
+                            text: "Even the server cannot read your messages. Your data stays yours."
+                        },
+                        familiar: {
+                            title: "Everything you need from Telegram",
+                            text: "Calls, bots, channels, groups. Familiar interface, no fear to move."
+                        },
+                        unique: {
+                            title: "Features others don’t have",
+                            text: "Panic-PIN, Bot IDE, Geo-Lock soon. Security beyond competitors."
+                        }
+                    }
+                },
+                now: {
+                    title: "✅ What works right now",
+                    subtitle: "This is a real app, not a prototype.",
+                    categories: {
+                        messenger: {
+                            title: "Messenger",
+                            point1: "Direct chats with friends",
+                            point2: "Groups (up to 500 people)",
+                            point3: "Channels for publishing",
+                            point4: "Reactions, pins, replies"
+                        },
+                        calls: {
+                            title: "Calls & video",
+                            point1: "1:1 video calls",
+                            point2: "Group calls",
+                            point3: "Screen sharing",
+                            point4: "Call recording"
+                        },
+                        bots: {
+                            title: "Bots & automation",
+                            point1: "Bot IDE inside the app",
+                            point2: "25+ bot templates",
+                            point3: "Integrations: GitHub, Discord, Trello, RSS",
+                            point4: "Webhook API for developers"
+                        },
+                        ease: {
+                            title: "Convenience",
+                            point1: "Search across all chats",
+                            point2: "Folders to organize",
+                            point3: "Business Hours status",
+                            point4: "Geo and live geo"
+                        },
+                        security: {
+                            title: "Security",
+                            point1: "Panic-PIN + decoy database",
+                            point2: "E2EE for all chats",
+                            point3: "TTL for messages",
+                            point4: "Spoiler mode"
+                        }
+                    }
+                },
+                soon: {
+                    title: "🚀 In development",
+                    subtitle: "A clear roadmap so you know what’s next.",
+                    items: {
+                        stego: {
+                            month: "February 2026",
+                            progress: "80% ready",
+                            title: "Steganography",
+                            text: "Hide text inside a photo. Only your friend can decode it."
+                        },
+                        mesh: {
+                            month: "March 2026",
+                            progress: "50% ready",
+                            title: "Mesh network",
+                            text: "Send via Bluetooth when there is no internet — in the метро or on protests."
+                        },
+                        geolock: {
+                            month: "April 2026",
+                            progress: "30% ready",
+                            title: "Geo-Lock",
+                            text: "Chat opens only in a specific place. Stolen phone = no access."
+                        }
+                    }
+                },
+                social: {
+                    title: "Who is already here",
+                    subtitle: "Live numbers from Xipher right now.",
+                    stats: {
+                        active: "Active users (24h)",
+                        messages: "Messages today",
+                        users: "Total users"
+                    },
+                    groupsTitle: "Xipher is used by:",
+                    groups: {
+                        dev: "Developers (Bot IDE instead of GitHub Actions)",
+                        freelance: "Freelancers (Business Hours + Panic-PIN)",
+                        confidential: "People with sensitive information (journalists, lawyers)",
+                        censorship: "Users in countries with censorship"
+                    }
+                },
+                compare: {
+                    title: "Xipher vs Telegram vs Signal",
+                    subtitle: "Short, factual comparison without aggression.",
+                    feature: "Feature",
+                    xipher: "Xipher",
+                    telegram: "Telegram",
+                    signal: "Signal",
+                    rows: {
+                        panic: "Panic-PIN + decoy DB",
+                        botide: "Built-in Bot IDE",
+                        e2ee: "E2EE for all chats",
+                        business: "Business hours",
+                        mesh: "Mesh network",
+                        stego: "Steganography",
+                        bots: "Bots and integrations"
+                    },
+                    values: {
+                        panic: { x: "✅", t: "❌", s: "❌" },
+                        botide: { x: "✅", t: "❌", s: "❌" },
+                        e2ee: { x: "✅", t: "⚠️", s: "✅" },
+                        business: { x: "✅", t: "❌", s: "❌" },
+                        mesh: { x: "✅", t: "❌", s: "❌" },
+                        stego: { x: "✅", t: "❌", s: "❌" },
+                        bots: { x: "✅", t: "✅", s: "❌" }
+                    },
+                    note: "Telegram is great. Use it if you want. But if real security matters — choose Xipher."
+                },
+                install: {
+                    title: "How to install",
+                    subtitle: "Choose the fastest way for you.",
+                    android: {
+                        title: "Android",
+                        step1: "Open RuStore",
+                        step2: "Search for \"Xipher\"",
+                        step3: "Tap Install",
+                        step4: "Done",
+                        cta: "Open RuStore"
+                    },
+                    ios: {
+                        title: "iPhone (Web App)",
+                        step1: "Open xipher.pro in Safari",
+                        step2: "Tap Share",
+                        step3: "Add to Home Screen",
+                        step4: "Use it like a native app",
+                        cta: "Instruction with screenshots"
+                    },
+                    web: {
+                        title: "Web",
+                        step1: "Open xipher.pro",
+                        step2: "Enter username and password",
+                        step3: "Start chatting",
+                        step4: "No install needed",
+                        cta: "Open web version"
+                    }
+                },
+                faq: {
+                    title: "FAQ",
+                    subtitle: "Honest answers before you decide.",
+                    q1: "Is it safe? Is it a scam?",
+                    a1: "Xipher is open-source on GitHub. You can inspect the code. We use SQLCipher for encryption.",
+                    q2: "What if I forget my password?",
+                    a2: "During registration you receive a Recovery Code. Keep it safe. If you forget the password, use the Recovery Code to reset it.",
+                    q3: "Can I import chats from Telegram?",
+                    a3: "Not yet, but it is in development. For now you can export contacts and recreate key chats.",
+                    q4: "My friends are on Telegram. Why switch?",
+                    a4: "You can use both. Telegram for public conversations, Xipher for private and sensitive ones.",
+                    q5: "Do I need Premium?",
+                    a5: "The free plan already has everything essential. Premium is for extra folders, advanced Bot IDE, and custom themes.",
+                    q6: "Where are messages stored?",
+                    a6: "Messages are encrypted locally before sending. Even if the server is compromised, content stays protected.",
+                    q7: "Do you show ads or sell data?",
+                    a7: "No ads and no data sales. Monetization only through Premium features.",
+                    q8: "Is iPhone supported without the App Store?",
+                    a8: "Yes. Install Xipher as a PWA from Safari and use it like a normal app."
+                },
+                cta: {
+                    title: "Ready to start?",
+                    subtitle: "Xipher works on Android, iPhone, and Web. Install in 30 seconds.",
+                    android: "Download on Android",
+                    ios: "Install on iPhone",
+                    newsletterPlaceholder: "Email for updates",
+                    newsletterCta: "Subscribe to updates",
+                    newsletterNote: "We open your mail client to confirm the subscription.",
+                    newsletterSent: "Thanks! Your email is ready to send."
+                },
+                opensource: {
+                    title: "Open Source",
+                    subtitle: "Transparency you can verify",
+                    headline: "100% Open Source Code",
+                    description: "We believe security shouldn't be a black box. Every line of Xipher's code is publicly available on GitHub. Security researchers, developers, and anyone can audit our encryption, verify there are no backdoors, and contribute to making Xipher better.",
+                    badge: {
+                        verified: "Verified Source",
+                        e2ee: "E2EE Verified",
+                        auditable: "Fully Auditable"
+                    },
+                    cta: "View on GitHub",
+                    trust: {
+                        audit: "Anyone can audit the code",
+                        noBackdoor: "No hidden backdoors — guaranteed",
+                        community: "Community-driven development"
+                    }
+                },
+                footer: {
+                    privacy: "Privacy Policy",
+                    terms: "Terms",
+                    api: "API",
+                    copyright: "© 2026 Xipher. All rights reserved."
+                },
+                modal: {
+                    title: "Install on iPhone",
+                    subtitle: "Follow these quick steps:",
+                    step1: "Open Safari and go to xipher.pro",
+                    step2: "Tap Share",
+                    step3: "Choose \"Add to Home Screen\"",
+                    close: "Close"
+                }
+            },
+            ru: {
+                meta: {
+                    title: "Xipher — защищённый мессенджер",
+                    description: "Xipher — защищённый мессенджер с настоящей приватностью, ботами и звонками."
+                },
+                brand: "Xipher",
+                nav: {
+                    why: "Почему",
+                    now: "Сейчас",
+                    soon: "Скоро",
+                    compare: "Сравнение",
+                    opensource: "Код",
+                    install: "Установить",
+                    faq: "FAQ",
+                    login: "Войти"
+                },
+                lang: {
+                    ru: "RU",
+                    en: "EN",
+                    label: "Язык"
+                },
+                hero: {
+                    kicker: "Когда обычного Telegram недостаточно",
+                    title: "Xipher — защищённый мессенджер",
+                    subtitle: "Все чаты зашифрованы. Никакой слежки. Как Telegram.",
+                    androidBtn: "Скачать на Android",
+                    iosBtn: "Установить на iPhone",
+                    note: "Быстро, безопасно, понятно. Вот и всё.",
+                    stat: "✅ Уже {count} {noun} в Xipher",
+                    statFallback: "✅ Присоединяйтесь к раннему доступу",
+                    roadmap1: "🚀 Стеганография в феврале",
+                    roadmap2: "🚀 Mesh-сеть в марте",
+                    roadmap3: "🚀 Geo-Lock в апреле"
+                },
+                why: {
+                    title: "Почему Xipher?",
+                    subtitle: "Три главные причины перейти.",
+                    cards: {
+                        security: {
+                            title: "Все чаты зашифрованы",
+                            text: "Даже сервер не может прочитать сообщения. Твои данные — только твои."
+                        },
+                        familiar: {
+                            title: "Всё нужное как в Telegram",
+                            text: "Звонки, боты, каналы, группы. Всё знакомо, всё работает."
+                        },
+                        unique: {
+                            title: "Фичи, которых нет у других",
+                            text: "Panic-PIN, Bot IDE, Geo-Lock скоро. Защита дальше конкурентов."
+                        }
+                    }
+                },
+                now: {
+                    title: "✅ Что есть прямо сейчас",
+                    subtitle: "Это живое приложение, не альфа-версия.",
+                    categories: {
+                        messenger: {
+                            title: "Мессенджер",
+                            point1: "Личные чаты с друзьями",
+                            point2: "Группы (до 500 человек)",
+                            point3: "Каналы для публикаций",
+                            point4: "Реакции, пины, ответы"
+                        },
+                        calls: {
+                            title: "Звонки и видео",
+                            point1: "Видео-звонки 1 на 1",
+                            point2: "Групповые звонки",
+                            point3: "Демонстрация экрана",
+                            point4: "Запись звонков"
+                        },
+                        bots: {
+                            title: "Боты и автоматизация",
+                            point1: "Bot IDE внутри приложения",
+                            point2: "25+ шаблонов ботов",
+                            point3: "Интеграции: GitHub, Discord, Trello, RSS",
+                            point4: "Webhook API для разработчиков"
+                        },
+                        ease: {
+                            title: "Удобство",
+                            point1: "Поиск по всем чатам",
+                            point2: "Папки для организации",
+                            point3: "Business Hours",
+                            point4: "Геолокация и live-геолокация"
+                        },
+                        security: {
+                            title: "Безопасность",
+                            point1: "Panic-PIN + Decoy-БД",
+                            point2: "E2EE для всех чатов",
+                            point3: "TTL для сообщений",
+                            point4: "Спойлер-режим"
+                        }
+                    }
+                },
+                soon: {
+                    title: "🚀 Что в разработке",
+                    subtitle: "Понятный календарь релизов.",
+                    items: {
+                        stego: {
+                            month: "Февраль 2026",
+                            progress: "80% готово",
+                            title: "Стеганография",
+                            text: "Прячем текст внутри фото. Только друг может расшифровать."
+                        },
+                        mesh: {
+                            month: "Март 2026",
+                            progress: "50% готово",
+                            title: "Mesh-сеть",
+                            text: "Пиши через Bluetooth, когда нет интернета — в метро, на протесте."
+                        },
+                        geolock: {
+                            month: "Апрель 2026",
+                            progress: "30% готово",
+                            title: "Geo-Lock",
+                            text: "Чат доступен только в определённом месте. Украли телефон — доступа нет."
+                        }
+                    }
+                },
+                social: {
+                    title: "Кто уже здесь",
+                    subtitle: "Живые цифры Xipher прямо сейчас.",
+                    stats: {
+                        active: "Активные пользователи (24ч)",
+                        messages: "Сообщений сегодня",
+                        users: "Всего пользователей"
+                    },
+                    groupsTitle: "Используют:",
+                    groups: {
+                        dev: "Разработчики (Bot IDE вместо GitHub Actions)",
+                        freelance: "Фрилансеры (Business Hours + Panic-PIN)",
+                        confidential: "Люди с конфиденциальной информацией (журналисты, адвокаты)",
+                        censorship: "Пользователи из стран с цензурой"
+                    }
+                },
+                compare: {
+                    title: "Xipher vs Telegram vs Signal",
+                    subtitle: "Коротко и без агрессии.",
+                    feature: "Фича",
+                    xipher: "Xipher",
+                    telegram: "Telegram",
+                    signal: "Signal",
+                    rows: {
+                        panic: "Panic-PIN + Decoy-БД",
+                        botide: "Bot IDE встроен",
+                        e2ee: "E2EE для всех чатов",
+                        business: "Business Hours",
+                        mesh: "Mesh-сеть",
+                        stego: "Стеганография",
+                        bots: "Боты и интеграции"
+                    },
+                    values: {
+                        panic: { x: "✅", t: "❌", s: "❌" },
+                        botide: { x: "✅", t: "❌", s: "❌" },
+                        e2ee: { x: "✅", t: "⚠️", s: "✅" },
+                        business: { x: "✅", t: "❌", s: "❌" },
+                        mesh: { x: "✅", t: "❌", s: "❌" },
+                        stego: { x: "✅", t: "❌", s: "❌" },
+                        bots: { x: "✅", t: "✅", s: "❌" }
+                    },
+                    note: "Telegram — отличный мессенджер. Но если важна реальная безопасность — выбирай Xipher."
+                },
+                install: {
+                    title: "Как установить?",
+                    subtitle: "Выберите удобный вариант.",
+                    android: {
+                        title: "Android",
+                        step1: "Открой RuStore",
+                        step2: "Найди \"Xipher\"",
+                        step3: "Нажми \"Установить\"",
+                        step4: "Готово",
+                        cta: "Открыть RuStore"
+                    },
+                    ios: {
+                        title: "iPhone (Web App)",
+                        step1: "Открой xipher.pro в Safari",
+                        step2: "Нажми \"Поделиться\"",
+                        step3: "Добавь на экран домой",
+                        step4: "Используй как обычное приложение",
+                        cta: "Инструкция со скриншотами"
+                    },
+                    web: {
+                        title: "Веб",
+                        step1: "Открой xipher.pro",
+                        step2: "Введи username и пароль",
+                        step3: "Начинай переписку",
+                        step4: "Без установки",
+                        cta: "Открыть веб-версию"
+                    }
+                },
+                faq: {
+                    title: "Часто спрашивают",
+                    subtitle: "Честные ответы до того, как вы спросите.",
+                    q1: "Это безопасно? Не скам?",
+                    a1: "Xipher с открытым исходным кодом на GitHub. Код можно проверить. Используем SQLCipher для шифрования.",
+                    q2: "Что будет, если забуду пароль?",
+                    a2: "При регистрации вы получаете Recovery Code. Сохраните его. Если забудете пароль, восстановите доступ через него.",
+                    q3: "Можно ли импортировать чаты из Telegram?",
+                    a3: "Пока нет, но это в разработке. Сейчас можно экспортировать контакты и начать важные чаты заново.",
+                    q4: "Все друзья в Telegram. Зачем мне переходить?",
+                    a4: "Не нужно уходить полностью. Telegram — для всех, Xipher — для приватного и важного.",
+                    q5: "Нужен ли Premium?",
+                    a5: "Бесплатной версии уже достаточно. Premium нужен для дополнительных папок, расширенного Bot IDE и тем.",
+                    q6: "Где хранятся сообщения?",
+                    a6: "Сообщения шифруются локально перед отправкой. Даже при взломе сервера контент защищён.",
+                    q7: "Есть ли реклама или продажа данных?",
+                    a7: "Нет рекламы и продажи данных. Монетизация только через Premium-фичи.",
+                    q8: "Работает ли на iPhone без App Store?",
+                    a8: "Да. Установите Xipher как PWA из Safari и используйте как обычное приложение."
+                },
+                cta: {
+                    title: "Готов начать?",
+                    subtitle: "Xipher работает на Android, iPhone и Web. Установка за 30 секунд.",
+                    android: "Скачать на Android",
+                    ios: "Установить на iPhone",
+                    newsletterPlaceholder: "Email для обновлений",
+                    newsletterCta: "Подписаться на новости",
+                    newsletterNote: "Откроем почтовый клиент для подтверждения.",
+                    newsletterSent: "Спасибо! Email готов к отправке."
+                },
+                opensource: {
+                    title: "Открытый код",
+                    subtitle: "Прозрачность, которую можно проверить",
+                    headline: "100% Open Source",
+                    description: "Мы верим, что безопасность не должна быть чёрным ящиком. Весь код Xipher публично доступен на GitHub. Исследователи безопасности, разработчики и любой желающий могут проверить наше шифрование, убедиться в отсутствии бэкдоров и помочь сделать Xipher лучше.",
+                    badge: {
+                        verified: "Проверенный код",
+                        e2ee: "E2EE подтверждено",
+                        auditable: "Полный аудит"
+                    },
+                    cta: "Смотреть на GitHub",
+                    trust: {
+                        audit: "Любой может проверить код",
+                        noBackdoor: "Никаких скрытых бэкдоров — гарантия",
+                        community: "Разработка силами сообщества"
+                    }
+                },
+                footer: {
+                    privacy: "Политика конфиденциальности",
+                    terms: "Условия использования",
+                    api: "API",
+                    copyright: "© 2026 Xipher. All rights reserved."
+                },
+                modal: {
+                    title: "Установить на iPhone",
+                    subtitle: "Быстрая инструкция:",
+                    step1: "Открой Safari и перейди на xipher.pro",
+                    step2: "Нажми \"Поделиться\"",
+                    step3: "Выбери \"Добавить на экран домой\"",
+                    close: "Закрыть"
+                }
+            }
+        };
+
+        const metaDescription = document.querySelector('meta[name="description"]');
+        const langButtons = document.querySelectorAll('[data-lang]');
+        const modal = document.getElementById('ios-modal');
+        const openModalButtons = document.querySelectorAll('[data-open-modal]');
+        const closeModalButtons = document.querySelectorAll('[data-close-modal]');
+        const statElements = document.querySelectorAll('[data-stat]');
+        const statTemplateElements = document.querySelectorAll('[data-stat-template]');
+        const newsletterForm = document.querySelector('[data-newsletter-form]');
+        const newsletterStatus = document.querySelector('[data-newsletter-status]');
+
+        let lastFocusedElement = null;
+        let currentLang = 'en';
+        let statsCache = null;
+
+        function getTranslation(lang, path) {
+            return path.split('.').reduce((value, key) => (value ? value[key] : undefined), translations[lang]);
+        }
+
+        function formatCount(value, lang) {
+            const number = Number(value);
+            if (!Number.isFinite(number)) {
+                return '';
+            }
+            try {
+                const locale = lang === 'ru' ? 'ru-RU' : 'en-US';
+                return new Intl.NumberFormat(locale).format(number);
+            } catch (err) {
+                return String(number);
+            }
+        }
+
+        function getRuPlural(value, one, few, many) {
+            const mod10 = value % 10;
+            const mod100 = value % 100;
+            if (mod10 === 1 && mod100 !== 11) {
+                return one;
+            }
+            if (mod10 >= 2 && mod10 <= 4 && (mod100 < 12 || mod100 > 14)) {
+                return few;
+            }
+            return many;
+        }
+
+        function applyTranslations(lang) {
+            document.querySelectorAll('[data-i18n]').forEach((el) => {
+                const value = getTranslation(lang, el.dataset.i18n);
+                if (value !== undefined) {
+                    el.textContent = value;
+                }
+            });
+
+            document.querySelectorAll('[data-i18n-placeholder]').forEach((el) => {
+                const value = getTranslation(lang, el.dataset.i18nPlaceholder);
+                if (value !== undefined) {
+                    el.setAttribute('placeholder', value);
+                }
+            });
+
+            const title = getTranslation(lang, 'meta.title');
+            const description = getTranslation(lang, 'meta.description');
+            if (title) {
+                document.title = title;
+            }
+            if (description && metaDescription) {
+                metaDescription.setAttribute('content', description);
+            }
+
+            renderStatTemplates();
+        }
+
+        function setLang(lang) {
+            const nextLang = translations[lang] ? lang : 'en';
+            currentLang = nextLang;
+            document.documentElement.lang = nextLang;
+            try {
+                localStorage.setItem('xipher-lang', nextLang);
+            } catch (err) {
+                // Ignore storage failures.
+            }
+            applyTranslations(nextLang);
+            langButtons.forEach((button) => {
+                const isActive = button.dataset.lang === nextLang;
+                button.classList.toggle('is-active', isActive);
+                button.setAttribute('aria-pressed', String(isActive));
+            });
+        }
+
+        function renderStats() {
+            if (!statsCache) return;
+            statElements.forEach((el) => {
+                const key = el.dataset.stat;
+                if (!key || statsCache[key] === undefined) {
+                    return;
+                }
+                const value = Math.trunc(Number(statsCache[key]));
+                if (!Number.isFinite(value)) {
+                    return;
+                }
+                el.textContent = formatCount(value, currentLang);
+            });
+        }
+
+        function renderStatTemplates() {
+            if (!statsCache) return;
+            statTemplateElements.forEach((el) => {
+                const templateKey = el.dataset.statTemplate;
+                const statKey = el.dataset.statKey;
+                if (!templateKey || !statKey) return;
+                const template = getTranslation(currentLang, templateKey);
+                if (!template) return;
+                const value = Math.trunc(Number(statsCache[statKey]));
+                if (!Number.isFinite(value)) return;
+                let text = template.replace('{count}', formatCount(value, currentLang));
+                if (template.includes('{noun}') && currentLang === 'ru') {
+                    const noun = getRuPlural(value, 'пользователь', 'пользователя', 'пользователей');
+                    text = text.replace('{noun}', noun);
+                }
+                el.textContent = text;
+            });
+        }
+
+        async function loadPublicStats() {
+            try {
+                const res = await fetch('/api/public-stats', {
+                    headers: { 'Accept': 'application/json' }
+                });
+                const text = await res.text();
+                const data = JSON.parse(text);
+                if (data && data.success && data.data) {
+                    statsCache = {
+                        users: data.data.users,
+                        active_24h: data.data.active_24h,
+                        messages_today: data.data.messages_today
+                    };
+                    renderStats();
+                    renderStatTemplates();
+                }
+            } catch (err) {
+                // Ignore stats failures.
+            }
+        }
+
+        function openModal() {
+            lastFocusedElement = document.activeElement;
+            modal.classList.add('is-open');
+            modal.setAttribute('aria-hidden', 'false');
+            document.body.classList.add('modal-open');
+            const closeButton = modal.querySelector('.modal-close');
+            if (closeButton) {
+                closeButton.focus();
+            }
+        }
+
+        function closeModal() {
+            modal.classList.remove('is-open');
+            modal.setAttribute('aria-hidden', 'true');
+            document.body.classList.remove('modal-open');
+            if (lastFocusedElement) {
+                lastFocusedElement.focus();
+            }
+        }
+
+        function setupNewsletter() {
+            if (!newsletterForm) return;
+            newsletterForm.addEventListener('submit', (event) => {
+                event.preventDefault();
+                const input = newsletterForm.querySelector('input[type="email"]');
+                if (!input) return;
+                const email = input.value.trim();
+                if (!email) return;
+                const subject = currentLang === 'ru' ? 'Xipher новости' : 'Xipher updates';
+                const body = currentLang === 'ru'
+                    ? `Прошу подписать меня на новости Xipher. Email: ${email}`
+                    : `Please subscribe me to Xipher updates. Email: ${email}`;
+                const mailto = `mailto:team@xipher.pro?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+                window.location.href = mailto;
+                if (newsletterStatus) {
+                    const message = getTranslation(currentLang, 'cta.newsletterSent');
+                    if (message) {
+                        newsletterStatus.textContent = message;
+                    }
+                }
+                input.value = '';
+            });
+        }
+
+        function initLanguage() {
+            let storedLang = '';
+            try {
+                storedLang = localStorage.getItem('xipher-lang') || '';
+            } catch (err) {
+                storedLang = '';
+            }
+            if (storedLang === 'ru' || storedLang === 'en') {
+                setLang(storedLang);
+                return;
+            }
+            const browserLang = (navigator.language || '').toLowerCase();
+            setLang(browserLang.startsWith('ru') ? 'ru' : 'en');
+        }
+
+        langButtons.forEach((button) => {
+            button.addEventListener('click', () => setLang(button.dataset.lang));
+        });
+
+        openModalButtons.forEach((button) => {
+            button.addEventListener('click', openModal);
+        });
+
+        closeModalButtons.forEach((button) => {
+            button.addEventListener('click', closeModal);
+        });
+
+        document.addEventListener('keydown', (event) => {
+            if (event.key === 'Escape' && modal.classList.contains('is-open')) {
+                closeModal();
+            }
+        });
+
+        initLanguage();
+        loadPublicStats();
+        setupNewsletter();
+    </script>
+    <!-- в вебе -->
+</body>
+</html>

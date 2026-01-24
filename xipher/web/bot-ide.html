@@ -1,0 +1,3370 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <link rel="icon" href="/xipher.ico" type="image/x-icon">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>IDE — Xipher Bot</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/notifications.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --ide-bg: #1e1e1e;
+      --ide-panel: #252526;
+      --ide-panel-alt: #2d2d2d;
+      --ide-border: #333333;
+      --ide-accent: #0e639c;
+      --ide-text: #d4d4d4;
+      --ide-muted: #9da0a6;
+    }
+
+    body { margin: 0; background: var(--ide-bg); color: var(--ide-text); font-family: 'Inter', sans-serif; }
+    .ide-container { display: flex; height: 100vh; flex-direction: column; }
+    .ide-titlebar { height: 36px; background: #1b1b1b; border-bottom: 1px solid var(--ide-border); display: flex; align-items: center; justify-content: space-between; padding: 0 12px; }
+    .ide-title { display: flex; align-items: center; gap: 8px; font-size: 0.9rem; font-weight: 600; }
+    .ide-logo { width: 18px; height: 18px; border-radius: 4px; background: var(--ide-accent); color: #fff; display: inline-flex; align-items: center; justify-content: center; font-size: 0.7rem; }
+    .ide-divider { color: var(--ide-muted); }
+    .ide-title-actions { display: flex; align-items: center; gap: 6px; }
+    .window-dot { width: 10px; height: 10px; border-radius: 50%; background: #555; }
+    .window-dot.is-red { background: #ef4444; }
+    .window-dot.is-yellow { background: #f59e0b; }
+    .window-dot.is-green { background: #10b981; }
+
+    .ide-toolbar { background: var(--ide-panel); border-bottom: 1px solid var(--ide-border); padding: 8px 12px; display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+    .ide-toolbar-group { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+
+    .ide-main { display: flex; flex: 1; overflow: hidden; background: var(--ide-bg); }
+    .ide-activitybar { width: 48px; background: #202020; border-right: 1px solid var(--ide-border); display: flex; flex-direction: column; align-items: center; padding: 8px 0; gap: 6px; }
+    .activity-btn { width: 32px; height: 32px; border-radius: 6px; background: transparent; border: 1px solid transparent; color: var(--ide-muted); cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 0.9rem; }
+    .activity-btn:hover { color: var(--ide-text); border-color: var(--ide-border); background: rgba(255,255,255,0.04); }
+    .activity-btn.active { color: #fff; background: rgba(14, 99, 156, 0.2); border-color: rgba(14, 99, 156, 0.6); }
+
+    .ide-sidebar { width: 260px; background: var(--ide-panel); border-right: 1px solid var(--ide-border); display: flex; flex-direction: column; overflow: hidden; }
+    .ide-sidebar.collapsed { width: 0; border-right: none; }
+    .ide-sidebar.collapsed .sidebar-header,
+    .ide-sidebar.collapsed .sidebar-panels { display: none; }
+    .sidebar-header { padding: 10px 12px; font-size: 0.7rem; letter-spacing: 1.2px; color: var(--ide-muted); text-transform: uppercase; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--ide-border); }
+    .sidebar-badge { background: rgba(14, 99, 156, 0.2); color: #cfe6ff; border: 1px solid rgba(14, 99, 156, 0.6); padding: 2px 6px; border-radius: 999px; font-size: 0.7rem; }
+
+    .sidebar-panels { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
+    .sidebar-panel { display: none; flex: 1; overflow: hidden; }
+    .sidebar-panel.active { display: flex; flex-direction: column; }
+
+    .file-tree { padding: 10px; overflow-y: auto; }
+    .file-tree-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+    .file-item { padding: 6px 8px; cursor: pointer; border-radius: 4px; display: flex; align-items: center; gap: 6px; position: relative; color: var(--ide-text); }
+    .file-item:hover { background: rgba(255,255,255,0.06); }
+    .file-item.active { background: rgba(14, 99, 156, 0.25); }
+    .file-item .file-actions { display: none; position: absolute; right: 8px; }
+    .file-item:hover .file-actions { display: flex; gap: 4px; }
+    .file-icon { width: 16px; text-align: center; opacity: 0.8; }
+
+    .search-panel { padding: 10px; display: flex; flex-direction: column; gap: 8px; height: 100%; }
+    .search-input { width: 100%; padding: 6px 8px; border-radius: 6px; border: 1px solid var(--ide-border); background: var(--ide-panel-alt); color: var(--ide-text); font-size: 0.85rem; }
+    .search-results { flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 6px; }
+    .search-result { padding: 6px 8px; border-radius: 6px; cursor: pointer; border: 1px solid transparent; background: rgba(255,255,255,0.03); }
+    .search-result:hover { border-color: var(--ide-border); background: rgba(255,255,255,0.08); }
+    .search-result-path { font-size: 0.8rem; color: var(--ide-muted); }
+    .search-result-line { font-size: 0.85rem; color: var(--ide-text); margin-top: 4px; white-space: pre-wrap; }
+
+    .panel-placeholder { padding: 12px; color: var(--ide-muted); font-size: 0.85rem; line-height: 1.5; }
+    .run-panel { padding: 12px; display: flex; flex-direction: column; gap: 10px; }
+    .run-panel .run-status { font-size: 0.85rem; color: var(--ide-muted); }
+    .run-panel .run-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+
+    .ai-panel { display: flex; flex-direction: column; height: 100%; }
+    .ai-header { padding: 10px 12px; border-bottom: 1px solid var(--ide-border); display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+    .ai-title { font-size: 0.9rem; font-weight: 600; }
+    .ai-status { font-size: 0.75rem; color: var(--ide-muted); }
+    .ai-actions { display: flex; gap: 6px; flex-wrap: wrap; }
+    .ai-messages { flex: 1; overflow-y: auto; padding: 10px 12px; display: flex; flex-direction: column; gap: 8px; }
+    .ai-message { padding: 8px 10px; border-radius: 8px; font-size: 0.82rem; line-height: 1.5; white-space: pre-wrap; }
+    .ai-message.user { background: rgba(14, 99, 156, 0.25); align-self: flex-end; }
+    .ai-message.assistant { background: rgba(255, 255, 255, 0.06); border: 1px solid var(--ide-border); align-self: flex-start; }
+    .ai-message.error { background: rgba(248, 113, 113, 0.16); border: 1px solid rgba(248, 113, 113, 0.5); color: #fca5a5; }
+    .ai-typing { padding: 4px 12px; font-size: 0.75rem; color: var(--ide-muted); display: none; }
+    .ai-composer { border-top: 1px solid var(--ide-border); padding: 8px; display: flex; gap: 8px; align-items: center; background: #1b1b1b; }
+    .ai-composer-inner { display: flex; align-items: center; gap: 8px; flex: 1; padding: 6px 10px; border-radius: 12px; border: 1px solid var(--ide-border); background: #1f1f1f; }
+    .ai-composer textarea { flex: 1; background: transparent; color: var(--ide-text); border: none; padding: 4px 0; font-family: ui-monospace, 'Courier New', monospace; font-size: 0.82rem; resize: none; outline: none; min-height: 36px; }
+    .ai-send-btn { width: 32px; height: 32px; border-radius: 10px; border: 1px solid var(--ide-border); background: rgba(14, 99, 156, 0.35); color: #fff; display: inline-flex; align-items: center; justify-content: center; cursor: pointer; font-size: 0.9rem; }
+    .ai-send-btn:hover { background: rgba(14, 99, 156, 0.55); }
+    .ai-toolbar { display: flex; align-items: center; gap: 6px; padding: 6px 8px 10px; background: #1b1b1b; }
+    .ai-icon-btn { width: 26px; height: 26px; border-radius: 7px; border: 1px solid var(--ide-border); background: rgba(255,255,255,0.02); color: var(--ide-text); display: inline-flex; align-items: center; justify-content: center; cursor: pointer; font-size: 0.8rem; }
+    .ai-icon-btn:hover { background: rgba(255,255,255,0.06); }
+    .ai-pill { border: 1px solid var(--ide-border); background: rgba(14, 99, 156, 0.2); color: #cfe6ff; padding: 4px 10px; border-radius: 999px; font-size: 0.75rem; cursor: pointer; }
+    .ai-pill.inactive { background: transparent; color: var(--ide-muted); }
+    .ai-spacer { flex: 1; }
+    .ai-meta { display: flex; align-items: center; gap: 8px; padding: 6px 8px 10px; background: #1b1b1b; flex-wrap: wrap; border-top: 1px solid var(--ide-border); }
+    .ai-select-pill { display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px; border-radius: 999px; border: 1px solid var(--ide-border); background: rgba(255,255,255,0.04); color: var(--ide-text); font-size: 0.75rem; }
+    .ai-select-pill select { border: none; background: transparent; color: inherit; font-size: 0.75rem; outline: none; appearance: none; padding-right: 6px; }
+    .ai-select-icon { font-size: 0.78rem; opacity: 0.8; }
+    .ai-select-caret { font-size: 0.7rem; opacity: 0.6; }
+    .ai-settings { border-top: 1px solid var(--ide-border); background: #202020; }
+    .ai-settings summary { list-style: none; cursor: pointer; padding: 8px; font-size: 0.78rem; color: var(--ide-muted); }
+    .ai-settings summary::-webkit-details-marker { display: none; }
+    .ai-settings-body { padding: 0 8px 10px; display: flex; flex-direction: column; gap: 6px; }
+    .ai-settings-body label { font-size: 0.75rem; color: var(--ide-muted); }
+    .ai-settings-body input { width: 100%; padding: 6px 8px; border-radius: 6px; border: 1px solid var(--ide-border); background: var(--ide-panel-alt); color: var(--ide-text); font-size: 0.8rem; }
+    .ai-toggle { display: flex; align-items: center; gap: 6px; font-size: 0.78rem; color: var(--ide-muted); }
+
+    .ide-editor { flex: 1; display: flex; flex-direction: column; min-width: 0; }
+    .editor-tabs { display: flex; align-items: center; gap: 2px; padding: 6px 8px; background: #202020; border-bottom: 1px solid var(--ide-border); overflow-x: auto; }
+    .editor-tab { display: inline-flex; align-items: center; gap: 6px; padding: 6px 10px; border-radius: 6px; background: transparent; color: var(--ide-muted); cursor: pointer; border: 1px solid transparent; white-space: nowrap; }
+    .editor-tab.active { color: #fff; background: rgba(255,255,255,0.06); border-color: var(--ide-border); }
+    .editor-tab:hover { color: var(--ide-text); }
+    .editor-tab .dirty-dot { width: 6px; height: 6px; border-radius: 50%; background: #f59e0b; display: inline-block; }
+    .editor-tab .tab-close { margin-left: 4px; border: none; background: transparent; color: inherit; cursor: pointer; font-size: 0.85rem; opacity: 0.7; }
+    .editor-tab .tab-close:hover { opacity: 1; }
+
+    .code-editor { flex: 1; border: none; background: #1e1e1e; color: var(--ide-text); font-family: ui-monospace, 'Courier New', monospace; font-size: 14px; padding: 16px; resize: none; outline: none; line-height: 1.6; }
+
+    .ide-terminal { height: 220px; background: #1b1b1b; border-top: 1px solid var(--ide-border); display: flex; flex-direction: column; }
+    .terminal-header { padding: 6px 10px; display: flex; align-items: center; justify-content: space-between; background: #202020; border-bottom: 1px solid var(--ide-border); font-size: 0.75rem; letter-spacing: 0.8px; color: var(--ide-muted); text-transform: uppercase; }
+    .terminal-body { flex: 1; overflow-y: auto; padding: 10px; font-family: ui-monospace, 'Courier New', monospace; font-size: 13px; color: var(--ide-text); }
+    .terminal-line { margin: 2px 0; }
+    .terminal-prompt { color: #4ec9b0; }
+    .terminal-output { color: var(--ide-text); }
+    .terminal-error { color: #f48771; }
+
+    .btn { padding: 8px 12px; border-radius: 6px; border: 1px solid var(--ide-border); background: var(--ide-panel-alt); color: var(--ide-text); cursor: pointer; font-size: 0.88rem; }
+    .btn.primary { background: var(--ide-accent); border-color: transparent; color: #fff; }
+    .btn.small { padding: 4px 8px; font-size: 0.78rem; }
+    .btn.danger { color: #f87171; }
+    .btn:disabled { opacity: 0.6; cursor: not-allowed; }
+
+    .ide-statusbar { height: 26px; background: #007acc; color: #fff; display: flex; align-items: center; justify-content: space-between; padding: 0 10px; font-size: 0.78rem; }
+    .status-left, .status-right { display: flex; align-items: center; gap: 12px; }
+    .status-sep { opacity: 0.7; }
+
+    .modal-backdrop { position: fixed; inset: 0; background: rgba(0,0,0,.55); display: none; align-items: center; justify-content: center; z-index: 1000; }
+    .modal { background: var(--ide-panel); border: 1px solid var(--ide-border); border-radius: 14px; padding: 16px; min-width: 300px; color: var(--ide-text); }
+    .modal h2 { margin: 0 0 12px 0; font-size: 1.1rem; }
+    .field { margin-bottom: 12px; }
+    .field label { display: block; margin-bottom: 4px; font-size: 0.9rem; color: var(--ide-muted); }
+    .field input { width: 100%; padding: 8px; border-radius: 6px; border: 1px solid var(--ide-border); background: var(--ide-panel-alt); color: var(--ide-text); }
+
+    .context-menu { position: fixed; z-index: 2500; background: var(--ide-panel); border: 1px solid var(--ide-border); border-radius: 8px; padding: 6px; min-width: 180px; display: none; box-shadow: 0 12px 30px rgba(0,0,0,0.4); }
+    .context-menu button { width: 100%; text-align: left; padding: 6px 8px; border: none; background: transparent; color: var(--ide-text); border-radius: 6px; cursor: pointer; font-size: 0.85rem; }
+    .context-menu button:hover { background: rgba(255,255,255,0.08); }
+    .context-menu button.danger { color: #f87171; }
+
+    @media (max-width: 960px) {
+      .ide-sidebar { width: 200px; }
+      .ide-toolbar { gap: 6px; }
+      .ide-toolbar-group { gap: 6px; }
+    }
+
+    @media (max-width: 720px) {
+      .ide-activitybar { display: none; }
+      .ide-sidebar { width: 180px; }
+      .ide-statusbar { display: none; }
+      .ide-terminal { height: 180px; }
+    }
+
+    .premium-lock { position: fixed; inset: 0; z-index: 3000; display: none; align-items: center; justify-content: center; padding: 24px; background: rgba(6, 10, 18, 0.6); -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); }
+    .premium-lock.active { display: flex; }
+    .premium-lock-card { width: 100%; max-width: 520px; background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 16px; padding: 20px; text-align: center; box-shadow: 0 22px 60px rgba(0,0,0,0.35); }
+    .premium-lock-badge { display: inline-flex; align-items: center; gap: 6px; padding: 6px 12px; border-radius: 999px; background: rgba(147, 51, 234, 0.16); font-size: 0.85rem; font-weight: 700; margin-bottom: 10px; }
+    .premium-lock-title { margin: 0 0 8px; font-size: 1.4rem; font-weight: 800; }
+    .premium-lock-text { margin: 0 0 16px; color: var(--text-secondary); line-height: 1.5; }
+    .premium-lock-actions { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
+    .premium-lock-note { margin-top: 12px; color: var(--text-muted); font-size: 0.9rem; line-height: 1.4; }
+    body.premium-locked { overflow: hidden; }
+    body.premium-locked .ide-container { filter: blur(4px); pointer-events: none; user-select: none; }
+  </style>
+</head>
+<body>
+  <div class="ide-container">
+    <div class="ide-titlebar">
+      <div class="ide-title">
+        <span class="ide-logo">X</span>
+        <span class="ide-app">Xipher</span>
+        <span class="ide-divider">/</span>
+        <span class="ide-bot-name" id="botName">Bot IDE</span>
+      </div>
+      <div class="ide-title-actions">
+        <span class="window-dot is-red"></span>
+        <span class="window-dot is-yellow"></span>
+        <span class="window-dot is-green"></span>
+      </div>
+    </div>
+    <div class="ide-toolbar">
+      <div class="ide-toolbar-group">
+        <button class="btn" id="connectVsCodeBtn" title="Подключить VS Code/Cursor">🔌 VS Code</button>
+        <button class="btn" id="exportBtn" title="Скачать проект для VS Code/Cursor">📥 Экспорт</button>
+        <button class="btn" id="importBtn" title="Загрузить проект из VS Code/Cursor">📤 Импорт</button>
+        <button class="btn" id="newFileBtn">+ Файл</button>
+        <button class="btn" id="saveBtn">Сохранить</button>
+        <button class="btn" id="buildBtn" style="display:none;">Собрать</button>
+      </div>
+      <div class="ide-toolbar-group">
+        <button class="btn primary" id="runBtn">▶ Запустить</button>
+        <button class="btn" onclick="window.location.href='/bots'">← Назад</button>
+      </div>
+    </div>
+    <div class="ide-main">
+      <div class="ide-activitybar">
+        <button class="activity-btn active" data-panel="explorer" title="Explorer">📁</button>
+        <button class="activity-btn" data-panel="search" title="Search">🔍</button>
+        <button class="activity-btn" data-panel="scm" title="Source Control">⎇</button>
+        <button class="activity-btn" data-panel="run" title="Run & Debug">▶</button>
+        <button class="activity-btn" data-panel="extensions" title="Extensions">⬢</button>
+        <button class="activity-btn" data-panel="ai" title="Xipher AI">🤖</button>
+      </div>
+      <div class="ide-sidebar" id="ideSidebar">
+        <div class="sidebar-header">
+          <span id="sidebarTitle">Explorer</span>
+          <span class="sidebar-badge" id="fileCountBadge">0</span>
+        </div>
+        <div class="sidebar-panels">
+          <div class="sidebar-panel active" data-panel="explorer">
+            <div class="file-tree">
+              <div class="file-tree-header">
+                <strong>Файлы</strong>
+                <button class="btn small" id="refreshFilesBtn">🔄</button>
+              </div>
+              <div id="fileTreeList"></div>
+            </div>
+          </div>
+          <div class="sidebar-panel" data-panel="search">
+            <div class="search-panel">
+              <input class="search-input" id="searchInput" placeholder="Поиск в файлах..." />
+              <div class="search-results" id="searchResults"></div>
+            </div>
+          </div>
+          <div class="sidebar-panel" data-panel="scm">
+            <div class="panel-placeholder">
+              Исходный контроль не подключен. Используйте Git локально через VS Code/Cursor.
+            </div>
+          </div>
+          <div class="sidebar-panel" data-panel="run">
+            <div class="run-panel">
+              <div class="run-status" id="runStatus">Runtime: —</div>
+              <div class="run-actions">
+                <button class="btn primary" id="runPanelBtn">▶ Запустить</button>
+                <button class="btn" id="stopPanelBtn">■ Остановить</button>
+              </div>
+              <div class="panel-placeholder">Запуск доступен для Python и Lite-ботов. Для других языков доступно редактирование.</div>
+            </div>
+          </div>
+          <div class="sidebar-panel" data-panel="extensions">
+            <div class="panel-placeholder">
+              Расширения пока недоступны. Используйте локальный VS Code для дополнительных возможностей.
+            </div>
+          </div>
+          <div class="sidebar-panel" data-panel="ai">
+            <div class="ai-panel">
+              <div class="ai-header">
+                <div>
+                  <div class="ai-title">Xipher AI</div>
+                  <div class="ai-status" id="aiStatus">Не подключено</div>
+                </div>
+                <div class="ai-actions">
+                  <button class="btn small" id="aiKeyBtn">API Key</button>
+                  <button class="btn small" id="aiOauthBtn">OAuth</button>
+                  <button class="btn small" id="aiSignOutBtn">Выйти</button>
+                </div>
+              </div>
+              <div class="ai-messages" id="aiMessages"></div>
+              <div class="ai-typing" id="aiTyping">GPT печатает...</div>
+              <div class="ai-composer">
+                <div class="ai-composer-inner">
+                  <textarea id="aiPrompt" rows="2" placeholder="Спроси что угодно..." spellcheck="false"></textarea>
+                  <button class="ai-send-btn" id="aiSendBtn" title="Отправить">➤</button>
+                </div>
+              </div>
+              <div class="ai-toolbar">
+                <button class="ai-icon-btn" id="aiAddBtn" title="Добавить контекст">+</button>
+                <button class="ai-icon-btn" id="aiSlashBtn" title="Команды">/</button>
+                <button class="ai-pill" id="aiAutoContextBtn">Auto context</button>
+                <span class="ai-spacer"></span>
+                <button class="ai-icon-btn" id="aiClearBtn" title="Очистить чат">⟳</button>
+                <button class="ai-icon-btn" id="aiStopBtn" title="Остановить">■</button>
+              </div>
+              <div class="ai-meta">
+                <div class="ai-select-pill">
+                  <span class="ai-select-icon">⚡</span>
+                  <select id="aiModelSelect"></select>
+                  <span class="ai-select-caret">▾</span>
+                </div>
+                <button class="ai-icon-btn" id="aiRefreshModelsBtn" title="Обновить модели">⟳</button>
+                <div class="ai-select-pill">
+                  <span class="ai-select-icon">🧭</span>
+                  <select id="aiModeSelect">
+                    <option value="chat">Chat</option>
+                    <option value="agent">Agent</option>
+                    <option value="full">Agent (full access)</option>
+                  </select>
+                  <span class="ai-select-caret">▾</span>
+                </div>
+                <div class="ai-select-pill">
+                  <span class="ai-select-icon">🧠</span>
+                  <select id="aiReasoningSelect">
+                    <option value="low">Low</option>
+                    <option value="medium">Medium</option>
+                    <option value="high">High</option>
+                    <option value="extra_high">Extra High</option>
+                  </select>
+                  <span class="ai-select-caret">▾</span>
+                </div>
+              </div>
+              <details class="ai-settings">
+                <summary>Advanced settings</summary>
+                <div class="ai-settings-body">
+                  <label for="aiApiBaseInput">API Base</label>
+                  <input id="aiApiBaseInput" placeholder="https://api.openai.com/v1">
+                  <label class="ai-toggle">
+                    <input type="checkbox" id="aiUseOAuthToggle">
+                    Использовать OAuth вместо ключа
+                  </label>
+                  <button class="btn small" id="aiSaveSettingsBtn">Сохранить</button>
+                </div>
+              </details>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="ide-editor">
+        <div class="editor-tabs" id="editorTabs"></div>
+        <textarea class="code-editor" id="codeEditor" placeholder="Выбери файл для редактирования..." spellcheck="false"></textarea>
+        <div class="ide-terminal">
+          <div class="terminal-header">
+            <span>Terminal</span>
+            <div class="terminal-actions">
+              <button class="btn small" id="clearTerminalBtn">Очистить</button>
+            </div>
+          </div>
+          <div class="terminal-body" id="terminal">
+            <div class="terminal-line"><span class="terminal-prompt">$</span> <span class="terminal-output">Загрузка...</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="ide-statusbar">
+      <div class="status-left">
+        <span class="status-item" id="statusBot">Bot: —</span>
+        <span class="status-sep">•</span>
+        <span class="status-item" id="statusFile">Файл: —</span>
+      </div>
+      <div class="status-right">
+        <span class="status-item" id="statusLanguage">—</span>
+        <span class="status-item" id="statusCursor">Ln 1, Col 1</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="premium-lock" id="premiumLock" role="dialog" aria-modal="true" aria-labelledby="premiumLockTitle">
+    <div class="premium-lock-card">
+      <div class="premium-lock-badge">★ Premium</div>
+      <h2 class="premium-lock-title" id="premiumLockTitle">Bot IDE доступен только в Premium</h2>
+      <p class="premium-lock-text">Оформите подписку, чтобы редактировать код и управлять файлами бота.</p>
+      <div class="premium-lock-actions">
+        <a class="btn primary" href="/chat">Открыть Premium</a>
+        <a class="btn" href="/bots">К списку ботов</a>
+      </div>
+      <div class="premium-lock-note">Оформление: чат → Настройки → Xipher Premium.</div>
+    </div>
+  </div>
+
+  <div class="modal-backdrop" id="connectVsCodeModal">
+    <div class="modal" style="max-width: 600px;">
+      <h2>🔌 Подключить VS Code / Cursor</h2>
+      <div style="margin-bottom: 16px; padding: 12px; background: rgba(147, 51, 234, 0.1); border-radius: 6px; font-size: 0.9rem; line-height: 1.6;">
+        <strong>📖 Инструкция:</strong><br><br>
+        <strong>1. Скачайте скрипт и установите зависимости:</strong><br>
+        <code style="background: rgba(0,0,0,0.2); padding: 4px 8px; border-radius: 4px; display: inline-block; margin: 4px 0;">npm install axios chokidar</code><br><br>
+        <strong>2. Запустите скрипт:</strong><br>
+        <code style="background: rgba(0,0,0,0.2); padding: 4px 8px; border-radius: 4px; display: inline-block; margin: 4px 0;">node xipher-bot-sync.js</code><br><br>
+        <strong>3. Откройте папку в VS Code/Cursor:</strong><br>
+        - File → Open Folder → выберите папку, указанную в терминале<br>
+        - Все файлы бота будут видны сразу<br><br>
+        <strong>4. Редактируйте файлы:</strong><br>
+        - Создавайте, редактируйте, удаляйте файлы в VS Code<br>
+        - Изменения автоматически синхронизируются с сервером<br>
+        - Работает в реальном времени, без экспорта/импорта<br><br>
+        <strong>💡 Важно:</strong> Не закрывайте терминал со скриптом - он работает в фоне
+      </div>
+      
+      <div class="field">
+        <label>Токен доступа (скопируйте):</label>
+        <div style="display: flex; gap: 8px; align-items: center;">
+          <input type="text" id="syncToken" readonly style="flex: 1; font-family: monospace; background: var(--bg-tertiary);" value="">
+          <button class="btn small" onclick="copySyncToken()">📋</button>
+        </div>
+      </div>
+      
+      <div class="field">
+        <label>Bot ID:</label>
+        <input type="text" id="syncBotId" readonly style="font-family: monospace; background: var(--bg-tertiary);" value="">
+      </div>
+      
+      <div class="field">
+        <label>Скрипт файлового сервера (Node.js):</label>
+        <textarea id="syncScript" readonly style="width: 100%; min-height: 300px; font-family: monospace; font-size: 0.8rem; padding: 8px; background: var(--bg-tertiary); border: 1px solid var(--border-color); border-radius: 6px; resize: vertical; line-height: 1.4;"></textarea>
+        <div style="display: flex; gap: 8px; margin-top: 8px;">
+          <button class="btn small" onclick="downloadSyncScript()">💾 Скачать скрипт</button>
+          <button class="btn small" onclick="copySyncScript()">📋 Копировать код</button>
+        </div>
+      </div>
+      
+      <div style="display: flex; gap: 8px; justify-content: flex-end; margin-top: 16px;">
+        <button class="btn" onclick="closeConnectVsCodeModal()">Закрыть</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-backdrop" id="importModal">
+    <div class="modal" style="max-width: 500px;">
+      <h2>Импорт проекта</h2>
+      <div class="field">
+        <label for="importFileInput">Выберите ZIP-архив с файлами проекта</label>
+        <input type="file" id="importFileInput" accept=".zip" style="padding: 8px; width: 100%;">
+        <div style="margin-top: 12px; padding: 12px; background: rgba(147, 51, 234, 0.1); border-radius: 6px; font-size: 0.85rem; color: var(--text-secondary); line-height: 1.6;">
+          <strong>📖 Инструкция:</strong><br>
+          1. Экспортируйте проект из VS Code/Cursor как ZIP<br>
+          2. Или создайте ZIP с файлами вашего бота<br>
+          3. Загрузите архив здесь<br>
+          <br>
+          <strong>💡 Совет:</strong> После импорта обновите список файлов (кнопка 🔄)
+        </div>
+      </div>
+      <div style="display: flex; gap: 8px; justify-content: flex-end; margin-top: 16px;">
+        <button class="btn" onclick="closeImportModal()">Отмена</button>
+        <button class="btn primary" onclick="importProject()">Загрузить</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-backdrop" id="newFileModal">
+    <div class="modal">
+      <h2>Новый файл</h2>
+      <div class="field">
+        <label for="newFilePath">Путь к файлу</label>
+        <input id="newFilePath" placeholder="например: main.py или src/index.js">
+      </div>
+      <div style="display: flex; gap: 8px; justify-content: flex-end;">
+        <button class="btn" onclick="closeNewFileModal()">Отмена</button>
+        <button class="btn primary" onclick="createNewFile()">Создать</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-backdrop" id="aiKeyModal">
+    <div class="modal">
+      <h2>OpenAI API Key</h2>
+      <div class="field">
+        <label for="aiKeyInput">Ваш API ключ</label>
+        <input id="aiKeyInput" type="password" placeholder="sk-...">
+      </div>
+      <div style="display: flex; gap: 8px; justify-content: flex-end;">
+        <button class="btn" onclick="closeAiKeyModal()">Отмена</button>
+        <button class="btn primary" id="aiKeySaveBtn">Сохранить</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-backdrop" id="aiOauthModal">
+    <div class="modal" style="min-width: 360px;">
+      <h2>OAuth для ChatGPT</h2>
+      <div class="field">
+        <label for="aiOauthAuthorizeUrl">Authorize URL</label>
+        <input id="aiOauthAuthorizeUrl" placeholder="https://auth.example.com/authorize">
+      </div>
+      <div class="field">
+        <label for="aiOauthTokenUrl">Token URL</label>
+        <input id="aiOauthTokenUrl" placeholder="https://auth.example.com/token">
+      </div>
+      <div class="field">
+        <label for="aiOauthClientId">Client ID</label>
+        <input id="aiOauthClientId" placeholder="client_id">
+      </div>
+      <div class="field">
+        <label for="aiOauthScopes">Scopes</label>
+        <input id="aiOauthScopes" placeholder="openid profile">
+      </div>
+      <div class="field">
+        <label for="aiOauthLink">Ссылка для входа</label>
+        <input id="aiOauthLink" readonly>
+      </div>
+      <div style="display: flex; gap: 8px; justify-content: flex-end;">
+        <button class="btn" onclick="closeAiOauthModal()">Отмена</button>
+        <button class="btn" id="aiOauthSaveBtn">Сохранить</button>
+        <button class="btn" id="aiOauthCopyBtn">Копировать ссылку</button>
+        <button class="btn primary" id="aiOauthLoginBtn">Войти</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="context-menu" id="contextMenu" role="menu" aria-hidden="true"></div>
+
+  <script src="/js/session.js"></script>
+  <script src="/js/notifications.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+  <script>
+    const API_BASE = '';
+    const PREMIUM_ACTIVE_KEY = 'xipher_premium_active';
+    const SCRIPT_IMPORT_KEY_PREFIX = 'xipher_bot_script_imported_';
+    const AI_SETTINGS_KEY = 'xipher_ai_settings';
+    const AI_API_KEY_KEY = 'xipher_ai_openai_key';
+    const AI_OAUTH_TOKEN_KEY = 'xipher_ai_oauth_token';
+    const AI_OAUTH_PENDING_KEY = 'xipher_ai_oauth_pending';
+    const AI_OAUTH_CONFIG_ENDPOINT = '/api/ai-oauth-config';
+    const AI_OAUTH_RETURN_KEY = 'xipher_ai_oauth_return';
+    let currentBotId = '';
+    let currentBotName = '';
+    let currentFilePath = '';
+    let files = {};
+    let savedFiles = {};
+    let openTabs = [];
+    const dirtyFiles = new Set();
+    let projectLanguage = null; // runtime hint: 'nodejs', 'python', null
+    let runInProgress = false;
+    let botScriptCache = { lang: 'python', enabled: false, code: '' };
+    let activePanel = 'explorer';
+    let sidebarVisible = true;
+    let aiSettings = null;
+    let aiMessages = [];
+    let aiBusy = false;
+    let aiAvailableModels = [];
+    let aiAbortController = null;
+    let aiStopRequested = false;
+
+    const LANGUAGE_BY_EXT = {
+      js: 'JavaScript',
+      jsx: 'JavaScript React',
+      ts: 'TypeScript',
+      tsx: 'TypeScript React',
+      py: 'Python',
+      rb: 'Ruby',
+      php: 'PHP',
+      go: 'Go',
+      rs: 'Rust',
+      java: 'Java',
+      kt: 'Kotlin',
+      kts: 'Kotlin',
+      swift: 'Swift',
+      cs: 'C#',
+      c: 'C',
+      h: 'C/C++ Header',
+      cpp: 'C++',
+      hpp: 'C++ Header',
+      cc: 'C++',
+      cxx: 'C++',
+      m: 'Objective-C',
+      mm: 'Objective-C++',
+      scala: 'Scala',
+      dart: 'Dart',
+      lua: 'Lua',
+      r: 'R',
+      sql: 'SQL',
+      sh: 'Shell',
+      bash: 'Shell',
+      zsh: 'Shell',
+      ps1: 'PowerShell',
+      html: 'HTML',
+      htm: 'HTML',
+      css: 'CSS',
+      scss: 'SCSS',
+      less: 'Less',
+      json: 'JSON',
+      yaml: 'YAML',
+      yml: 'YAML',
+      toml: 'TOML',
+      ini: 'INI',
+      xml: 'XML',
+      md: 'Markdown',
+      txt: 'Plain Text',
+      env: 'Env',
+      conf: 'Config',
+      dockerfile: 'Dockerfile',
+      makefile: 'Makefile'
+    };
+
+    const FILE_ICON_BY_EXT = {
+      py: '🐍',
+      js: '📜',
+      jsx: '📜',
+      ts: '📘',
+      tsx: '📘',
+      json: '📦',
+      html: '🌐',
+      htm: '🌐',
+      css: '🎨',
+      scss: '🎨',
+      less: '🎨',
+      md: '📄',
+      txt: '📄',
+      yaml: '⚙️',
+      yml: '⚙️',
+      toml: '⚙️',
+      ini: '⚙️',
+      sh: '🔧',
+      bash: '🔧',
+      zsh: '🔧',
+      ps1: '🔧',
+      go: '🐹',
+      rs: '🦀',
+      java: '☕',
+      kt: '📱',
+      kts: '📱',
+      swift: '🐦',
+      dart: '🎯',
+      php: '🐘',
+      rb: '💎',
+      cs: '🎯',
+      c: '🧩',
+      cpp: '🧩',
+      h: '🧩',
+      hpp: '🧩'
+    };
+
+    const PANEL_TITLES = {
+      explorer: 'Explorer',
+      search: 'Search',
+      scm: 'Source Control',
+      run: 'Run & Debug',
+      extensions: 'Extensions',
+      ai: 'Xipher AI'
+    };
+
+    function getSessionToken() {
+      return localStorage.getItem('xipher_token') || '';
+    }
+
+    async function apiPost(path, body) {
+      const res = await fetch(API_BASE + path, {
+        method: 'POST',
+        credentials: 'include',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(body || {})
+      });
+      const text = await res.text();
+      try { return JSON.parse(text); } catch (_) { return { success: false, message: text || 'Bad response' }; }
+    }
+
+    const oauthCallbackParams = new URLSearchParams(window.location.search);
+    const isOauthCallback = oauthCallbackParams.get('oauth_callback') === '1';
+    if (isOauthCallback) {
+      const code = oauthCallbackParams.get('code');
+      const state = oauthCallbackParams.get('state');
+      if (window.opener && code) {
+        window.opener.postMessage({ type: 'xipher-ai-oauth', code, state }, window.location.origin);
+      } else if (code) {
+        try {
+          localStorage.setItem(AI_OAUTH_RETURN_KEY, JSON.stringify({ code, state }));
+        } catch (_) {}
+      }
+      setTimeout(() => {
+        window.close();
+      }, 100);
+    }
+
+    function getImportKey() {
+      return `${SCRIPT_IMPORT_KEY_PREFIX}${currentBotId || 'unknown'}`;
+    }
+
+    function hasImportedScript() {
+      try {
+        return localStorage.getItem(getImportKey()) === 'true';
+      } catch (_) {
+        return false;
+      }
+    }
+
+    function markImportedScript() {
+      try {
+        localStorage.setItem(getImportKey(), 'true');
+      } catch (_) {}
+    }
+
+    function getLanguageLabel(path) {
+      if (!path) return '—';
+      const lower = path.toLowerCase();
+      if (lower === 'dockerfile') return 'Dockerfile';
+      if (lower === 'makefile') return 'Makefile';
+      if (lower.endsWith('.gitignore')) return 'Git Ignore';
+      const ext = lower.includes('.') ? lower.split('.').pop() : '';
+      if (LANGUAGE_BY_EXT[ext]) return LANGUAGE_BY_EXT[ext];
+      return ext ? ext.toUpperCase() : 'Plain Text';
+    }
+
+    function normalizePremiumFlag(value) {
+      return value === true || value === 'true';
+    }
+
+    function readPremiumCache() {
+      try {
+        const raw = localStorage.getItem(PREMIUM_ACTIVE_KEY);
+        if (raw === 'true') return true;
+        if (raw === 'false') return false;
+      } catch (_) {}
+      return null;
+    }
+
+    function cachePremiumState(active) {
+      try {
+        localStorage.setItem(PREMIUM_ACTIVE_KEY, active ? 'true' : 'false');
+      } catch (_) {}
+    }
+
+    async function resolvePremiumStatus() {
+      let payload = null;
+      if (window.xipherSession && typeof window.xipherSession.validateSession === 'function') {
+        try {
+          const session = await window.xipherSession.validateSession();
+          if (session && session.success) {
+            payload = session.data || session.user || null;
+          }
+        } catch (_) {}
+      }
+
+      if (!payload) {
+        try {
+          const token = getSessionToken();
+          const body = token && token !== 'cookie' ? { token } : {};
+          const data = await apiPost('/api/validate-token', body);
+          if (data && data.success) {
+            payload = data.data || data.user || null;
+          }
+        } catch (_) {}
+      }
+
+      if (payload) {
+        const active = normalizePremiumFlag(payload.is_premium);
+        cachePremiumState(active);
+        return active;
+      }
+
+      cachePremiumState(false);
+      return false;
+    }
+
+    function setPremiumLocked(locked) {
+      const lock = document.getElementById('premiumLock');
+      if (lock) {
+        lock.classList.toggle('active', locked);
+      }
+      document.body.classList.toggle('premium-locked', locked);
+    }
+
+    function addTerminalLine(text, type = 'output') {
+      const terminal = document.getElementById('terminal');
+      const line = document.createElement('div');
+      line.className = 'terminal-line';
+      const prompt = document.createElement('span');
+      prompt.className = 'terminal-prompt';
+      prompt.textContent = '$ ';
+      const content = document.createElement('span');
+      content.className = `terminal-${type}`;
+      content.textContent = text;
+      line.appendChild(prompt);
+      line.appendChild(content);
+      terminal.appendChild(line);
+      terminal.scrollTop = terminal.scrollHeight;
+    }
+
+    function clearTerminal() {
+      document.getElementById('terminal').innerHTML = '';
+    }
+
+    function updateStatusBar() {
+      const statusBot = document.getElementById('statusBot');
+      const statusFile = document.getElementById('statusFile');
+      const statusLanguage = document.getElementById('statusLanguage');
+      const statusCursor = document.getElementById('statusCursor');
+      const editor = document.getElementById('codeEditor');
+
+      if (statusBot) {
+        statusBot.textContent = currentBotId ? `Bot: ${currentBotId.slice(0, 8)}` : 'Bot: —';
+      }
+      if (statusFile) {
+        statusFile.textContent = currentFilePath ? `Файл: ${currentFilePath}` : 'Файл: —';
+      }
+      if (statusLanguage) {
+        statusLanguage.textContent = currentFilePath ? getLanguageLabel(currentFilePath) : '—';
+      }
+      if (statusCursor && editor) {
+        const pos = editor.selectionStart || 0;
+        const textBefore = editor.value.slice(0, pos);
+        const lines = textBefore.split('\n');
+        const line = lines.length || 1;
+        const col = (lines[lines.length - 1] || '').length + 1;
+        statusCursor.textContent = `Ln ${line}, Col ${col}`;
+      }
+      updateRunStatus();
+    }
+
+    function updateRunStatus() {
+      const runStatus = document.getElementById('runStatus');
+      if (!runStatus) return;
+      const runtime = botScriptCache.lang ? botScriptCache.lang.toUpperCase() : (projectLanguage ? projectLanguage.toUpperCase() : '—');
+      const enabled = botScriptCache.enabled ? 'ON' : 'OFF';
+      runStatus.textContent = `Runtime: ${runtime} (${enabled})`;
+    }
+
+    function resolveScriptLang() {
+      if (botScriptCache.lang) return botScriptCache.lang;
+      if (projectLanguage === 'python' || projectLanguage === 'nodejs') return 'python';
+      return 'python';
+    }
+
+    function resolveScriptCode() {
+      const entry = resolvePythonEntry();
+      if (entry && entry.code) return entry.code;
+      if (botScriptCache.code) return botScriptCache.code;
+      return '';
+    }
+
+    function markFileDirty(path, dirty) {
+      if (!path) return;
+      if (dirty) {
+        dirtyFiles.add(path);
+      } else {
+        dirtyFiles.delete(path);
+      }
+      renderEditorTabs();
+    }
+
+    function renderEditorTabs() {
+      const tabs = document.getElementById('editorTabs');
+      if (!tabs) return;
+      tabs.innerHTML = '';
+      if (!openTabs.length) {
+        const placeholder = document.createElement('div');
+        placeholder.style.color = 'var(--ide-muted)';
+        placeholder.style.padding = '4px 8px';
+        placeholder.textContent = 'Нет открытых файлов';
+        tabs.appendChild(placeholder);
+        return;
+      }
+
+      for (const path of openTabs) {
+        const tab = document.createElement('div');
+        tab.className = `editor-tab${path === currentFilePath ? ' active' : ''}`;
+        tab.dataset.path = path;
+        const label = document.createElement('span');
+        label.textContent = path;
+        tab.appendChild(label);
+
+        if (dirtyFiles.has(path)) {
+          const dot = document.createElement('span');
+          dot.className = 'dirty-dot';
+          tab.appendChild(dot);
+        }
+
+        const close = document.createElement('button');
+        close.className = 'tab-close';
+        close.type = 'button';
+        close.textContent = '×';
+        close.addEventListener('click', (e) => {
+          e.stopPropagation();
+          closeEditorTab(path);
+        });
+        tab.appendChild(close);
+
+        tab.addEventListener('click', () => {
+          if (path !== currentFilePath) {
+            loadFile(path);
+          }
+        });
+        tabs.appendChild(tab);
+      }
+    }
+
+    function openEditorTab(path) {
+      if (!path) return;
+      if (!openTabs.includes(path)) {
+        openTabs.push(path);
+      }
+      renderEditorTabs();
+    }
+
+    function closeEditorTab(path) {
+      openTabs = openTabs.filter(p => p !== path);
+      if (currentFilePath === path) {
+        currentFilePath = '';
+        document.getElementById('codeEditor').value = '';
+        if (openTabs.length) {
+          loadFile(openTabs[openTabs.length - 1]);
+        }
+      }
+      renderEditorTabs();
+      updateStatusBar();
+    }
+
+    async function saveFileContent(path, content, { silent = false } = {}) {
+      if (!currentBotId || !path) {
+        if (!silent) addTerminalLine('Ошибка: файл не выбран', 'error');
+        return false;
+      }
+      files[path] = content;
+
+      if (!silent) {
+        addTerminalLine(`Сохранение ${path}...`);
+      }
+      const token = getSessionToken();
+      const data = await apiPost('/api/save-bot-file', {
+        token,
+        bot_id: currentBotId,
+        file_path: path,
+        file_content: content
+      });
+
+      if (data && data.success) {
+        savedFiles[path] = content;
+        markFileDirty(path, false);
+        if (!silent) {
+          addTerminalLine(`Файл ${path} сохранён`);
+          notifications.success('Файл сохранён');
+        }
+        if (path === 'main.py') {
+          botScriptCache.lang = 'python';
+          botScriptCache.code = content;
+          updateRunStatus();
+        }
+        if (path === 'package.json') {
+          projectLanguage = 'nodejs';
+          document.getElementById('buildBtn').style.display = 'block';
+        }
+        return true;
+      }
+      if (!silent) {
+        addTerminalLine(`Ошибка сохранения: ${data?.message || 'Unknown'}`, 'error');
+        notifications.error('Не удалось сохранить файл');
+      }
+      return false;
+    }
+
+    function getFileIcon(path) {
+      const lower = path.toLowerCase();
+      if (lower === 'dockerfile') return '🐳';
+      if (lower === 'makefile') return '🧰';
+      if (lower === 'package.json') return '📦';
+      const ext = lower.includes('.') ? lower.split('.').pop() : '';
+      if (FILE_ICON_BY_EXT[ext]) return FILE_ICON_BY_EXT[ext];
+      return '📄';
+    }
+
+    function detectProjectLanguage(fileList) {
+      // Check for Node.js
+      if (fileList.some(f => f.file_path === 'package.json')) {
+        return 'nodejs';
+      }
+      // Check for Python
+      if (fileList.some(f => f.file_path === 'requirements.txt' || f.file_path.endsWith('.py'))) {
+        return 'python';
+      }
+      return null;
+    }
+
+    async function loadBotInfo() {
+      if (!currentBotId) return;
+      const token = getSessionToken();
+      
+      // Load bot name and flow_json
+      const botsData = await apiPost('/api/get-user-bots', { token });
+      let bot = null;
+      if (botsData && botsData.success && botsData.bots) {
+        bot = botsData.bots.find(b => b.id === currentBotId);
+        if (bot) {
+          currentBotName = bot.bot_name || 'Bot';
+          document.getElementById('botName').textContent = `${currentBotName} IDE`;
+        }
+      }
+      updateStatusBar();
+      
+      // Load bot script code (if exists)
+      const scriptData = await apiPost('/api/get-bot-script', { token, bot_id: currentBotId });
+      botScriptCache = { lang: 'python', enabled: false, code: '' };
+      if (scriptData && scriptData.success && scriptData.data) {
+        botScriptCache = {
+          lang: scriptData.data.script_lang || 'python',
+          enabled: scriptData.data.script_enabled === 'true' || scriptData.data.script_enabled === true,
+          code: scriptData.data.script_code || ''
+        };
+      }
+      updateRunStatus();
+    }
+
+    function getDefaultPythonTemplate(botName) {
+      return `#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+Xipher Bot - ${botName || 'Bot'}
+
+Этот код готов к использованию и работает с Xipher Bot API.
+
+Доступные данные в update:
+- type: 'message' | 'member_joined' - тип события
+- scope: 'direct' | 'group' - где произошло событие
+- scope_id: user_id или group_id - ID чата/группы
+- from_user_id: ID пользователя, который отправил сообщение
+- from_role: роль в группе ('admin', 'member', 'owner' или '')
+- text: текст сообщения (для type='message')
+- joined_username: username при присоединении (для type='member_joined')
+
+API методы:
+- api.send(text) - ответить в текущий чат (ЛС или группа)
+- api.send_dm(user_id, text) - отправить сообщение в ЛС конкретному пользователю
+- api.send_group(group_id, text) - отправить сообщение в группу
+"""
+
+def handle(update, api):
+    """
+    Главная функция обработки событий бота.
+    
+    Args:
+        update: dict с данными о событии
+        api: объект API для отправки сообщений
+    """
+    event_type = update.get('type', '')
+    scope = update.get('scope', '')
+    text = (update.get('text') or '').strip()
+    
+    # Обработка присоединения нового участника в группу
+    if event_type == 'member_joined':
+        username = update.get('joined_username') or 'user'
+        api.send(f"Привет, @{username}! Добро пожаловать в группу 👋")
+        return
+    
+    # Обработка текстовых сообщений
+    if event_type != 'message' or not text:
+        return
+    
+    # Команды бота
+    if text in ('/start', '/help'):
+        help_text = """🤖 Привет! Я бот на Xipher.
+
+Доступные команды:
+/help - показать это сообщение
+/ping - проверить работу бота
+/info - информация о боте
+/echo <текст> - повторить текст
+
+Примеры:
+/echo Привет мир!
+"""
+        api.send(help_text)
+        return
+    
+    if text == '/ping':
+        api.send('🏓 pong')
+        return
+    
+    if text == '/info':
+        info = f"""ℹ️ Информация о боте:
+
+Тип события: {event_type}
+Область: {scope}
+ID области: {update.get('scope_id', 'N/A')}
+Отправитель: {update.get('from_user_id', 'N/A')}
+Роль: {update.get('from_role', 'N/A')}
+"""
+        api.send(info)
+        return
+    
+    # Команда /echo
+    if text.startswith('/echo '):
+        echo_text = text[6:].strip()
+        if echo_text:
+            api.send(f"📢 {echo_text}")
+        else:
+            api.send("Использование: /echo <текст>")
+        return
+    
+    # Обработка обычных сообщений
+    if scope == 'direct':
+        # В личных сообщениях отвечаем на любое сообщение
+        api.send(f"Вы написали: {text}")
+    elif scope == 'group':
+        # В группах отвечаем только на упоминания или команды
+        if text.startswith('/') or '@' in text:
+            api.send(f"Получено в группе: {text}")
+    
+    # Можно добавить свою логику здесь
+    # Например, обработка ключевых слов, интеграции с внешними API и т.д.
+`;
+    }
+
+    async function ensureBootstrapFiles(fileList) {
+      if (fileList.length > 0) {
+        markImportedScript();
+        return false;
+      }
+
+      if (hasImportedScript()) {
+        return false;
+      }
+
+      const token = getSessionToken();
+      if (!token || !currentBotId) return false;
+
+      if (botScriptCache.enabled && botScriptCache.code && botScriptCache.code.trim()) {
+        const saveData = await apiPost('/api/save-bot-file', {
+          token,
+          bot_id: currentBotId,
+          file_path: 'main.py',
+          file_content: botScriptCache.code
+        });
+        if (saveData && saveData.success) {
+          markImportedScript();
+          addTerminalLine('Создан main.py из кода бота');
+          await loadFiles();
+          return true;
+        }
+      } else {
+        const defaultCode = getDefaultPythonTemplate(currentBotName || 'Bot');
+        const saveData = await apiPost('/api/save-bot-file', {
+          token,
+          bot_id: currentBotId,
+          file_path: 'main.py',
+          file_content: defaultCode
+        });
+        if (saveData && saveData.success) {
+          markImportedScript();
+          addTerminalLine('Создан файл main.py (шаблон)');
+          await loadFiles();
+          return true;
+        }
+      }
+
+      return false;
+    }
+
+    async function loadFiles() {
+      if (!currentBotId) return;
+      clearTerminal();
+      addTerminalLine('Загрузка файлов проекта...');
+      
+      const token = getSessionToken();
+      const data = await apiPost('/api/list-bot-files', { token, bot_id: currentBotId });
+      
+      if (!data || !data.success) {
+        addTerminalLine('Ошибка: ' + (data?.message || 'Не удалось загрузить файлы'), 'error');
+        return;
+      }
+      
+      const fileList = data.files || [];
+      if (await ensureBootstrapFiles(fileList)) {
+        return;
+      }
+      files = {};
+      savedFiles = {};
+      dirtyFiles.clear();
+      
+      // Load content for each file
+      for (const f of fileList) {
+        const fileData = await apiPost('/api/get-bot-file', { token, bot_id: currentBotId, file_path: f.file_path });
+        if (fileData && fileData.success && fileData.data) {
+          const content = fileData.data.file_content || '';
+          files[f.file_path] = content;
+          savedFiles[f.file_path] = content;
+        }
+      }
+
+      const badge = document.getElementById('fileCountBadge');
+      if (badge) {
+        badge.textContent = String(fileList.length);
+      }
+      
+      // Detect project language
+      projectLanguage = detectProjectLanguage(fileList);
+      document.getElementById('buildBtn').style.display = projectLanguage === 'nodejs' ? 'block' : 'none';
+      
+      renderFileTree(fileList);
+      const available = new Set(fileList.map(f => f.file_path));
+      openTabs = openTabs.filter(p => available.has(p));
+      for (const path of Array.from(dirtyFiles)) {
+        if (!available.has(path)) {
+          dirtyFiles.delete(path);
+        }
+      }
+      renderEditorTabs();
+      updateStatusBar();
+      const searchInput = document.getElementById('searchInput');
+      if (activePanel === 'search' && searchInput) {
+        runSearch(searchInput.value);
+      }
+      addTerminalLine(`Загружено ${fileList.length} файлов. Язык проекта: ${projectLanguage || 'не определен'}`);
+    }
+
+    function renderFileTree(fileList) {
+      const list = document.getElementById('fileTreeList');
+      list.innerHTML = '';
+      const badge = document.getElementById('fileCountBadge');
+      if (badge) {
+        badge.textContent = String(fileList.length);
+      }
+      
+      if (fileList.length === 0) {
+        const empty = document.createElement('div');
+        empty.style.padding = '8px';
+        empty.style.color = 'var(--text-muted)';
+        empty.style.fontSize = '0.9rem';
+        empty.textContent = 'Нет файлов';
+        list.appendChild(empty);
+        return;
+      }
+      
+      for (const f of fileList) {
+        const item = document.createElement('div');
+        item.className = 'file-item';
+        item.dataset.path = f.file_path;
+        const icon = document.createElement('span');
+        icon.className = 'file-icon';
+        icon.textContent = getFileIcon(f.file_path);
+
+        const name = document.createElement('span');
+        name.style.flex = '1';
+        name.textContent = f.file_path;
+
+        const actions = document.createElement('div');
+        actions.className = 'file-actions';
+
+        const deleteBtn = document.createElement('button');
+        deleteBtn.className = 'btn small danger';
+        deleteBtn.type = 'button';
+        deleteBtn.title = 'Удалить';
+        deleteBtn.textContent = '×';
+        deleteBtn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          deleteFile(f.file_path);
+        });
+
+        actions.appendChild(deleteBtn);
+        item.appendChild(icon);
+        item.appendChild(name);
+        item.appendChild(actions);
+        item.addEventListener('click', (e) => {
+          if (e.target.tagName !== 'BUTTON') {
+            loadFile(f.file_path);
+          }
+        });
+        list.appendChild(item);
+      }
+    }
+
+    function setActivePanel(panel) {
+      activePanel = panel;
+      document.querySelectorAll('.activity-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.panel === panel);
+      });
+      document.querySelectorAll('.sidebar-panel').forEach(p => {
+        p.classList.toggle('active', p.dataset.panel === panel);
+      });
+      const title = document.getElementById('sidebarTitle');
+      if (title) {
+        title.textContent = PANEL_TITLES[panel] || 'Explorer';
+      }
+      const badge = document.getElementById('fileCountBadge');
+      if (badge) {
+        badge.style.display = panel === 'explorer' ? 'inline-flex' : 'none';
+      }
+      if (panel === 'search') {
+        document.getElementById('searchInput')?.focus();
+      }
+    }
+
+    function toggleSidebar(forceVisible) {
+      const sidebar = document.getElementById('ideSidebar');
+      if (!sidebar) return;
+      if (typeof forceVisible === 'boolean') {
+        sidebarVisible = forceVisible;
+      } else {
+        sidebarVisible = !sidebarVisible;
+      }
+      sidebar.classList.toggle('collapsed', !sidebarVisible);
+    }
+
+    function initActivityBar() {
+      document.querySelectorAll('.activity-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const panel = btn.dataset.panel;
+          if (!panel) return;
+          if (activePanel === panel) {
+            toggleSidebar();
+            return;
+          }
+          if (!sidebarVisible) {
+            toggleSidebar(true);
+          }
+          setActivePanel(panel);
+        });
+      });
+    }
+
+    async function openFileAtLine(path, lineNumber) {
+      await loadFile(path);
+      const editor = document.getElementById('codeEditor');
+      const content = files[path] || '';
+      const lines = content.split('\n');
+      let offset = 0;
+      for (let i = 0; i < Math.max(0, lineNumber - 1) && i < lines.length; i++) {
+        offset += lines[i].length + 1;
+      }
+      const lineText = lines[lineNumber - 1] || '';
+      if (editor) {
+        editor.focus();
+        editor.setSelectionRange(offset, offset + lineText.length);
+      }
+      updateStatusBar();
+    }
+
+    function runSearch(term) {
+      const resultsEl = document.getElementById('searchResults');
+      if (!resultsEl) return;
+      resultsEl.innerHTML = '';
+      const query = (term || '').trim();
+      if (!query) {
+        const empty = document.createElement('div');
+        empty.className = 'panel-placeholder';
+        empty.textContent = 'Введите запрос для поиска.';
+        resultsEl.appendChild(empty);
+        return;
+      }
+
+      const lowerQuery = query.toLowerCase();
+      const results = [];
+      const limit = 200;
+
+      for (const [path, content] of Object.entries(files)) {
+        const lines = (content || '').split('\n');
+        for (let i = 0; i < lines.length; i++) {
+          if (lines[i].toLowerCase().includes(lowerQuery)) {
+            results.push({ path, line: i + 1, preview: lines[i] });
+            if (results.length >= limit) break;
+          }
+        }
+        if (results.length >= limit) break;
+      }
+
+      if (!results.length) {
+        const empty = document.createElement('div');
+        empty.className = 'panel-placeholder';
+        empty.textContent = 'Ничего не найдено.';
+        resultsEl.appendChild(empty);
+        return;
+      }
+
+      for (const result of results) {
+        const item = document.createElement('div');
+        item.className = 'search-result';
+        item.addEventListener('click', () => {
+          openFileAtLine(result.path, result.line);
+        });
+        const pathEl = document.createElement('div');
+        pathEl.className = 'search-result-path';
+        pathEl.textContent = `${result.path} : ${result.line}`;
+        const lineEl = document.createElement('div');
+        lineEl.className = 'search-result-line';
+        lineEl.textContent = result.preview.trim();
+        item.appendChild(pathEl);
+        item.appendChild(lineEl);
+        resultsEl.appendChild(item);
+      }
+    }
+
+    function getDefaultAiSettings() {
+      return {
+        apiBase: 'https://api.openai.com/v1',
+        model: 'gpt-4o-mini',
+        mode: 'chat',
+        reasoning: 'medium',
+        autoContext: true,
+        useOAuth: false,
+        oauthAuthorizeUrl: '',
+        oauthTokenUrl: '',
+        oauthClientId: '',
+        oauthScopes: 'openid profile'
+      };
+    }
+
+    function loadAiSettings() {
+      const defaults = getDefaultAiSettings();
+      try {
+        const raw = localStorage.getItem(AI_SETTINGS_KEY);
+        if (raw) {
+          const parsed = JSON.parse(raw);
+          aiSettings = { ...defaults, ...parsed };
+        } else {
+          aiSettings = defaults;
+        }
+      } catch (_) {
+        aiSettings = defaults;
+      }
+      updateAiSettingsUI();
+      updateAiAutoContextUI();
+      updateAiStatus();
+    }
+
+    async function loadAiOAuthDefaults() {
+      try {
+        const response = await fetch(AI_OAUTH_CONFIG_ENDPOINT, { method: 'GET', credentials: 'include' });
+        if (!response.ok) return;
+        const data = await response.json();
+        if (!data || !data.success || !data.data) return;
+        const cfg = data.data;
+        const base = aiSettings || getDefaultAiSettings();
+        aiSettings = {
+          ...base,
+          oauthAuthorizeUrl: cfg.authorize_url || base.oauthAuthorizeUrl,
+          oauthTokenUrl: cfg.token_url || base.oauthTokenUrl,
+          oauthClientId: cfg.client_id || base.oauthClientId,
+          oauthScopes: cfg.scopes || base.oauthScopes
+        };
+        if (cfg.default_use_oauth === true || cfg.default_use_oauth === 'true') {
+          aiSettings.useOAuth = true;
+        }
+        saveAiSettings(aiSettings);
+      } catch (_) {}
+    }
+
+    function saveAiSettings(settings) {
+      aiSettings = { ...getDefaultAiSettings(), ...settings };
+      try {
+        localStorage.setItem(AI_SETTINGS_KEY, JSON.stringify(aiSettings));
+      } catch (_) {}
+      updateAiSettingsUI();
+      updateAiAutoContextUI();
+      updateAiStatus();
+    }
+
+    function updateAiSettingsUI() {
+      if (!aiSettings) return;
+      const modelSelect = document.getElementById('aiModelSelect');
+      const apiBaseInput = document.getElementById('aiApiBaseInput');
+      const useOauthToggle = document.getElementById('aiUseOAuthToggle');
+      const modeSelect = document.getElementById('aiModeSelect');
+      const reasoningSelect = document.getElementById('aiReasoningSelect');
+      const authUrlInput = document.getElementById('aiOauthAuthorizeUrl');
+      const tokenUrlInput = document.getElementById('aiOauthTokenUrl');
+      const clientIdInput = document.getElementById('aiOauthClientId');
+      const scopesInput = document.getElementById('aiOauthScopes');
+
+      renderAiModelOptions(modelSelect);
+      if (apiBaseInput) apiBaseInput.value = aiSettings.apiBase || '';
+      if (useOauthToggle) useOauthToggle.checked = !!aiSettings.useOAuth;
+      if (modeSelect) modeSelect.value = aiSettings.mode || 'chat';
+      if (reasoningSelect) reasoningSelect.value = aiSettings.reasoning || 'medium';
+      if (authUrlInput) authUrlInput.value = aiSettings.oauthAuthorizeUrl || '';
+      if (tokenUrlInput) tokenUrlInput.value = aiSettings.oauthTokenUrl || '';
+      if (clientIdInput) clientIdInput.value = aiSettings.oauthClientId || '';
+      if (scopesInput) scopesInput.value = aiSettings.oauthScopes || '';
+    }
+
+    function updateAiAutoContextUI() {
+      const btn = document.getElementById('aiAutoContextBtn');
+      if (!btn || !aiSettings) return;
+      btn.classList.toggle('inactive', !aiSettings.autoContext);
+    }
+
+    function renderAiModelOptions(selectEl) {
+      if (!selectEl) return;
+      const current = aiSettings?.model || '';
+      const models = aiAvailableModels.length ? aiAvailableModels : (current ? [current] : []);
+      const seen = new Set();
+      selectEl.innerHTML = '';
+      if (!models.length) {
+        const option = document.createElement('option');
+        option.value = '';
+        option.textContent = 'Нет доступных моделей';
+        selectEl.appendChild(option);
+        selectEl.disabled = true;
+        return;
+      }
+      selectEl.disabled = false;
+      for (const model of models) {
+        if (!model || seen.has(model)) continue;
+        const option = document.createElement('option');
+        option.value = model;
+        option.textContent = model;
+        if (model === current) option.selected = true;
+        selectEl.appendChild(option);
+        seen.add(model);
+      }
+      if (current && !seen.has(current)) {
+        const option = document.createElement('option');
+        option.value = current;
+        option.textContent = `${current} (custom)`;
+        option.selected = true;
+        selectEl.appendChild(option);
+      }
+      if (!selectEl.value && selectEl.options.length) {
+        selectEl.selectedIndex = 0;
+      }
+      if (!aiSettings.model && selectEl.value) {
+        aiSettings.model = selectEl.value;
+      }
+    }
+
+    function getAiApiKey() {
+      try {
+        return (localStorage.getItem(AI_API_KEY_KEY) || '').trim();
+      } catch (_) {
+        return '';
+      }
+    }
+
+    function setAiApiKey(value) {
+      try {
+        if (value) {
+          localStorage.setItem(AI_API_KEY_KEY, value);
+        } else {
+          localStorage.removeItem(AI_API_KEY_KEY);
+        }
+      } catch (_) {}
+      updateAiStatus();
+      refreshAiModels();
+    }
+
+    function getAiOauthToken() {
+      try {
+        const raw = localStorage.getItem(AI_OAUTH_TOKEN_KEY);
+        return raw ? JSON.parse(raw) : null;
+      } catch (_) {
+        return null;
+      }
+    }
+
+    function setAiOauthToken(token) {
+      try {
+        localStorage.setItem(AI_OAUTH_TOKEN_KEY, JSON.stringify(token));
+      } catch (_) {}
+      updateAiStatus();
+      refreshAiModels();
+    }
+
+    function clearAiOauthToken() {
+      try {
+        localStorage.removeItem(AI_OAUTH_TOKEN_KEY);
+      } catch (_) {}
+      updateAiStatus();
+      aiAvailableModels = [];
+      updateAiSettingsUI();
+    }
+
+    function updateAiStatus() {
+      const statusEl = document.getElementById('aiStatus');
+      if (!statusEl) return;
+      if (!aiSettings) {
+        statusEl.textContent = 'Не подключено';
+        return;
+      }
+      const authLabel = aiSettings.useOAuth
+        ? (getAiOauthToken() ? 'OAuth подключен' : 'OAuth не подключен')
+        : (getAiApiKey() ? 'API key подключен' : 'API key не задан');
+      const modeLabel = aiSettings.mode ? aiSettings.mode.toUpperCase() : 'CHAT';
+      const modelLabel = aiSettings.model || '—';
+      statusEl.textContent = `${authLabel} · ${modeLabel} · ${modelLabel}`;
+    }
+
+    async function refreshAiModels() {
+      if (!aiSettings) loadAiSettings();
+      const authToken = await getAiAuthToken();
+      if (!authToken) {
+        aiAvailableModels = [];
+        updateAiSettingsUI();
+        return;
+      }
+
+      try {
+        const sessionToken = getSessionToken();
+        if (!sessionToken) {
+          aiAvailableModels = [];
+          updateAiSettingsUI();
+          return;
+        }
+        const authType = aiSettings.useOAuth ? 'oauth' : 'api_key';
+        const data = await apiPost('/api/ai-models', {
+          token: sessionToken,
+          auth_type: authType,
+          api_base: aiSettings.apiBase,
+          api_key: authType === 'api_key' ? authToken : '',
+          oauth_token: authType === 'oauth' ? authToken : ''
+        });
+        if (!data || !data.success || !data.data) {
+          aiAvailableModels = [];
+          updateAiSettingsUI();
+          if (data && data.message) {
+            notifications.error(data.message);
+          }
+          return;
+        }
+        const responseBody = data.data.response_body || '';
+        const parsed = responseBody ? JSON.parse(responseBody) : {};
+        const models = Array.isArray(parsed?.data) ? parsed.data.map(item => item.id).filter(Boolean) : [];
+        const filtered = models.filter(name => /^(gpt|o\\d|o1|o3)/i.test(name));
+        aiAvailableModels = filtered.length ? filtered.sort() : models.sort();
+        if (aiSettings && aiSettings.model && aiAvailableModels.length && !aiAvailableModels.includes(aiSettings.model)) {
+          aiSettings.model = aiAvailableModels[0];
+          saveAiSettings(aiSettings);
+        } else {
+          updateAiSettingsUI();
+        }
+      } catch (_) {
+        aiAvailableModels = [];
+        updateAiSettingsUI();
+        notifications.error('Не удалось получить список моделей');
+      }
+    }
+
+    function appendAiMessage(role, text) {
+      const container = document.getElementById('aiMessages');
+      if (!container) return;
+      const msg = document.createElement('div');
+      msg.className = `ai-message ${role}`;
+      msg.textContent = text;
+      container.appendChild(msg);
+      container.scrollTop = container.scrollHeight;
+
+      if (role === 'user' || role === 'assistant') {
+        aiMessages.push({ role, content: text });
+        if (aiMessages.length > 30) {
+          aiMessages = aiMessages.slice(-30);
+        }
+      }
+    }
+
+    function clearAiMessages() {
+      aiMessages = [];
+      const container = document.getElementById('aiMessages');
+      if (container) container.innerHTML = '';
+    }
+
+    function setAiTyping(active) {
+      const typingEl = document.getElementById('aiTyping');
+      if (typingEl) typingEl.style.display = active ? 'block' : 'none';
+    }
+
+    function insertAiPromptText(text) {
+      const promptEl = document.getElementById('aiPrompt');
+      if (!promptEl) return;
+      const current = promptEl.value.trim();
+      promptEl.value = current ? `${current}\n\n${text}` : text;
+      promptEl.focus();
+    }
+
+    function toggleAiAutoContext() {
+      aiSettings = aiSettings || getDefaultAiSettings();
+      aiSettings.autoContext = !aiSettings.autoContext;
+      saveAiSettings(aiSettings);
+      updateAiAutoContextUI();
+      notifications.info(aiSettings.autoContext ? 'Auto context включен' : 'Auto context выключен');
+    }
+
+    function stopAiRequest() {
+      if (!aiBusy || !aiAbortController) return;
+      aiStopRequested = true;
+      aiAbortController.abort();
+    }
+
+    function insertAiContextSnippet() {
+      const editor = document.getElementById('codeEditor');
+      let snippet = '';
+      if (editor && editor.selectionStart !== editor.selectionEnd) {
+        const selection = editor.value.slice(editor.selectionStart, editor.selectionEnd);
+        snippet = `Контекст выделения:\n${truncateText(selection, 2000)}`;
+      } else if (currentFilePath && files[currentFilePath] !== undefined) {
+        snippet = `Контекст файла: ${currentFilePath}\n${truncateText(files[currentFilePath], 4000)}`;
+      } else {
+        notifications.error('Нет активного файла для контекста');
+        return;
+      }
+      insertAiPromptText(snippet.trim());
+    }
+
+    function openAiCommandMenu() {
+      const anchor = document.getElementById('aiSlashBtn');
+      if (!anchor) return;
+      const rect = anchor.getBoundingClientRect();
+      const targetLabel = currentFilePath ? `файла ${currentFilePath}` : 'проекта';
+      const commands = [
+        { label: 'Объяснить текущий файл', prompt: `Объясни что делает этот файл и его структуру.` },
+        { label: 'Найти ошибки', prompt: `Найди потенциальные ошибки и риски в коде ${targetLabel}.` },
+        { label: 'Рефакторинг', prompt: `Предложи рефакторинг и улучшения для ${targetLabel}.` },
+        { label: 'Сгенерировать тесты', prompt: `Сгенерируй тесты для ${targetLabel}.` },
+        { label: 'Сделать TODO', prompt: `Составь список TODO и улучшений для ${targetLabel}.` }
+      ];
+      showContextMenu(rect.left, rect.bottom + 6, commands.map(item => ({
+        label: item.label,
+        action: () => insertAiPromptText(item.prompt)
+      })));
+    }
+
+    async function sendAiPrompt() {
+      if (aiBusy) return;
+      const promptEl = document.getElementById('aiPrompt');
+      if (!promptEl) return;
+      const text = (promptEl.value || '').trim();
+      if (!text) return;
+      promptEl.value = '';
+      appendAiMessage('user', text);
+      await requestAiCompletion();
+    }
+
+    async function requestAiCompletion() {
+      if (aiBusy) return;
+      aiBusy = true;
+      setAiTyping(true);
+      let timeoutId = null;
+
+      try {
+        if (!aiSettings) {
+          loadAiSettings();
+        }
+
+        const authToken = await getAiAuthToken();
+        if (!authToken) {
+          appendAiMessage('error', 'Нужен API key или OAuth авторизация.');
+          return;
+        }
+
+        const sessionToken = getSessionToken();
+        if (!sessionToken) {
+          appendAiMessage('error', 'Нужна авторизация в Xipher.');
+          return;
+        }
+
+        const model = aiSettings.model || 'gpt-4o-mini';
+        const systemPrompt = buildAiSystemPrompt();
+        const contextPrompt = buildAiContextPrompt();
+        const messages = [];
+        if (systemPrompt) {
+          messages.push({ role: 'system', content: systemPrompt });
+        }
+        if (contextPrompt) {
+          messages.push({ role: 'system', content: contextPrompt });
+        }
+        messages.push(...aiMessages.map(m => ({ role: m.role, content: m.content })));
+
+        const requestBody = { model, messages };
+        const effort = mapReasoningEffort(aiSettings.reasoning || 'medium', model);
+        if (effort) {
+          requestBody.reasoning_effort = effort;
+        }
+        const tools = getAiToolSchema();
+        if (tools.length && aiSettings.mode !== 'chat') {
+          requestBody.tools = tools;
+          requestBody.tool_choice = 'auto';
+        }
+
+        aiAbortController = new AbortController();
+        timeoutId = setTimeout(() => {
+          if (aiAbortController) aiAbortController.abort();
+        }, 45000);
+
+        const authType = aiSettings.useOAuth ? 'oauth' : 'api_key';
+        const response = await fetch(API_BASE + '/api/ai-chat', {
+          method: 'POST',
+          credentials: 'include',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            token: sessionToken,
+            auth_type: authType,
+            api_base: aiSettings.apiBase,
+            api_key: authType === 'api_key' ? authToken : '',
+            oauth_token: authType === 'oauth' ? authToken : '',
+            payload: requestBody
+          }),
+          signal: aiAbortController.signal
+        });
+
+        if (!response.ok) {
+          const errorText = await response.text();
+          appendAiMessage('error', `Ошибка API: ${response.status} ${errorText}`);
+          return;
+        }
+
+        const data = await response.json();
+        if (!data || !data.success || !data.data) {
+          appendAiMessage('error', data?.message || 'Ошибка API');
+          return;
+        }
+
+        const responseBody = data.data.response_body || '';
+        const parsed = responseBody ? JSON.parse(responseBody) : {};
+        const message = parsed?.choices?.[0]?.message || {};
+        const content = message?.content;
+        const toolCalls = message?.tool_calls || [];
+
+        if (!content) {
+          if (!toolCalls.length) {
+            appendAiMessage('error', 'Пустой ответ от API.');
+            return;
+          }
+        }
+        if (content) {
+          appendAiMessage('assistant', content.trim());
+        }
+
+        if (toolCalls.length && aiSettings.mode !== 'chat') {
+          await executeAiToolCalls(toolCalls);
+        }
+      } catch (error) {
+        if (error && error.name === 'AbortError') {
+          appendAiMessage('error', aiStopRequested ? 'Запрос остановлен.' : 'Запрос прерван по таймауту.');
+        } else {
+          const rawMessage = error && error.message ? error.message : String(error || '');
+          const hint = rawMessage === 'Failed to fetch'
+            ? 'Не удалось подключиться к серверу Xipher или API.'
+            : rawMessage;
+          appendAiMessage('error', `Ошибка запроса: ${hint}`);
+        }
+      } finally {
+        if (timeoutId) clearTimeout(timeoutId);
+        aiAbortController = null;
+        aiStopRequested = false;
+        aiBusy = false;
+        setAiTyping(false);
+      }
+    }
+
+    function buildAiSystemPrompt() {
+      if (!aiSettings) return '';
+      const mode = aiSettings.mode || 'chat';
+      const reasoning = aiSettings.reasoning || 'medium';
+      let prompt = 'Ты Xipher AI помощник для разработки. ';
+      if (mode === 'chat') {
+        prompt += 'Отвечай кратко и по делу.';
+      } else if (mode === 'agent') {
+        prompt += 'Думай как агент: предлагай план и шаги, предупреждай о рисках.';
+      } else if (mode === 'full') {
+        prompt += 'Думай как агент с полным доступом к проекту и файлам.';
+      }
+      if (mode !== 'chat') {
+        prompt += ' Когда нужно изменить проект, используй инструменты create_file, update_file, delete_file, create_folder.';
+      }
+      prompt += ` Уровень размышлений: ${formatReasoningLabel(reasoning)}.`;
+      return prompt;
+    }
+
+    function buildAiContextPrompt() {
+      if (!aiSettings) return '';
+      const mode = aiSettings.mode || 'chat';
+      if (mode === 'chat' || !aiSettings.autoContext) return '';
+      const fileList = Object.keys(files || {}).sort();
+      let context = `Контекст проекта. Всего файлов: ${fileList.length}.\n`;
+      if (fileList.length) {
+        context += `Список файлов:\n${fileList.join('\n')}\n`;
+      }
+      if (currentFilePath && files[currentFilePath] !== undefined) {
+        context += `\nТекущий файл: ${currentFilePath}\n`;
+        context += `${truncateText(files[currentFilePath], mode === 'full' ? 12000 : 6000)}\n`;
+      }
+      if (mode === 'full') {
+        let remaining = 24000;
+        for (const path of fileList) {
+          if (path === currentFilePath) continue;
+          const content = files[path];
+          if (!content) continue;
+          const snippet = truncateText(content, Math.min(6000, remaining));
+          if (!snippet) continue;
+          context += `\nФайл: ${path}\n${snippet}\n`;
+          remaining -= snippet.length;
+          if (remaining <= 0) break;
+        }
+      }
+      return context.trim();
+    }
+
+    function getAiToolSchema() {
+      return [
+        {
+          type: 'function',
+          function: {
+            name: 'create_file',
+            description: 'Создать или перезаписать файл проекта.',
+            parameters: {
+              type: 'object',
+              properties: {
+                path: { type: 'string', description: 'Путь к файлу' },
+                content: { type: 'string', description: 'Содержимое файла' }
+              },
+              required: ['path', 'content']
+            }
+          }
+        },
+        {
+          type: 'function',
+          function: {
+            name: 'update_file',
+            description: 'Обновить содержимое файла.',
+            parameters: {
+              type: 'object',
+              properties: {
+                path: { type: 'string', description: 'Путь к файлу' },
+                content: { type: 'string', description: 'Новое содержимое' }
+              },
+              required: ['path', 'content']
+            }
+          }
+        },
+        {
+          type: 'function',
+          function: {
+            name: 'delete_file',
+            description: 'Удалить файл проекта.',
+            parameters: {
+              type: 'object',
+              properties: {
+                path: { type: 'string', description: 'Путь к файлу' }
+              },
+              required: ['path']
+            }
+          }
+        },
+        {
+          type: 'function',
+          function: {
+            name: 'create_folder',
+            description: 'Создать папку (создает служебный файл внутри).',
+            parameters: {
+              type: 'object',
+              properties: {
+                path: { type: 'string', description: 'Путь к папке' }
+              },
+              required: ['path']
+            }
+          }
+        }
+      ];
+    }
+
+    async function executeAiToolCalls(toolCalls) {
+      if (!Array.isArray(toolCalls) || !toolCalls.length) return;
+      const results = [];
+      let changed = false;
+
+      for (const call of toolCalls) {
+        const name = call?.function?.name || '';
+        const argsRaw = call?.function?.arguments || '{}';
+        let args = {};
+        try {
+          args = JSON.parse(argsRaw);
+        } catch (_) {
+          results.push(`❌ ${name}: неверные аргументы`);
+          continue;
+        }
+
+        if (name === 'create_file' || name === 'update_file') {
+          const path = String(args.path || '').trim();
+          if (!isSafeFilePath(path)) {
+            results.push(`❌ ${name}: небезопасный путь`);
+            continue;
+          }
+          const content = String(args.content || '');
+          const ok = await saveFileContent(path, content, { silent: true });
+          if (ok) {
+            results.push(`✅ ${name}: ${path}`);
+            changed = true;
+          } else {
+            results.push(`❌ ${name}: ${path}`);
+          }
+        } else if (name === 'delete_file') {
+          const path = String(args.path || '').trim();
+          if (!isSafeFilePath(path)) {
+            results.push(`❌ delete_file: небезопасный путь`);
+            continue;
+          }
+          const ok = await deleteFileSilent(path);
+          if (ok) {
+            results.push(`✅ delete_file: ${path}`);
+            changed = true;
+          } else {
+            results.push(`❌ delete_file: ${path}`);
+          }
+        } else if (name === 'create_folder') {
+          const raw = String(args.path || '').trim().replace(/[\\/]+$/, '');
+          const folder = raw.endsWith('/') ? raw.slice(0, -1) : raw;
+          if (!folder || !isSafeFilePath(`${folder}/.keep`)) {
+            results.push(`❌ create_folder: небезопасный путь`);
+            continue;
+          }
+          const ok = await saveFileContent(`${folder}/.keep`, '', { silent: true });
+          if (ok) {
+            results.push(`✅ create_folder: ${folder}`);
+            changed = true;
+          } else {
+            results.push(`❌ create_folder: ${folder}`);
+          }
+        } else {
+          results.push(`❌ Неизвестный инструмент: ${name}`);
+        }
+      }
+
+      if (changed) {
+        await loadFiles();
+      }
+      appendAiMessage('assistant', results.join('\n'));
+    }
+
+    async function deleteFileSilent(path) {
+      const token = getSessionToken();
+      if (!token) return false;
+      const data = await apiPost('/api/delete-bot-file', {
+        token,
+        bot_id: currentBotId,
+        file_path: path
+      });
+      if (data && data.success) {
+        delete files[path];
+        delete savedFiles[path];
+        dirtyFiles.delete(path);
+        openTabs = openTabs.filter(p => p !== path);
+        if (currentFilePath === path) {
+          currentFilePath = '';
+          document.getElementById('codeEditor').value = '';
+        }
+        return true;
+      }
+      return false;
+    }
+
+    function truncateText(text, limit) {
+      if (!text) return '';
+      if (text.length <= limit) return text;
+      return text.slice(0, limit) + '\n...';
+    }
+
+    function mapReasoningEffort(level, model) {
+      const normalized = level === 'extra_high' ? 'high' : level;
+      if (!['low', 'medium', 'high'].includes(normalized)) return null;
+      const lowerModel = (model || '').toLowerCase();
+      if (lowerModel.startsWith('o1') || lowerModel.startsWith('o3') || lowerModel.includes('reason')) {
+        return normalized;
+      }
+      return null;
+    }
+
+    function formatReasoningLabel(level) {
+      switch (level) {
+        case 'low':
+          return 'Low';
+        case 'medium':
+          return 'Medium';
+        case 'high':
+          return 'High';
+        case 'extra_high':
+          return 'Extra High';
+        default:
+          return 'Medium';
+      }
+    }
+
+    async function getAiAuthToken() {
+      if (!aiSettings) loadAiSettings();
+      if (aiSettings.useOAuth) {
+        let token = getAiOauthToken();
+        if (!token) return null;
+        if (token.expires_at && token.expires_at <= Date.now() + 30000) {
+          token = await refreshAiOauthToken(token);
+          if (!token) return null;
+        }
+        return token.access_token || null;
+      }
+      return getAiApiKey() || null;
+    }
+
+    async function exchangeAiOauthToken(payload, { silent = false } = {}) {
+      const sessionToken = getSessionToken();
+      if (!sessionToken) {
+        if (!silent) notifications.error('Нужна авторизация в Xipher');
+        return null;
+      }
+      const data = await apiPost('/api/ai-oauth-exchange', { token: sessionToken, ...payload });
+      if (!data || !data.success || !data.data) {
+        if (!silent) notifications.error(data?.message || 'OAuth ошибка');
+        return null;
+      }
+      const responseBody = data.data.response_body || '';
+      let parsed = null;
+      try {
+        parsed = responseBody ? JSON.parse(responseBody) : null;
+      } catch (_) {
+        if (!silent) notifications.error('Неверный ответ OAuth');
+        return null;
+      }
+      if (!parsed || !parsed.access_token) {
+        if (!silent) notifications.error('OAuth ответ без токена');
+        return null;
+      }
+      if (parsed.expires_in && !parsed.expires_at) {
+        parsed.expires_at = Date.now() + parsed.expires_in * 1000;
+      }
+      return parsed;
+    }
+
+    async function refreshAiOauthToken(token) {
+      if (!token || !token.refresh_token) return token;
+      const refreshed = await exchangeAiOauthToken(
+        { grant_type: 'refresh_token', refresh_token: token.refresh_token },
+        { silent: true }
+      );
+      if (!refreshed) {
+        clearAiOauthToken();
+        return null;
+      }
+      setAiOauthToken(refreshed);
+      return refreshed;
+    }
+
+    async function startAiOAuth() {
+      const url = await buildAiOAuthLink(false);
+      if (!url) return;
+      const linkInput = document.getElementById('aiOauthLink');
+      if (linkInput) linkInput.value = url;
+      window.open(url, 'xipher_ai_oauth', 'width=520,height=640');
+    }
+
+    async function handleAiOauthMessage(payload) {
+      if (!payload || !payload.code || !payload.state) return;
+      if (!aiSettings) loadAiSettings();
+      let pending = null;
+      try {
+        const raw = sessionStorage.getItem(AI_OAUTH_PENDING_KEY);
+        pending = raw ? JSON.parse(raw) : null;
+      } catch (_) {}
+      if (!pending || pending.state !== payload.state) return;
+
+      const data = await exchangeAiOauthToken({
+        grant_type: 'authorization_code',
+        code: payload.code,
+        redirect_uri: pending.redirectUri,
+        code_verifier: pending.codeVerifier
+      });
+      if (!data) return;
+      setAiOauthToken(data);
+      aiSettings.useOAuth = true;
+      saveAiSettings(aiSettings);
+      notifications.success('OAuth подключен');
+    }
+
+    function openAiKeyModal() {
+      document.getElementById('aiKeyModal').style.display = 'flex';
+      document.getElementById('aiKeyInput').value = '';
+      document.getElementById('aiKeyInput').focus();
+    }
+
+    function closeAiKeyModal() {
+      document.getElementById('aiKeyModal').style.display = 'none';
+    }
+
+    async function openAiOauthModal() {
+      updateAiSettingsUI();
+      document.getElementById('aiOauthModal').style.display = 'flex';
+      await updateAiOauthLinkPreview();
+    }
+
+    function closeAiOauthModal() {
+      document.getElementById('aiOauthModal').style.display = 'none';
+    }
+
+    function saveAiSettingsFromUi() {
+      const model = document.getElementById('aiModelSelect').value.trim() || 'gpt-4o-mini';
+      const apiBase = document.getElementById('aiApiBaseInput').value.trim();
+      const useOAuth = document.getElementById('aiUseOAuthToggle').checked;
+      const mode = document.getElementById('aiModeSelect').value;
+      const reasoning = document.getElementById('aiReasoningSelect').value;
+      const base = aiSettings || getDefaultAiSettings();
+      saveAiSettings({ ...base, model, apiBase, useOAuth, mode, reasoning });
+      notifications.success('AI настройки сохранены');
+      refreshAiModels();
+    }
+
+    function saveAiOauthSettingsFromUi() {
+      const oauthAuthorizeUrl = document.getElementById('aiOauthAuthorizeUrl').value.trim();
+      const oauthTokenUrl = document.getElementById('aiOauthTokenUrl').value.trim();
+      const oauthClientId = document.getElementById('aiOauthClientId').value.trim();
+      const oauthScopes = document.getElementById('aiOauthScopes').value.trim();
+      const base = aiSettings || getDefaultAiSettings();
+      saveAiSettings({ ...base, oauthAuthorizeUrl, oauthTokenUrl, oauthClientId, oauthScopes });
+      notifications.success('OAuth настройки сохранены');
+      updateAiOauthLinkPreview();
+    }
+
+    function aiSignOut() {
+      clearAiOauthToken();
+      setAiApiKey('');
+      aiSettings = aiSettings || getDefaultAiSettings();
+      aiSettings.useOAuth = false;
+      saveAiSettings(aiSettings);
+      notifications.success('AI отключен');
+    }
+
+    function generateRandomString(length) {
+      const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+      const bytes = new Uint8Array(length);
+      window.crypto.getRandomValues(bytes);
+      let result = '';
+      for (const b of bytes) {
+        result += chars[b % chars.length];
+      }
+      return result;
+    }
+
+    async function generateCodeChallenge(verifier) {
+      if (!window.crypto || !window.crypto.subtle) {
+        return { challenge: verifier, method: 'plain' };
+      }
+      const data = new TextEncoder().encode(verifier);
+      const digest = await window.crypto.subtle.digest('SHA-256', data);
+      return { challenge: base64UrlEncode(new Uint8Array(digest)), method: 'S256' };
+    }
+
+    function base64UrlEncode(bytes) {
+      let binary = '';
+      bytes.forEach((b) => {
+        binary += String.fromCharCode(b);
+      });
+      return btoa(binary).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+    }
+
+    async function buildAiOAuthLink(showErrors = true) {
+      if (!aiSettings) loadAiSettings();
+      if (!aiSettings.oauthAuthorizeUrl || !aiSettings.oauthClientId) {
+        if (showErrors) {
+          notifications.error('Заполните OAuth настройки');
+        }
+        return '';
+      }
+
+      const state = generateRandomString(24);
+      const codeVerifier = generateRandomString(64);
+      const challenge = await generateCodeChallenge(codeVerifier);
+      const redirectUri = `${window.location.origin}/bot-ide.html?oauth_callback=1`;
+
+      const pending = { state, codeVerifier, redirectUri };
+      try {
+        sessionStorage.setItem(AI_OAUTH_PENDING_KEY, JSON.stringify(pending));
+      } catch (_) {}
+
+      const url = new URL(aiSettings.oauthAuthorizeUrl);
+      url.searchParams.set('response_type', 'code');
+      url.searchParams.set('client_id', aiSettings.oauthClientId);
+      url.searchParams.set('redirect_uri', redirectUri);
+      if (aiSettings.oauthScopes) {
+        url.searchParams.set('scope', aiSettings.oauthScopes);
+      }
+      url.searchParams.set('state', state);
+      url.searchParams.set('code_challenge', challenge.challenge);
+      url.searchParams.set('code_challenge_method', challenge.method);
+      return url.toString();
+    }
+
+    async function updateAiOauthLinkPreview() {
+      const linkInput = document.getElementById('aiOauthLink');
+      if (!linkInput) return;
+      const url = await buildAiOAuthLink(false);
+      linkInput.value = url || '';
+    }
+
+    async function consumeAiOauthReturn() {
+      try {
+        const raw = localStorage.getItem(AI_OAUTH_RETURN_KEY);
+        if (!raw) return;
+        localStorage.removeItem(AI_OAUTH_RETURN_KEY);
+        const payload = JSON.parse(raw);
+        await handleAiOauthMessage(payload);
+      } catch (_) {}
+    }
+
+    function initAiPanel() {
+      loadAiSettings();
+      updateAiStatus();
+      loadAiOAuthDefaults()
+        .then(() => refreshAiModels())
+        .catch(() => {});
+    }
+
+    function findFileTreeItem(path) {
+      const items = document.querySelectorAll('.file-item');
+      for (const item of items) {
+        if (item.dataset.path === path) return item;
+      }
+      return null;
+    }
+
+    function isSafeFilePath(path) {
+      if (typeof path !== 'string' || !path.trim()) return false;
+      if (path.includes('..')) return false;
+      if (path.startsWith('/') || path.startsWith('\\')) return false;
+      if (/[\x00-\x1f<>:"|?*]/.test(path)) return false;
+      return true;
+    }
+
+    function loadBotId() {
+      const params = new URLSearchParams(window.location.search);
+      currentBotId = params.get('bot_id') || '';
+      if (!currentBotId) {
+        addTerminalLine('Ошибка: bot_id не указан', 'error');
+        return false;
+      }
+      return true;
+    }
+
+    async function loadFile(path) {
+      if (!currentBotId) return;
+      currentFilePath = path;
+      document.querySelectorAll('.file-item').forEach(el => el.classList.remove('active'));
+      findFileTreeItem(path)?.classList.add('active');
+      openEditorTab(path);
+      
+      // Load from cache or server
+      if (Object.prototype.hasOwnProperty.call(files, path)) {
+        document.getElementById('codeEditor').value = files[path];
+        updateStatusBar();
+        return;
+      }
+      
+      addTerminalLine(`Загрузка ${path}...`);
+      const token = getSessionToken();
+      const data = await apiPost('/api/get-bot-file', { token, bot_id: currentBotId, file_path: path });
+      
+      if (data && data.success && data.data) {
+        const content = data.data.file_content || '';
+        files[path] = content;
+        savedFiles[path] = content;
+        document.getElementById('codeEditor').value = content;
+        addTerminalLine(`Файл ${path} загружен`);
+        markFileDirty(path, false);
+        updateStatusBar();
+      } else {
+        addTerminalLine(`Ошибка загрузки ${path}: ${data?.message || 'Unknown'}`, 'error');
+      }
+    }
+
+    async function saveFile() {
+      if (!currentBotId || !currentFilePath) {
+        addTerminalLine('Ошибка: файл не выбран', 'error');
+        return;
+      }
+      const content = document.getElementById('codeEditor').value;
+      await saveFileContent(currentFilePath, content);
+      updateStatusBar();
+    }
+
+    async function buildProject() {
+      if (!currentBotId || projectLanguage !== 'nodejs') return;
+      addTerminalLine('Сборка проекта (Node.js)...', 'output');
+      const token = getSessionToken();
+      const data = await apiPost('/api/build-bot-project', { token, bot_id: currentBotId });
+      
+      if (data && data.success) {
+        if (data.data && data.data.output) {
+          data.data.output.split('\n').forEach(line => {
+            if (line.trim()) addTerminalLine(line, 'output');
+          });
+        }
+        addTerminalLine('Сборка завершена', 'output');
+      } else {
+        addTerminalLine(`Ошибка сборки: ${data?.message || 'Unknown'}`, 'error');
+      }
+    }
+
+    function resolvePythonEntry() {
+      if (files['main.py'] !== undefined) {
+        return { path: 'main.py', code: files['main.py'] || '' };
+      }
+      if (currentFilePath && currentFilePath.endsWith('.py')) {
+        return { path: currentFilePath, code: files[currentFilePath] || '' };
+      }
+      const pyFile = Object.keys(files).find(p => p.endsWith('.py'));
+      if (pyFile) {
+        return { path: pyFile, code: files[pyFile] || '' };
+      }
+      return null;
+    }
+
+    async function stopBot({ silent = false, lang = null, code = null } = {}) {
+      if (!currentBotId) return false;
+      const token = getSessionToken();
+      if (!token) {
+        if (!silent) notifications.error('Необходима авторизация');
+        return false;
+      }
+
+      const scriptLang = lang || resolveScriptLang();
+      const scriptCode = code !== null ? code : resolveScriptCode();
+
+      if (!silent) {
+        addTerminalLine('Остановка текущего бота...', 'output');
+      }
+      const stopResp = await apiPost('/api/update-bot-script', {
+        token,
+        bot_id: currentBotId,
+        script_lang: scriptLang,
+        script_enabled: 'false',
+        script_code: scriptCode
+      });
+
+      if (stopResp && stopResp.success) {
+        botScriptCache.lang = scriptLang;
+        botScriptCache.enabled = false;
+        if (scriptCode) {
+          botScriptCache.code = scriptCode;
+        }
+        updateRunStatus();
+        if (!silent) {
+          addTerminalLine('Бот остановлен', 'output');
+        }
+        return true;
+      }
+
+      if (!silent) {
+        addTerminalLine(`Ошибка остановки: ${stopResp?.message || 'Unknown'}`, 'error');
+      }
+      return false;
+    }
+
+    async function runProject() {
+      if (!currentBotId || runInProgress) return;
+      const token = getSessionToken();
+      if (!token) {
+        notifications.error('Необходима авторизация');
+        return;
+      }
+
+      const entry = resolvePythonEntry();
+      if (!entry || !entry.code.trim()) {
+        addTerminalLine('Запуск доступен только для Python-файлов (нужен main.py)', 'error');
+        notifications.error('Запуск доступен только для Python');
+        return;
+      }
+
+      runInProgress = true;
+      const runBtn = document.getElementById('runBtn');
+      const prevLabel = runBtn ? runBtn.textContent : '';
+      const runPanelBtn = document.getElementById('runPanelBtn');
+      const prevPanelLabel = runPanelBtn ? runPanelBtn.textContent : '';
+      if (runBtn) {
+        runBtn.disabled = true;
+        runBtn.textContent = 'Перезапуск...';
+      }
+      if (runPanelBtn) {
+        runPanelBtn.disabled = true;
+        runPanelBtn.textContent = 'Перезапуск...';
+      }
+
+      try {
+        if (dirtyFiles.has(entry.path)) {
+          await saveFileContent(entry.path, entry.code, { silent: true });
+        }
+
+        await stopBot({ silent: true, lang: 'python', code: entry.code });
+
+        addTerminalLine('Запуск бота...', 'output');
+        const startResp = await apiPost('/api/update-bot-script', {
+          token,
+          bot_id: currentBotId,
+          script_lang: 'python',
+          script_enabled: 'true',
+          script_code: entry.code
+        });
+
+        if (startResp && startResp.success) {
+          botScriptCache.lang = 'python';
+          botScriptCache.enabled = true;
+          botScriptCache.code = entry.code;
+          updateRunStatus();
+          addTerminalLine('Бот перезапущен и использует новый код', 'output');
+          notifications.success('Бот перезапущен');
+        } else {
+          addTerminalLine(`Ошибка запуска: ${startResp?.message || 'Unknown'}`, 'error');
+          notifications.error('Не удалось запустить бота');
+        }
+      } catch (error) {
+        addTerminalLine(`Ошибка запуска: ${error.message}`, 'error');
+        notifications.error('Ошибка запуска бота');
+      } finally {
+        runInProgress = false;
+        if (runBtn) {
+          runBtn.disabled = false;
+          runBtn.textContent = prevLabel || '▶ Запустить';
+        }
+        if (runPanelBtn) {
+          runPanelBtn.disabled = false;
+          runPanelBtn.textContent = prevPanelLabel || '▶ Запустить';
+        }
+      }
+    }
+
+    function openNewFileModal(prefill = '') {
+      document.getElementById('newFileModal').style.display = 'flex';
+      document.getElementById('newFilePath').value = prefill;
+      document.getElementById('newFilePath').focus();
+    }
+
+    function closeNewFileModal() {
+      document.getElementById('newFileModal').style.display = 'none';
+    }
+
+    async function createNewFile() {
+      const path = (document.getElementById('newFilePath').value || '').trim();
+      if (!path) {
+        notifications.error('Укажи путь к файлу');
+        return;
+      }
+      if (!isSafeFilePath(path)) {
+        notifications.error('Недопустимый путь файла');
+        return;
+      }
+      
+      if (files[path] !== undefined) {
+        notifications.error('Файл уже существует');
+        return;
+      }
+      
+      files[path] = '';
+      savedFiles[path] = '';
+      document.getElementById('codeEditor').value = '';
+      currentFilePath = path;
+      openEditorTab(path);
+
+      const ok = await saveFileContent(path, '', { silent: true });
+      
+      if (ok) {
+        closeNewFileModal();
+        markImportedScript();
+        await loadFiles();
+        loadFile(path);
+        notifications.success('Файл создан');
+      } else {
+        notifications.error('Не удалось создать файл');
+      }
+    }
+
+    function showContextMenu(x, y, items) {
+      const menu = document.getElementById('contextMenu');
+      if (!menu) return;
+      menu.innerHTML = '';
+      for (const item of items) {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.textContent = item.label;
+        if (item.danger) btn.classList.add('danger');
+        if (item.disabled) {
+          btn.disabled = true;
+          btn.style.opacity = '0.6';
+          btn.style.cursor = 'not-allowed';
+        } else {
+          btn.addEventListener('click', () => {
+            hideContextMenu();
+            item.action();
+          });
+        }
+        menu.appendChild(btn);
+      }
+
+      menu.style.display = 'block';
+      menu.setAttribute('aria-hidden', 'false');
+      const menuRect = menu.getBoundingClientRect();
+      const maxX = window.innerWidth - menuRect.width - 8;
+      const maxY = window.innerHeight - menuRect.height - 8;
+      const posX = Math.max(8, Math.min(x, maxX));
+      const posY = Math.max(8, Math.min(y, maxY));
+      menu.style.left = `${posX}px`;
+      menu.style.top = `${posY}px`;
+    }
+
+    function hideContextMenu() {
+      const menu = document.getElementById('contextMenu');
+      if (!menu) return;
+      menu.style.display = 'none';
+      menu.setAttribute('aria-hidden', 'true');
+      menu.innerHTML = '';
+    }
+
+    async function renameFile(oldPath) {
+      const newPath = (prompt('Новый путь файла:', oldPath) || '').trim();
+      if (!newPath || newPath === oldPath) return;
+      if (!isSafeFilePath(newPath)) {
+        notifications.error('Недопустимый путь файла');
+        return;
+      }
+      if (files[newPath] !== undefined) {
+        notifications.error('Файл с таким именем уже существует');
+        return;
+      }
+
+      let content = files[oldPath];
+      if (content === undefined) {
+        const token = getSessionToken();
+        const data = await apiPost('/api/get-bot-file', { token, bot_id: currentBotId, file_path: oldPath });
+        if (data && data.success && data.data) {
+          content = data.data.file_content || '';
+        } else {
+          notifications.error('Не удалось загрузить файл для переименования');
+          return;
+        }
+      }
+
+      const token = getSessionToken();
+      const saveData = await apiPost('/api/save-bot-file', {
+        token,
+        bot_id: currentBotId,
+        file_path: newPath,
+        file_content: content
+      });
+      if (!saveData || !saveData.success) {
+        notifications.error('Не удалось создать файл с новым именем');
+        return;
+      }
+
+      const deleteData = await apiPost('/api/delete-bot-file', {
+        token,
+        bot_id: currentBotId,
+        file_path: oldPath
+      });
+      if (!deleteData || !deleteData.success) {
+        notifications.error('Не удалось удалить старый файл');
+        return;
+      }
+
+      files[newPath] = content;
+      savedFiles[newPath] = content;
+      delete files[oldPath];
+      delete savedFiles[oldPath];
+      dirtyFiles.delete(oldPath);
+      openTabs = openTabs.map(p => (p === oldPath ? newPath : p));
+      if (currentFilePath === oldPath) {
+        currentFilePath = newPath;
+      }
+
+      await loadFiles();
+      await loadFile(newPath);
+      notifications.success('Файл переименован');
+    }
+
+    async function deleteFile(path) {
+      if (!confirm(`Удалить файл ${path}?`)) return;
+      
+      const token = getSessionToken();
+      const data = await apiPost('/api/delete-bot-file', {
+        token,
+        bot_id: currentBotId,
+        file_path: path
+      });
+      
+      if (data && data.success) {
+        delete files[path];
+        delete savedFiles[path];
+        dirtyFiles.delete(path);
+        openTabs = openTabs.filter(p => p !== path);
+        if (currentFilePath === path) {
+          currentFilePath = '';
+          document.getElementById('codeEditor').value = '';
+        }
+        await loadFiles();
+        renderEditorTabs();
+        updateStatusBar();
+        notifications.success('Файл удалён');
+      } else {
+        addTerminalLine(`Ошибка удаления: ${data?.message || 'Unknown'}`, 'error');
+        notifications.error('Не удалось удалить файл');
+      }
+    }
+
+    async function exportProject() {
+      if (!currentBotId) {
+        notifications.error('Бот не выбран');
+        return;
+      }
+      
+      addTerminalLine('Экспорт проекта...', 'output');
+      const token = getSessionToken();
+      
+      try {
+        // Get all files
+        const filesData = await apiPost('/api/list-bot-files', { token, bot_id: currentBotId });
+        if (!filesData || !filesData.success || !filesData.files) {
+          notifications.error('Не удалось загрузить файлы');
+          return;
+        }
+        
+        // Create ZIP using JSZip
+        if (typeof JSZip === 'undefined') {
+          notifications.error('JSZip не загружен');
+          return;
+        }
+        
+        const zip = new JSZip();
+        
+        // Load all files
+        for (const file of filesData.files) {
+          addTerminalLine(`Загрузка ${file.file_path}...`, 'output');
+          const fileData = await apiPost('/api/get-bot-file', { 
+            token, 
+            bot_id: currentBotId, 
+            file_path: file.file_path 
+          });
+          
+          if (fileData && fileData.success && fileData.data) {
+            zip.file(file.file_path, fileData.data.file_content || '');
+          }
+        }
+        
+        // Generate ZIP
+        addTerminalLine('Создание архива...', 'output');
+        const blob = await zip.generateAsync({ type: 'blob' });
+        
+        // Download
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `bot-${currentBotId}-project.zip`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+        
+        addTerminalLine('Проект экспортирован!', 'output');
+        notifications.success('Проект экспортирован');
+      } catch (error) {
+        addTerminalLine(`Ошибка экспорта: ${error.message}`, 'error');
+        notifications.error('Ошибка экспорта проекта');
+      }
+    }
+
+    function openImportModal() {
+      document.getElementById('importModal').style.display = 'flex';
+      document.getElementById('importFileInput').value = '';
+    }
+
+    function closeImportModal() {
+      document.getElementById('importModal').style.display = 'none';
+    }
+
+    async function importProject() {
+      const fileInput = document.getElementById('importFileInput');
+      if (!fileInput.files || !fileInput.files[0]) {
+        notifications.error('Выберите ZIP-файл');
+        return;
+      }
+      
+      if (!currentBotId) {
+        notifications.error('Бот не выбран');
+        return;
+      }
+      
+      const file = fileInput.files[0];
+      if (!file.name.endsWith('.zip')) {
+        notifications.error('Выберите ZIP-архив');
+        return;
+      }
+      
+      addTerminalLine('Импорт проекта...', 'output');
+      
+      try {
+        // Load JSZip if needed
+        if (typeof JSZip === 'undefined') {
+          notifications.error('JSZip не загружен');
+          return;
+        }
+        
+        const zip = new JSZip();
+        const zipData = await zip.loadAsync(file);
+        
+        addTerminalLine(`Найдено файлов: ${Object.keys(zipData.files).length}`, 'output');
+        
+        const token = getSessionToken();
+        let imported = 0;
+        let errors = 0;
+        
+        // Import each file
+        for (const [path, zipFile] of Object.entries(zipData.files)) {
+          if (zipFile.dir) continue; // Skip directories
+          if (!isSafeFilePath(path)) {
+            errors++;
+            addTerminalLine(`Пропущен небезопасный путь: ${path}`, 'error');
+            continue;
+          }
+          
+          try {
+            const content = await zipFile.async('string');
+            addTerminalLine(`Импорт ${path}...`, 'output');
+            
+            const result = await apiPost('/api/save-bot-file', {
+              token,
+              bot_id: currentBotId,
+              file_path: path,
+              file_content: content
+            });
+            
+            if (result && result.success) {
+              imported++;
+            } else {
+              errors++;
+              addTerminalLine(`Ошибка импорта ${path}: ${result?.message || 'Unknown'}`, 'error');
+            }
+          } catch (error) {
+            errors++;
+            addTerminalLine(`Ошибка обработки ${path}: ${error.message}`, 'error');
+          }
+        }
+        
+        addTerminalLine(`Импорт завершён: ${imported} файлов импортировано, ${errors} ошибок`, 'output');
+        notifications.success(`Импортировано ${imported} файлов`);
+        
+        // Reload files
+        await loadFiles();
+        closeImportModal();
+      } catch (error) {
+        addTerminalLine(`Ошибка импорта: ${error.message}`, 'error');
+        notifications.error('Ошибка импорта проекта');
+      }
+    }
+
+    // Event listeners
+    document.getElementById('saveBtn').addEventListener('click', saveFile);
+    document.getElementById('buildBtn').addEventListener('click', buildProject);
+    document.getElementById('runBtn').addEventListener('click', runProject);
+    document.getElementById('runPanelBtn').addEventListener('click', runProject);
+    document.getElementById('stopPanelBtn').addEventListener('click', () => stopBot());
+    document.getElementById('newFileBtn').addEventListener('click', openNewFileModal);
+    document.getElementById('refreshFilesBtn').addEventListener('click', loadFiles);
+    document.getElementById('exportBtn').addEventListener('click', exportProject);
+    document.getElementById('importBtn').addEventListener('click', openImportModal);
+    document.getElementById('connectVsCodeBtn').addEventListener('click', openConnectVsCodeModal);
+    document.getElementById('clearTerminalBtn').addEventListener('click', clearTerminal);
+    document.getElementById('newFileModal').addEventListener('click', (e) => {
+      if (e.target.id === 'newFileModal') closeNewFileModal();
+    });
+    document.getElementById('importModal').addEventListener('click', (e) => {
+      if (e.target.id === 'importModal') closeImportModal();
+    });
+    document.getElementById('connectVsCodeModal').addEventListener('click', (e) => {
+      if (e.target.id === 'connectVsCodeModal') closeConnectVsCodeModal();
+    });
+    document.getElementById('aiKeyBtn').addEventListener('click', openAiKeyModal);
+    document.getElementById('aiOauthBtn').addEventListener('click', openAiOauthModal);
+    document.getElementById('aiSignOutBtn').addEventListener('click', aiSignOut);
+    document.getElementById('aiSendBtn').addEventListener('click', sendAiPrompt);
+    document.getElementById('aiAddBtn').addEventListener('click', insertAiContextSnippet);
+    document.getElementById('aiSlashBtn').addEventListener('click', openAiCommandMenu);
+    document.getElementById('aiAutoContextBtn').addEventListener('click', toggleAiAutoContext);
+    document.getElementById('aiClearBtn').addEventListener('click', () => {
+      clearAiMessages();
+      notifications.success('Чат очищен');
+    });
+    document.getElementById('aiStopBtn').addEventListener('click', stopAiRequest);
+    document.getElementById('aiSaveSettingsBtn').addEventListener('click', saveAiSettingsFromUi);
+    document.getElementById('aiRefreshModelsBtn').addEventListener('click', refreshAiModels);
+    document.getElementById('aiKeySaveBtn').addEventListener('click', () => {
+      const value = document.getElementById('aiKeyInput').value.trim();
+      if (!value) {
+        notifications.error('Введите API ключ');
+        return;
+      }
+      setAiApiKey(value);
+      aiSettings = aiSettings || getDefaultAiSettings();
+      aiSettings.useOAuth = false;
+      saveAiSettings(aiSettings);
+      closeAiKeyModal();
+      notifications.success('API ключ сохранён');
+    });
+    document.getElementById('aiOauthSaveBtn').addEventListener('click', saveAiOauthSettingsFromUi);
+    document.getElementById('aiOauthCopyBtn').addEventListener('click', () => {
+      const linkInput = document.getElementById('aiOauthLink');
+      if (!linkInput || !linkInput.value) {
+        notifications.error('Ссылка ещё не готова');
+        return;
+      }
+      linkInput.select();
+      document.execCommand('copy');
+      notifications.success('Ссылка скопирована');
+    });
+    document.getElementById('aiOauthLoginBtn').addEventListener('click', async () => {
+      saveAiOauthSettingsFromUi();
+      await startAiOAuth();
+    });
+    document.getElementById('aiKeyModal').addEventListener('click', (e) => {
+      if (e.target.id === 'aiKeyModal') closeAiKeyModal();
+    });
+    document.getElementById('aiOauthModal').addEventListener('click', (e) => {
+      if (e.target.id === 'aiOauthModal') closeAiOauthModal();
+    });
+    document.getElementById('aiModelSelect').addEventListener('change', () => {
+      aiSettings = aiSettings || getDefaultAiSettings();
+      aiSettings.model = document.getElementById('aiModelSelect').value;
+      saveAiSettings(aiSettings);
+    });
+    document.getElementById('aiModeSelect').addEventListener('change', () => {
+      aiSettings = aiSettings || getDefaultAiSettings();
+      aiSettings.mode = document.getElementById('aiModeSelect').value;
+      saveAiSettings(aiSettings);
+    });
+    document.getElementById('aiReasoningSelect').addEventListener('change', () => {
+      aiSettings = aiSettings || getDefaultAiSettings();
+      aiSettings.reasoning = document.getElementById('aiReasoningSelect').value;
+      saveAiSettings(aiSettings);
+    });
+    document.getElementById('aiUseOAuthToggle').addEventListener('change', () => {
+      aiSettings = aiSettings || getDefaultAiSettings();
+      aiSettings.useOAuth = document.getElementById('aiUseOAuthToggle').checked;
+      saveAiSettings(aiSettings);
+      updateAiStatus();
+    });
+    document.getElementById('aiOauthAuthorizeUrl').addEventListener('input', updateAiOauthLinkPreview);
+    document.getElementById('aiOauthTokenUrl').addEventListener('input', updateAiOauthLinkPreview);
+    document.getElementById('aiOauthClientId').addEventListener('input', updateAiOauthLinkPreview);
+    document.getElementById('aiOauthScopes').addEventListener('input', updateAiOauthLinkPreview);
+
+    const searchInput = document.getElementById('searchInput');
+    if (searchInput) {
+      searchInput.addEventListener('input', () => runSearch(searchInput.value));
+    }
+
+    const fileTree = document.querySelector('.file-tree');
+    if (fileTree) {
+      fileTree.addEventListener('contextmenu', (e) => {
+        e.preventDefault();
+        const target = e.target.closest('.file-item');
+        if (target && target.dataset.path) {
+          const path = target.dataset.path;
+          const dir = path.includes('/') ? `${path.split('/').slice(0, -1).join('/')}/` : '';
+          showContextMenu(e.clientX, e.clientY, [
+            { label: 'Открыть', action: () => loadFile(path) },
+            { label: 'Новый файл здесь', action: () => openNewFileModal(dir) },
+            { label: 'Переименовать', action: () => renameFile(path) },
+            { label: 'Удалить', action: () => deleteFile(path), danger: true }
+          ]);
+        } else {
+          showContextMenu(e.clientX, e.clientY, [
+            { label: 'Новый файл', action: () => openNewFileModal() },
+            { label: 'Обновить', action: () => loadFiles() }
+          ]);
+        }
+      });
+    }
+
+    const editorArea = document.getElementById('codeEditor');
+    if (editorArea) {
+      editorArea.addEventListener('contextmenu', (e) => {
+        e.preventDefault();
+        showContextMenu(e.clientX, e.clientY, [
+          { label: 'Сохранить', action: () => saveFile(), disabled: !currentFilePath },
+          { label: 'Запустить', action: () => runProject(), disabled: !currentBotId }
+        ]);
+      });
+    }
+
+    document.addEventListener('click', (e) => {
+      const menu = document.getElementById('contextMenu');
+      if (menu && menu.style.display === 'block' && !menu.contains(e.target)) {
+        hideContextMenu();
+      }
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        hideContextMenu();
+      }
+    });
+
+    window.addEventListener('message', (event) => {
+      if (event.origin !== window.location.origin) return;
+      if (!event.data || event.data.type !== 'xipher-ai-oauth') return;
+      handleAiOauthMessage(event.data);
+    });
+
+    const editorEl = document.getElementById('codeEditor');
+    if (editorEl) {
+      const handleEditorChange = () => {
+        if (!currentFilePath) {
+          updateStatusBar();
+          return;
+        }
+        const value = editorEl.value;
+        files[currentFilePath] = value;
+        const savedValue = savedFiles[currentFilePath] || '';
+        markFileDirty(currentFilePath, value !== savedValue);
+        updateStatusBar();
+      };
+      editorEl.addEventListener('input', handleEditorChange);
+      editorEl.addEventListener('click', updateStatusBar);
+      editorEl.addEventListener('keyup', updateStatusBar);
+    }
+
+    const aiPrompt = document.getElementById('aiPrompt');
+    if (aiPrompt) {
+      aiPrompt.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' && !e.shiftKey) {
+          e.preventDefault();
+          sendAiPrompt();
+        }
+      });
+    }
+
+    function openConnectVsCodeModal() {
+      if (!currentBotId) {
+        notifications.error('Бот не выбран');
+        return;
+      }
+      
+      const token = getSessionToken();
+      document.getElementById('syncBotId').value = currentBotId;
+      document.getElementById('syncToken').value = token;
+      
+      const apiBase = window.location.origin;
+      // Generate file server script that mounts bot files as local filesystem
+      const script = `#!/usr/bin/env node
+// Xipher Bot File Server - для VS Code/Cursor
+// Монтирует файлы бота как локальную файловую систему
+// Установите зависимости: npm install axios chokidar
+
+const axios = require('axios');
+const chokidar = require('chokidar');
+const fs = require('fs');
+const path = require('path');
+
+const BOT_ID = '${currentBotId}';
+const TOKEN = '${token}';
+const API_BASE = '${apiBase}';
+const LOCAL_DIR = path.join(process.cwd(), 'xipher-bot-' + BOT_ID.substring(0, 8));
+
+console.log('🚀 Xipher Bot File Server');
+console.log('📁 Папка проекта:', LOCAL_DIR);
+console.log('');
+
+// Создаем локальную папку
+if (!fs.existsSync(LOCAL_DIR)) {
+  fs.mkdirSync(LOCAL_DIR, { recursive: true });
+  console.log('✓ Создана папка:', LOCAL_DIR);
+}
+
+// Функция для загрузки файла с сервера
+async function downloadFile(filePath) {
+  try {
+    const response = await axios.post(\`\${API_BASE}/api/get-bot-file\`, {
+      token: TOKEN,
+      bot_id: BOT_ID,
+      file_path: filePath
+    }, {
+      timeout: 10000,
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    });
+    
+    if (response.data && response.data.success && response.data.data) {
+      const fullPath = path.join(LOCAL_DIR, filePath);
+      const dir = path.dirname(fullPath);
+      if (!fs.existsSync(dir)) {
+        fs.mkdirSync(dir, { recursive: true });
+      }
+      const content = response.data.data.file_content || '';
+      fs.writeFileSync(fullPath, content, 'utf8');
+      return true;
+    }
+  } catch (error) {
+    if (error.response && error.response.status === 404) {
+      // Файл не найден на сервере - это нормально для новых файлов
+      return false;
+    }
+    console.error(\`✗ Ошибка загрузки \${filePath}:\`, error.message);
+  }
+  return false;
+}
+
+// Функция для загрузки файла на сервер
+async function uploadFile(filePath) {
+  try {
+    const fullPath = path.join(LOCAL_DIR, filePath);
+    if (!fs.existsSync(fullPath)) {
+      // Файл удален локально - удаляем на сервере
+      try {
+        await axios.post(\`\${API_BASE}/api/delete-bot-file\`, {
+          token: TOKEN,
+          bot_id: BOT_ID,
+          file_path: filePath
+        });
+        console.log(\`🗑️  Удален на сервере: \${filePath}\`);
+      } catch (e) {
+        // Игнорируем ошибки удаления
+      }
+      return;
+    }
+    
+    // Проверяем, что это файл, а не директория
+    const stats = fs.statSync(fullPath);
+    if (!stats.isFile()) {
+      return;
+    }
+    
+    // Читаем файл с правильной кодировкой
+    let content;
+    try {
+      content = fs.readFileSync(fullPath, 'utf8');
+    } catch (e) {
+      // Если не UTF-8, пробуем как бинарный (для изображений и т.д.)
+      content = fs.readFileSync(fullPath, 'base64');
+      // Для бинарных файлов пока не поддерживаем, пропускаем
+      console.log(\`⚠️  Бинарный файл пропущен: \${filePath}\`);
+      return;
+    }
+    
+    const response = await axios.post(\`\${API_BASE}/api/save-bot-file\`, {
+      token: TOKEN,
+      bot_id: BOT_ID,
+      file_path: filePath.replace(/\\\\/g, '/'), // Нормализуем путь
+      file_content: content
+    }, {
+      timeout: 10000,
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    });
+    
+    if (response.data && response.data.success) {
+      console.log(\`✓ Синхронизирован: \${filePath}\`);
+      return true;
+    } else {
+      console.error(\`✗ Ошибка ответа сервера для \${filePath}:\`, response.data?.message || 'Unknown');
+    }
+  } catch (error) {
+    if (error.code === 'ENOENT') {
+      // Файл был удален, это нормально
+      return;
+    }
+    console.error(\`✗ Ошибка синхронизации \${filePath}:\`, error.message);
+  }
+  return false;
+}
+
+// Загружаем все файлы с сервера при старте
+async function syncFromServer() {
+  console.log('🔄 Загрузка файлов с сервера...');
+  console.log('📡 Подключение к API:', API_BASE);
+  console.log('🤖 Bot ID:', BOT_ID);
+  console.log('');
+  
+  try {
+    const response = await axios.post(\`\${API_BASE}/api/list-bot-files\`, {
+      token: TOKEN,
+      bot_id: BOT_ID
+    }, {
+      timeout: 15000,
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    });
+    
+    if (response.data && response.data.success && response.data.files) {
+      const files = response.data.files;
+      console.log(\`📦 Найдено файлов на сервере: \${files.length}\`);
+      console.log('');
+      
+      if (files.length === 0) {
+        console.log('ℹ️  На сервере нет файлов. Создайте файлы в веб-IDE или через VS Code.');
+        console.log('');
+        return;
+      }
+      
+      let downloaded = 0;
+      let errors = 0;
+      
+      for (const file of files) {
+        const success = await downloadFile(file.file_path);
+        if (success) {
+          downloaded++;
+          process.stdout.write(\`\r📥 Загружено: \${downloaded}/\${files.length} файлов\`);
+        } else {
+          errors++;
+        }
+      }
+      
+      console.log('');
+      console.log('');
+      console.log(\`✅ Загружено \${downloaded} из \${files.length} файлов\`);
+      if (errors > 0) {
+        console.log(\`⚠️  Ошибок: \${errors}\`);
+      }
+      console.log('');
+    } else {
+      console.error('✗ Неверный ответ сервера:', response.data);
+    }
+  } catch (error) {
+    if (error.code === 'ECONNREFUSED') {
+      console.error('✗ Не удалось подключиться к серверу:', API_BASE);
+      console.error('   Убедитесь, что сервер Xipher запущен');
+    } else if (error.response) {
+      console.error('✗ Ошибка API:', error.response.status, error.response.data?.message || error.message);
+    } else {
+      console.error('✗ Ошибка загрузки:', error.message);
+    }
+    console.error('');
+    console.error('Проверьте:');
+    console.error('  1. Сервер Xipher запущен на', API_BASE);
+    console.error('  2. Токен и Bot ID правильные');
+    console.error('  3. Интернет-соединение работает');
+    console.error('');
+  }
+}
+
+// Отслеживаем изменения в локальных файлах
+function watchFiles() {
+  console.log('👀 Отслеживание изменений файлов...');
+  const watcher = chokidar.watch(LOCAL_DIR, {
+    ignored: [/node_modules/, /\\.git/, /\\.vscode/],
+    persistent: true,
+    ignoreInitial: true,
+    awaitWriteFinish: {
+      stabilityThreshold: 500,
+      pollInterval: 100
+    }
+  });
+  
+  watcher.on('change', async (filePath) => {
+    const relativePath = path.relative(LOCAL_DIR, filePath);
+    await uploadFile(relativePath);
+  });
+  
+  watcher.on('add', async (filePath) => {
+    const relativePath = path.relative(LOCAL_DIR, filePath);
+    await uploadFile(relativePath);
+  });
+  
+  watcher.on('unlink', async (filePath) => {
+    const relativePath = path.relative(LOCAL_DIR, filePath);
+    await uploadFile(relativePath); // uploadFile обработает удаление
+  });
+  
+  watcher.on('error', (error) => {
+    console.error('Ошибка watcher:', error);
+  });
+}
+
+// Периодическая синхронизация с сервера (каждые 30 секунд)
+let syncInterval = null;
+function startPeriodicSync() {
+  syncInterval = setInterval(async () => {
+    try {
+      const response = await axios.post(\`\${API_BASE}/api/list-bot-files\`, {
+        token: TOKEN,
+        bot_id: BOT_ID
+      });
+      
+      if (response.data.success && response.data.files) {
+        // Проверяем, есть ли новые файлы на сервере
+        for (const file of response.data.files) {
+          const localPath = path.join(LOCAL_DIR, file.file_path);
+          if (!fs.existsSync(localPath)) {
+            // Файл есть на сервере, но нет локально - загружаем
+            await downloadFile(file.file_path);
+          }
+        }
+      }
+    } catch (error) {
+      // Игнорируем ошибки периодической синхронизации
+    }
+  }, 30000); // 30 секунд
+}
+
+// Запуск
+(async () => {
+  await syncFromServer();
+  watchFiles();
+  startPeriodicSync();
+  
+  console.log('');
+  console.log('═══════════════════════════════════════════════════════');
+  console.log('✅ Файловый сервер запущен!');
+  console.log('');
+  console.log('📂 Откройте эту папку в VS Code/Cursor:');
+  console.log('   ' + LOCAL_DIR);
+  console.log('');
+  console.log('💡 Инструкция:');
+  console.log('   1. File → Open Folder → выберите папку выше');
+  console.log('   2. Редактируйте файлы - изменения синхронизируются автоматически');
+  console.log('   3. Создавайте новые файлы - они сразу появятся на сервере');
+  console.log('   4. Не закрывайте этот терминал');
+  console.log('');
+  console.log('🛑 Для остановки нажмите Ctrl+C');
+  console.log('═══════════════════════════════════════════════════════');
+  console.log('');
+})();
+
+// Graceful shutdown
+process.on('SIGINT', () => {
+  console.log('\\n🛑 Остановка сервера...');
+  if (syncInterval) clearInterval(syncInterval);
+  process.exit(0);
+});`;
+      
+      document.getElementById('syncScript').value = script;
+      document.getElementById('connectVsCodeModal').style.display = 'flex';
+    }
+
+    function closeConnectVsCodeModal() {
+      document.getElementById('connectVsCodeModal').style.display = 'none';
+    }
+
+    function copySyncToken() {
+      const tokenInput = document.getElementById('syncToken');
+      tokenInput.select();
+      document.execCommand('copy');
+      notifications.success('Токен скопирован');
+    }
+
+    function downloadSyncScript() {
+      const script = document.getElementById('syncScript').value;
+      const blob = new Blob([script], { type: 'text/javascript' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `xipher-bot-sync-${currentBotId}.js`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+      notifications.success('Скрипт скачан. Установите: npm install axios chokidar express');
+    }
+
+    function copySyncScript() {
+      const script = document.getElementById('syncScript');
+      script.select();
+      document.execCommand('copy');
+      notifications.success('Код скрипта скопирован в буфер обмена');
+    }
+    document.getElementById('newFilePath').addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') createNewFile();
+    });
+
+    // Initialize
+    (async () => {
+      if (isOauthCallback) {
+        return;
+      }
+      if (window.xipherSession) {
+        const session = await window.xipherSession.requireSessionOrRedirect();
+        if (!session) return;
+      }
+      const isPremium = await resolvePremiumStatus();
+      if (!isPremium) {
+        setPremiumLocked(true);
+        return;
+      }
+      setPremiumLocked(false);
+      initActivityBar();
+      setActivePanel('explorer');
+      initAiPanel();
+      await consumeAiOauthReturn();
+      if (!loadBotId()) return;
+      await loadBotInfo();
+      await loadFiles();
+      // Auto-open main.py if it exists
+      const token = getSessionToken();
+      const filesList = await apiPost('/api/list-bot-files', { token, bot_id: currentBotId });
+      if (filesList && filesList.success && filesList.files) {
+        const mainPy = filesList.files.find(f => f.file_path === 'main.py');
+        if (mainPy) {
+          await loadFile('main.py');
+        }
+      }
+    })();
+  </script>
+</body>
+</html>

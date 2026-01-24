@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/folderEditorRoot"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/panel_bg"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <View
+        android:id="@+id/folderEditorHandle"
+        android:layout_width="44dp"
+        android:layout_height="4dp"
+        android:layout_gravity="center_horizontal"
+        android:background="@drawable/sheet_handle_bg" />
+
+    <TextView
+        android:id="@+id/folderEditorTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:text="@string/folder_create"
+        android:textColor="@color/x_text_primary"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+
+    <EditText
+        android:id="@+id/folderNameInput"
+        android:layout_width="match_parent"
+        android:layout_height="44dp"
+        android:layout_marginTop="12dp"
+        android:background="@drawable/input_bg"
+        android:hint="@string/folder_name_hint"
+        android:inputType="textCapSentences"
+        android:paddingStart="12dp"
+        android:paddingEnd="12dp"
+        android:textColor="@color/x_text_primary"
+        android:textColorHint="@color/x_text_secondary"
+        android:textSize="14sp" />
+
+    <LinearLayout
+        android:id="@+id/folderSearchBar"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/bg_input_bar"
+        android:gravity="center_vertical"
+        android:paddingStart="10dp"
+        android:paddingEnd="10dp">
+
+        <ImageView
+            android:layout_width="18dp"
+            android:layout_height="18dp"
+            android:src="@drawable/ic_search"
+            app:tint="@color/x_text_secondary" />
+
+        <EditText
+            android:id="@+id/folderSearchInput"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_weight="1"
+            android:background="@android:color/transparent"
+            android:hint="@string/search_hint"
+            android:inputType="text"
+            android:maxLines="1"
+            android:textColor="@color/x_text_primary"
+            android:textColorHint="@color/x_text_secondary"
+            android:textSize="14sp" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/folderChatLabel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:layout_marginBottom="6dp"
+        android:text="@string/folder_select_chats"
+        android:textColor="@color/x_text_secondary"
+        android:textSize="12sp"
+        android:textStyle="bold" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="260dp"
+        android:fillViewport="true"
+        android:scrollbars="none">
+
+        <LinearLayout
+            android:id="@+id/folderChatList"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" />
+    </ScrollView>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:gravity="end"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/btnCancelFolder"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:background="@drawable/btn_icon"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            android:text="@string/cancel"
+            android:textAllCaps="false"
+            android:textColor="@color/x_text_secondary"
+            android:textSize="13sp" />
+
+        <Button
+            android:id="@+id/btnSaveFolder"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_marginStart="10dp"
+            android:background="@drawable/btn_primary"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            android:text="@string/save"
+            android:textAllCaps="false"
+            android:textColor="@color/x_on_accent"
+            android:textSize="13sp" />
+    </LinearLayout>
+</LinearLayout>

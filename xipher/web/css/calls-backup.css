@@ -1,0 +1,865 @@
+/* Стили для звонков */
+
+.call-modal-overlay {
+    --call-accent: var(--accent-color);
+    --call-accent-strong: var(--accent-strong);
+    --call-surface: rgba(16, 16, 22, 0.82);
+    --call-surface-strong: rgba(18, 18, 26, 0.92);
+    --call-border: var(--glass-border);
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background:
+        linear-gradient(135deg, rgba(18, 18, 22, 0.8), rgba(8, 8, 10, 0.9)),
+        rgba(8, 8, 10, 0.85);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 99999 !important;
+    backdrop-filter: blur(16px);
+    opacity: 0;
+    transition: opacity 0.25s ease;
+}
+
+.call-modal-overlay.is-visible {
+    opacity: 1;
+}
+
+.call-modal-content {
+    position: relative;
+    background: var(--surface-elevated);
+    border-radius: 24px;
+    padding: 2rem 2rem 1.75rem;
+    max-width: 560px;
+    width: 90%;
+    max-height: 90vh;
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    overflow: hidden;
+    backdrop-filter: blur(var(--glass-blur));
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+    border: 1px solid var(--call-border);
+    transform: translateY(14px) scale(0.98);
+    opacity: 0;
+    transition: transform 0.35s ease, opacity 0.35s ease, box-shadow 0.35s ease;
+}
+
+.call-modal-overlay.is-visible .call-modal-content {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+    box-shadow: 0 24px 80px rgba(0, 0, 0, 0.55), var(--shadow-glow-strong);
+}
+
+.call-modal-content::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+        radial-gradient(circle at 12% 18%, rgba(157, 0, 255, 0.14) 0%, transparent 55%),
+        radial-gradient(circle at 88% 0%, rgba(88, 28, 135, 0.16) 0%, transparent 45%);
+    opacity: 0.7;
+    pointer-events: none;
+}
+
+.call-header,
+.call-video-container,
+.call-actions-outgoing,
+.call-actions-incoming,
+.call-actions-active,
+.call-settings-menu,
+.group-call-container {
+    position: relative;
+    z-index: 1;
+}
+
+.call-header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-top: 0.25rem;
+}
+
+.call-user-info {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
+    text-align: center;
+}
+
+.call-avatar {
+    width: 96px;
+    height: 96px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--call-accent), var(--purple-light));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 2.2rem;
+    font-weight: 600;
+    box-shadow: 0 0 20px rgba(147, 51, 234, 0.5);
+    position: relative;
+}
+
+.call-avatar::after {
+    content: '';
+    position: absolute;
+    inset: -10px;
+    border-radius: 50%;
+    border: 1px solid rgba(157, 0, 255, 0.6);
+    box-shadow: 0 0 24px rgba(157, 0, 255, 0.45);
+    opacity: 0;
+    animation: callAvatarPulse 1.6s ease-out infinite;
+    pointer-events: none;
+}
+
+.call-modal-overlay.state-incoming .call-avatar::after,
+.call-modal-overlay.state-outgoing .call-avatar::after {
+    opacity: 1;
+}
+
+.call-modal-overlay.state-incoming .call-avatar::after {
+    animation-duration: 1.2s;
+}
+
+.call-modal-overlay.state-outgoing .call-avatar::after {
+    animation-duration: 1.8s;
+}
+
+.call-user-details h3 {
+    margin: 0;
+    font-size: 1.6rem;
+    color: var(--text-primary);
+    font-weight: 600;
+    letter-spacing: 0.01em;
+}
+
+.call-user-details {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.call-status {
+    margin: 0.35rem 0 0 0;
+    color: var(--text-secondary);
+    font-size: 0.95rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.call-timer {
+    margin: 0.4rem 0 0 0;
+    color: var(--accent-color);
+    font-size: 1.1rem;
+    font-weight: 600;
+    font-family: 'Courier New', monospace;
+    text-shadow: 0 0 16px rgba(157, 0, 255, 0.35);
+}
+
+.call-video-container {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16/9;
+    background: linear-gradient(135deg, rgba(14, 14, 20, 0.96), rgba(26, 12, 40, 0.9));
+    border-radius: 18px;
+    overflow: hidden;
+    margin-bottom: 0.5rem;
+    border: 1px solid var(--call-border);
+    box-shadow: var(--shadow-card);
+    isolation: isolate;
+}
+
+.call-video-container::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at 70% 20%, rgba(157, 0, 255, 0.25), transparent 55%);
+    opacity: 0.6;
+    pointer-events: none;
+    z-index: 0;
+}
+
+.call-video-container::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border: 1px solid rgba(157, 0, 255, 0.3);
+    border-radius: inherit;
+    pointer-events: none;
+    z-index: 3;
+}
+
+#localVideo {
+    position: absolute;
+    bottom: 12px;
+    right: 12px;
+    width: 132px;
+    height: 98px;
+    border-radius: 14px;
+    object-fit: cover;
+    border: 2px solid var(--accent-color);
+    background: var(--black-tertiary);
+    z-index: 2;
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4), 0 0 18px rgba(147, 51, 234, 0.4);
+}
+
+#remoteVideo {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    background: var(--black-tertiary);
+    position: relative;
+    z-index: 1;
+    filter: saturate(1.05) contrast(1.02);
+}
+
+.call-actions-outgoing,
+.call-actions-incoming,
+.call-actions-active {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    opacity: 0;
+    transform: translateY(8px);
+    transition: opacity 0.25s ease, transform 0.25s ease;
+}
+
+.call-modal-overlay.is-visible .call-actions-outgoing,
+.call-modal-overlay.is-visible .call-actions-incoming,
+.call-modal-overlay.is-visible .call-actions-active {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.call-modal-content > .call-actions-outgoing,
+.call-modal-content > .call-actions-incoming,
+.call-modal-content > .call-actions-active {
+    margin-top: auto;
+}
+
+.call-actions-active {
+    background: rgba(12, 12, 18, 0.6);
+    border: 1px solid var(--call-border);
+    border-radius: 999px;
+    padding: 0.55rem 0.75rem;
+    backdrop-filter: blur(12px);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.3);
+}
+
+.call-actions-outgoing {
+    display: none;
+}
+
+.call-actions-incoming {
+    display: none;
+}
+
+.call-actions-active {
+    display: none;
+}
+
+.call-btn {
+    padding: 0.9rem 1.6rem;
+    border: none;
+    border-radius: 999px;
+    font-size: 0.98rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.6rem;
+    min-width: 128px;
+    letter-spacing: 0.01em;
+}
+
+.call-btn:active {
+    transform: translateY(0);
+    filter: brightness(0.95);
+}
+
+.call-btn-accept {
+    background: linear-gradient(135deg, rgba(53, 212, 154, 0.95), rgba(22, 165, 107, 0.95));
+    color: white;
+    box-shadow: 0 12px 24px rgba(53, 212, 154, 0.35);
+}
+
+.call-btn-accept:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 16px 32px rgba(53, 212, 154, 0.45);
+}
+
+.call-btn-reject,
+.call-btn-cancel,
+.call-btn-end {
+    background: linear-gradient(135deg, rgba(239, 68, 68, 0.95), rgba(185, 28, 28, 0.95));
+    color: white;
+    box-shadow: 0 12px 24px rgba(239, 68, 68, 0.35);
+}
+
+.call-btn-reject:hover,
+.call-btn-cancel:hover,
+.call-btn-end:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 16px 32px rgba(239, 68, 68, 0.45);
+}
+
+.call-btn-toggle {
+    background: rgba(20, 20, 28, 0.7);
+    color: var(--text-primary);
+    border: 1px solid var(--call-border);
+    padding: 0;
+    min-width: 52px;
+    width: 52px;
+    height: 52px;
+    font-size: 1.5rem;
+    border-radius: 50%;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.35);
+}
+
+.call-btn-toggle:hover {
+    background: rgba(26, 26, 36, 0.85);
+    border-color: var(--accent-color);
+    transform: scale(1.05);
+}
+
+.call-btn-icon {
+    font-size: 1.1rem;
+    line-height: 1;
+}
+
+.call-btn-label {
+    font-size: 0.95rem;
+}
+
+.call-actions-active .call-btn-label {
+    display: none;
+}
+
+.call-actions-active .call-btn {
+    padding: 0;
+    min-width: 56px;
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+}
+
+.call-actions-active .call-btn-end {
+    width: 64px;
+    height: 64px;
+    min-width: 64px;
+    font-size: 1.2rem;
+}
+
+.call-actions-active .call-btn-icon {
+    font-size: 1.2rem;
+}
+
+.call-btn-toggle[style*="opacity: 0.5"] {
+    opacity: 0.5 !important;
+}
+
+.call-header {
+    position: relative;
+}
+
+.call-header-actions {
+    position: absolute;
+    top: 0.1rem;
+    right: 0.1rem;
+    display: flex;
+    gap: 0.5rem;
+}
+
+.call-btn-minimize,
+.call-btn-settings {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    background: rgba(18, 18, 26, 0.7);
+    border: 1px solid var(--call-border);
+    color: var(--text-secondary);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    transition: all 0.2s ease;
+}
+
+.call-btn-minimize:hover,
+.call-btn-settings:hover {
+    background: rgba(26, 26, 36, 0.85);
+    color: var(--text-primary);
+    border-color: var(--accent-color);
+}
+
+.call-settings-menu {
+    background: rgba(18, 18, 26, 0.7);
+    border: 1px solid var(--call-border);
+    border-radius: 16px;
+    padding: 1rem;
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.25);
+    backdrop-filter: blur(12px);
+}
+
+.call-setting-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+.call-setting-item:last-child {
+    margin-bottom: 0;
+}
+
+.call-setting-item label {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    font-weight: 500;
+}
+
+.call-device-select {
+    background: rgba(22, 22, 30, 0.7);
+    border: 1px solid var(--call-border);
+    border-radius: 8px;
+    padding: 0.75rem;
+    color: var(--text-primary);
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.call-device-select:hover {
+    border-color: var(--accent-color);
+}
+
+.call-device-select:focus {
+    outline: none;
+    border-color: var(--accent-color);
+    box-shadow: 0 0 0 3px rgba(157, 0, 255, 0.15);
+}
+
+.call-quality-inline {
+    display: flex;
+    gap: 0.6rem;
+    flex-wrap: wrap;
+}
+
+.call-quality-inline .call-device-select {
+    flex: 1;
+    min-width: 120px;
+}
+
+.call-quality-note {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    margin-top: 0.35rem;
+}
+
+/* Минимизированное окно звонка */
+.minimized-call {
+    position: fixed;
+    bottom: calc(20px + var(--call-controls-offset, 0px));
+    right: 20px;
+    background: rgba(18, 18, 26, 0.85);
+    border: 1px solid var(--call-border);
+    border-radius: 18px;
+    padding: 0.85rem 1rem;
+    min-width: 280px;
+    box-shadow: 0 14px 36px rgba(0, 0, 0, 0.45);
+    z-index: 10001;
+    backdrop-filter: blur(14px);
+    display: none;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.minimized-call-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+}
+
+.minimized-call-info {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    flex: 1;
+}
+
+.minimized-call-avatar {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--call-accent), var(--purple-light));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: 600;
+    font-size: 1.2rem;
+    box-shadow: 0 0 15px rgba(147, 51, 234, 0.4);
+}
+
+.minimized-call-details {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    flex: 1;
+    min-width: 0;
+}
+
+.minimized-call-name {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.minimized-call-timer {
+    font-size: 0.85rem;
+    color: var(--purple-primary);
+    font-weight: 600;
+    font-family: 'Courier New', monospace;
+}
+
+.minimized-call-actions {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.minimized-call-btn {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: rgba(22, 22, 30, 0.7);
+    border: 1px solid var(--call-border);
+    color: var(--text-secondary);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+    transition: all 0.2s ease;
+}
+
+.minimized-call-btn:hover {
+    background: rgba(26, 26, 36, 0.85);
+    color: var(--text-primary);
+    border-color: var(--accent-color);
+}
+
+.minimized-call-end {
+    color: var(--error-color);
+}
+
+.minimized-call-end:hover {
+    background: rgba(239, 68, 68, 0.2);
+    border-color: var(--error-color);
+}
+
+/* Адаптивность */
+@media (max-width: 768px) {
+    .call-modal-content {
+        width: 95%;
+        padding: 1.5rem;
+    }
+    
+    .call-avatar {
+        width: 72px;
+        height: 72px;
+        font-size: 1.7rem;
+    }
+    
+    .call-user-details h3 {
+        font-size: 1.2rem;
+    }
+    
+    #localVideo {
+        width: 110px;
+        height: 78px;
+    }
+    
+    .call-btn {
+        padding: 0.75rem 1.35rem;
+        font-size: 0.9rem;
+        min-width: 112px;
+    }
+    
+    .call-btn-toggle {
+        width: 46px;
+        height: 46px;
+        min-width: 46px;
+        font-size: 1.2rem;
+    }
+
+    .call-actions-active .call-btn {
+        width: 50px;
+        height: 50px;
+        min-width: 50px;
+    }
+
+    .call-actions-active .call-btn-end {
+        width: 58px;
+        height: 58px;
+        min-width: 58px;
+    }
+}
+
+/* Стили для групповых звонков */
+.group-call-container {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+    min-height: 500px;
+    max-height: 80vh;
+}
+
+.group-call-header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--call-border);
+}
+
+.call-participants-count {
+    color: var(--text-secondary);
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin: 0;
+}
+
+.group-call-participants {
+    flex: 1;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+    overflow-y: auto;
+    padding: 1rem;
+    background: rgba(18, 18, 26, 0.6);
+    border-radius: 16px;
+    margin-bottom: 1rem;
+    max-height: 400px;
+    border: 1px solid var(--call-border);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
+}
+
+.group-call-participant {
+    position: relative;
+    aspect-ratio: 16/9;
+    background: var(--black-tertiary);
+    border-radius: 14px;
+    overflow: hidden;
+    border: 1px solid var(--call-border);
+    transition: all 0.3s ease;
+}
+
+.group-call-participant:hover {
+    border-color: var(--accent-color);
+    transform: scale(1.02);
+}
+
+.group-call-participant video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    background: var(--black-tertiary);
+}
+
+.participant-name {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.8), transparent);
+    color: white;
+    padding: 0.5rem;
+    font-size: 0.85rem;
+    font-weight: 500;
+}
+
+.group-call-local-video {
+    position: relative;
+    width: 200px;
+    height: 150px;
+    margin: 0 auto;
+    border-radius: 16px;
+    overflow: hidden;
+    border: 2px solid rgba(157, 0, 255, 0.6);
+    background: var(--black-tertiary);
+}
+
+.group-call-local-video video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.local-video-label {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: linear-gradient(to top, rgba(157, 0, 255, 0.65), transparent);
+    color: white;
+    padding: 0.5rem;
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-align: center;
+}
+
+/* Кнопки для группового звонка */
+#groupCallActionsOutgoing,
+#groupCallActionsIncoming,
+#groupCallActionsActive {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem;
+    margin-top: 1rem;
+    flex-wrap: wrap;
+}
+
+#groupCallContainer .call-actions-outgoing,
+#groupCallContainer .call-actions-incoming,
+#groupCallContainer .call-actions-active {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.6rem 0.75rem;
+    margin-top: 0.75rem;
+    flex-wrap: wrap;
+}
+
+/* Анимации для уведомлений о звонках */
+@keyframes callAvatarPulse {
+    0% {
+        transform: scale(0.9);
+        opacity: 0.2;
+    }
+    60% {
+        transform: scale(1.08);
+        opacity: 0.55;
+    }
+    100% {
+        transform: scale(1.18);
+        opacity: 0;
+    }
+}
+
+@keyframes slideInRight {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@keyframes slideOutRight {
+    from {
+        transform: translateX(0);
+        opacity: 1;
+    }
+    to {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+}
+
+.call-notification {
+    animation: slideInRight 0.3s ease-out;
+}
+
+.call-type-modal {
+    max-width: 420px;
+}
+
+.call-type-body {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.call-type-actions {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 0.75rem;
+}
+
+.call-type-option {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    width: 100%;
+}
+
+.call-type-option:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+    box-shadow: none;
+}
+
+.call-type-icon {
+    font-size: 1.1rem;
+}
+
+.call-type-hint {
+    margin: 0;
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    text-align: center;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .call-modal-overlay,
+    .call-modal-content,
+    .call-actions-outgoing,
+    .call-actions-incoming,
+    .call-actions-active {
+        transition: none;
+    }
+    
+    .call-avatar::after,
+    .call-notification {
+        animation: none;
+    }
+}
+
+/* Адаптивность для групповых звонков */
+@media (max-width: 768px) {
+    .group-call-participants {
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        gap: 0.75rem;
+        padding: 0.75rem;
+    }
+    
+    .group-call-local-video {
+        width: 150px;
+        height: 112px;
+    }
+}

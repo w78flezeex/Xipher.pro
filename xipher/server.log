@@ -1,0 +1,1367 @@
+nohup: ignoring input
+[2026-01-24 00:28:56] [INFO] Starting Xipher Server...
+[2026-01-24 00:28:56] [INFO] Server will listen on 0.0.0.0:8080
+[2026-01-24 00:28:56] [INFO] Connected to PostgreSQL database
+NOTICE:  constraint "no_self_message" of relation "messages" does not exist, skipping
+[2026-01-24 00:28:56] [INFO] Ensured no_self_message constraint is dropped for saved messages support
+[2026-01-24 00:28:57] [INFO] Ensured messages.message_type allows location types
+NOTICE:  relation "chat_pins" already exists, skipping
+NOTICE:  relation "user_chat_pins" already exists, skipping
+NOTICE:  relation "idx_user_chat_pins_user" already exists, skipping
+NOTICE:  relation "user_chat_folders" already exists, skipping
+[2026-01-24 00:28:57] [ERROR] PostgreSQL error: ERROR:  must be owner of table user_profiles
+
+[2026-01-24 00:28:57] [WARNING] Could not ensure user_profiles.linked_channel_id exists: ERROR:  must be owner of table user_profiles
+
+[2026-01-24 00:28:57] [ERROR] PostgreSQL error: ERROR:  must be owner of table user_profiles
+
+[2026-01-24 00:28:57] [WARNING] Could not ensure user_profiles.business_hours_json exists: ERROR:  must be owner of table user_profiles
+
+NOTICE:  column "avatar_url" of relation "channels" already exists, skipping
+[2026-01-24 00:28:57] [ERROR] PostgreSQL error: ERROR:  must be owner of table chats
+CONTEXT:  SQL statement "ALTER TABLE chats ADD COLUMN IF NOT EXISTS avatar_url VARCHAR(500)"
+PL/pgSQL function inline_code_block line 1 at EXECUTE
+
+[2026-01-24 00:28:57] [WARNING] Could not ensure chats.avatar_url exists: ERROR:  must be owner of table chats
+CONTEXT:  SQL statement "ALTER TABLE chats ADD COLUMN IF NOT EXISTS avatar_url VARCHAR(500)"
+PL/pgSQL function inline_code_block line 1 at EXECUTE
+
+[2026-01-24 00:28:57] [ERROR] PostgreSQL error: ERROR:  must be owner of table chats
+CONTEXT:  SQL statement "ALTER TABLE chats ADD COLUMN IF NOT EXISTS is_verified BOOLEAN DEFAULT FALSE"
+PL/pgSQL function inline_code_block line 1 at EXECUTE
+
+[2026-01-24 00:28:57] [WARNING] Could not ensure chats.is_verified exists: ERROR:  must be owner of table chats
+CONTEXT:  SQL statement "ALTER TABLE chats ADD COLUMN IF NOT EXISTS is_verified BOOLEAN DEFAULT FALSE"
+PL/pgSQL function inline_code_block line 1 at EXECUTE
+
+NOTICE:  relation "chat_join_requests" already exists, skipping
+[2026-01-24 00:28:57] [ERROR] PostgreSQL error: ERROR:  must be owner of table chat_join_requests
+CONTEXT:  SQL statement "CREATE INDEX IF NOT EXISTS idx_chat_join_requests_chat ON chat_join_requests(chat_id)"
+PL/pgSQL function inline_code_block line 1 at EXECUTE
+
+[2026-01-24 00:28:57] [WARNING] Could not ensure chat_join_requests table exists: ERROR:  must be owner of table chat_join_requests
+CONTEXT:  SQL statement "CREATE INDEX IF NOT EXISTS idx_chat_join_requests_chat ON chat_join_requests(chat_id)"
+PL/pgSQL function inline_code_block line 1 at EXECUTE
+
+NOTICE:  relation "chat_allowed_reactions" already exists, skipping
+[2026-01-24 00:28:57] [ERROR] PostgreSQL error: ERROR:  must be owner of table chat_allowed_reactions
+CONTEXT:  SQL statement "CREATE INDEX IF NOT EXISTS idx_chat_allowed_reactions_chat ON chat_allowed_reactions(chat_id)"
+PL/pgSQL function inline_code_block line 1 at EXECUTE
+
+[2026-01-24 00:28:57] [WARNING] Could not ensure chat_allowed_reactions table exists: ERROR:  must be owner of table chat_allowed_reactions
+CONTEXT:  SQL statement "CREATE INDEX IF NOT EXISTS idx_chat_allowed_reactions_chat ON chat_allowed_reactions(chat_id)"
+PL/pgSQL function inline_code_block line 1 at EXECUTE
+
+NOTICE:  relation "chat_invite_links" already exists, skipping
+[2026-01-24 00:28:57] [ERROR] PostgreSQL error: ERROR:  must be owner of table chat_invite_links
+CONTEXT:  SQL statement "CREATE INDEX IF NOT EXISTS idx_chat_invite_links_chat ON chat_invite_links(chat_id)"
+PL/pgSQL function inline_code_block line 1 at EXECUTE
+
+[2026-01-24 00:28:57] [WARNING] Could not ensure chat_invite_links table exists: ERROR:  must be owner of table chat_invite_links
+CONTEXT:  SQL statement "CREATE INDEX IF NOT EXISTS idx_chat_invite_links_chat ON chat_invite_links(chat_id)"
+PL/pgSQL function inline_code_block line 1 at EXECUTE
+
+NOTICE:  column "bot_description" of relation "bot_builder_bots" already exists, skipping
+NOTICE:  column "bot_avatar_url" of relation "bot_builder_bots" already exists, skipping
+NOTICE:  column "bot_user_id" of relation "bot_builder_bots" already exists, skipping
+NOTICE:  column "script_lang" of relation "bot_builder_bots" already exists, skipping
+NOTICE:  column "script_enabled" of relation "bot_builder_bots" already exists, skipping
+NOTICE:  column "script_code" of relation "bot_builder_bots" already exists, skipping
+NOTICE:  relation "bot_notes" already exists, skipping
+NOTICE:  relation "idx_bot_notes_scope" already exists, skipping
+NOTICE:  relation "bot_reminders" already exists, skipping
+NOTICE:  relation "idx_bot_reminders_due" already exists, skipping
+NOTICE:  relation "bot_developers" already exists, skipping
+NOTICE:  relation "idx_bot_developers_bot" already exists, skipping
+NOTICE:  relation "idx_bot_developers_user" already exists, skipping
+NOTICE:  relation "bot_files" already exists, skipping
+NOTICE:  relation "idx_bot_files_bot" already exists, skipping
+NOTICE:  column "reply_markup" of relation "messages" already exists, skipping
+NOTICE:  column "is_bot" of relation "users" already exists, skipping
+NOTICE:  column "is_premium" of relation "users" already exists, skipping
+NOTICE:  column "premium_plan" of relation "users" already exists, skipping
+NOTICE:  column "premium_expires_at" of relation "users" already exists, skipping
+NOTICE:  relation "premium_payments" already exists, skipping
+NOTICE:  column "gift_receiver_id" of relation "premium_payments" already exists, skipping
+NOTICE:  relation "idx_premium_payments_user_id" already exists, skipping
+NOTICE:  column "is_admin" of relation "users" already exists, skipping
+NOTICE:  column "role" of relation "users" already exists, skipping
+NOTICE:  column "totp_secret" of relation "users" already exists, skipping
+NOTICE:  column "admin_ip_whitelist" of relation "users" already exists, skipping
+NOTICE:  relation "admin_settings" already exists, skipping
+NOTICE:  relation "user_push_tokens" already exists, skipping
+NOTICE:  relation "idx_user_push_tokens_user" already exists, skipping
+[2026-01-24 00:28:57] [ERROR] PostgreSQL error: ERROR:  must be owner of table user_sessions
+
+[2026-01-24 00:28:57] [WARNING] Could not ensure user_sessions.user_agent exists: ERROR:  must be owner of table user_sessions
+
+NOTICE:  column "category" of relation "groups" already exists, skipping
+NOTICE:  column "is_public" of relation "groups" already exists, skipping
+NOTICE:  column "category" of relation "channels" already exists, skipping
+NOTICE:  column "is_verified" of relation "channels" already exists, skipping
+NOTICE:  relation "idx_groups_is_public" already exists, skipping
+NOTICE:  relation "idx_channels_is_private_false" already exists, skipping
+[2026-01-24 00:28:57] [INFO] Preparing statement: get_user_by_username
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'get_user_by_username' with 1 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: get_user_by_id
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'get_user_by_id' with 1 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: get_user_public
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'get_user_public' with 1 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: check_username_exists
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'check_username_exists' with 1 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: are_friends
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'are_friends' with 2 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: create_user
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'create_user' with 2 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: create_bot_user
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'create_bot_user' with 2 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: update_last_login
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'update_last_login' with 1 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: update_last_activity
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'update_last_activity' with 1 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: upsert_user_session
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'upsert_user_session' with 3 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: get_user_id_by_session
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'get_user_id_by_session' with 1 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: touch_user_session
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'touch_user_session' with 1 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: delete_user_session
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'delete_user_session' with 1 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: list_user_sessions
+[2026-01-24 00:28:57] [ERROR] Failed to prepare statement 'list_user_sessions' with 1 params: ERROR:  column "user_agent" does not exist
+LINE 1: ...ext, ''), COALESCE(last_seen::text, ''), COALESCE(user_agent...
+                                                             ^
+
+[2026-01-24 00:28:57] [INFO] Preparing statement: update_user_session_user_agent
+[2026-01-24 00:28:57] [ERROR] Failed to prepare statement 'update_user_session_user_agent' with 2 params: ERROR:  column "user_agent" of relation "user_sessions" does not exist
+LINE 1: UPDATE user_sessions SET user_agent = $2 WHERE token = $1
+                                 ^
+
+[2026-01-24 00:28:57] [INFO] Preparing statement: upsert_push_token
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'upsert_push_token' with 3 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: delete_push_token
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'delete_push_token' with 2 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: get_push_tokens
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'get_push_tokens' with 1 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: set_user_active
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'set_user_active' with 2 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: update_user_password_hash
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'update_user_password_hash' with 2 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: set_user_role
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'set_user_role' with 2 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: set_user_admin_flag
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'set_user_admin_flag' with 2 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: delete_user_sessions_by_user
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'delete_user_sessions_by_user' with 1 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: count_banned_users
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'count_banned_users' with 0 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: count_active_users_since
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'count_active_users_since' with 1 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: count_groups
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'count_groups' with 0 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: count_channels
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'count_channels' with 0 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: count_bots
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'count_bots' with 0 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: count_reports_by_status
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'count_reports_by_status' with 1 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: upsert_admin_setting
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'upsert_admin_setting' with 2 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: get_admin_setting
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'get_admin_setting' with 1 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: delete_messages_by_user
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'delete_messages_by_user' with 1 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: count_users
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'count_users' with 0 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: count_messages_today
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'count_messages_today' with 0 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: count_online_users
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'count_online_users' with 1 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: admin_search_users
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'admin_search_users' with 4 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: admin_search_messages
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'admin_search_messages' with 3 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: admin_search_groups
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'admin_search_groups' with 3 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: admin_search_channels
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'admin_search_channels' with 3 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: update_user_avatar
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'update_user_avatar' with 2 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: set_user_premium
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'set_user_premium' with 3 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: create_premium_payment
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'create_premium_payment' with 3 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: create_premium_gift_payment
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'create_premium_gift_payment' with 4 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: get_premium_payment_by_label
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'get_premium_payment_by_label' with 1 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: mark_premium_payment_paid
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'mark_premium_payment_paid' with 3 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: reset_premium_payment_status
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'reset_premium_payment_status' with 1 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: has_trial_payment
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'has_trial_payment' with 1 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: admin_list_premium_payments
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'admin_list_premium_payments' with 2 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: get_user_last_activity
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'get_user_last_activity' with 1 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: check_user_online
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'check_user_online' with 2 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: get_user_profile
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'get_user_profile' with 1 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: upsert_user_profile
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'upsert_user_profile' with 7 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: upsert_user_linked_channel
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'upsert_user_linked_channel' with 2 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: set_user_business_hours
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'set_user_business_hours' with 2 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: get_user_privacy
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'get_user_privacy' with 1 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: upsert_user_privacy
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'upsert_user_privacy' with 6 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: get_chat_pins
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'get_chat_pins' with 1 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: pin_chat
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'pin_chat' with 3 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: unpin_chat
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'unpin_chat' with 3 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: get_chat_folders
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'get_chat_folders' with 1 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: set_chat_folders
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'set_chat_folders' with 2 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: count_user_channels_v2
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'count_user_channels_v2' with 1 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: count_user_channels_legacy
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'count_user_channels_legacy' with 1 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: count_user_public_links_v2
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'count_user_public_links_v2' with 1 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: count_user_public_links_legacy
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'count_user_public_links_legacy' with 1 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: create_friend_request
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'create_friend_request' with 2 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: get_friend_request
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'get_friend_request' with 1 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: update_friend_request_status
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'update_friend_request_status' with 2 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: create_friendship
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'create_friendship' with 2 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: create_friendship_pair
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'create_friendship_pair' with 2 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: get_friend_requests
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'get_friend_requests' with 1 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: get_friends
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'get_friends' with 1 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: send_message
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'send_message' with 9 parameters
+[2026-01-24 00:28:57] [INFO] Prepared statement 'send_message' creation attempted
+[2026-01-24 00:28:57] [INFO] Preparing statement: get_messages
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'get_messages' with 3 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: get_saved_messages
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'get_saved_messages' with 2 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: get_last_message
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'get_last_message' with 2 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: get_last_saved_message
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'get_last_saved_message' with 1 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: get_message_by_id
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'get_message_by_id' with 1 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: delete_message_by_id
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'delete_message_by_id' with 1 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: get_unread_count
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'get_unread_count' with 2 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: mark_messages_read
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'mark_messages_read' with 2 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: mark_messages_delivered
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'mark_messages_delivered' with 2 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: mark_message_delivered_by_id
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'mark_message_delivered_by_id' with 1 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: get_chat_partners
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'get_chat_partners' with 1 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: has_saved_messages
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'has_saved_messages' with 1 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: pin_direct_message
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'pin_direct_message' with 4 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: unpin_direct_message
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'unpin_direct_message' with 2 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: get_direct_pinned_message
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'get_direct_pinned_message' with 2 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: create_group
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'create_group' with 3 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: get_group_by_id
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'get_group_by_id' with 1 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: get_user_groups
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'get_user_groups' with 1 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: add_group_member
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'add_group_member' with 3 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: send_group_message
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'send_group_message' with 11 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: get_group_messages
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'get_group_messages' with 2 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: create_group_invite
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'create_group_invite' with 4 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: update_group_name
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'update_group_name' with 2 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: update_group_description
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'update_group_description' with 2 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: pin_group_message
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'pin_group_message' with 3 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: update_message_pinned
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'update_message_pinned' with 1 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: remove_group_member
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'remove_group_member' with 2 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: update_group_member_role
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'update_group_member_role' with 3 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: mute_group_member
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'mute_group_member' with 3 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: ban_group_member
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'ban_group_member' with 4 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: get_group_members
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'get_group_members' with 1 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: get_group_member
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'get_group_member' with 2 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: update_admin_permissions
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'update_admin_permissions' with 3 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: get_invite_info
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'get_invite_info' with 1 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: unpin_group_message
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'unpin_group_message' with 2 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: update_message_unpinned
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'update_message_unpinned' with 1 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: delete_group
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'delete_group' with 1 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: delete_group_messages
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'delete_group_messages' with 1 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: delete_group_members
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'delete_group_members' with 1 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: delete_group_invites
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'delete_group_invites' with 1 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: delete_group_pinned
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'delete_group_pinned' with 1 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: search_group_messages
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'search_group_messages' with 3 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: update_group_permissions
+[2026-01-24 00:28:57] [ERROR] Failed to prepare statement 'update_group_permissions' with 2 params: ERROR:  column "permissions" does not exist
+LINE 1: UPDATE groups SET permissions = COALESCE(permissions, '{}'::...
+                                                 ^
+
+[2026-01-24 00:28:57] [INFO] Preparing statement: create_channel
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'create_channel' with 4 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: check_channel_custom_link
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'check_channel_custom_link' with 1 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: get_channel_by_id
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'get_channel_by_id' with 1 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: get_channel_by_custom_link
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'get_channel_by_custom_link' with 1 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: get_user_channels
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'get_user_channels' with 1 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: add_channel_member
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'add_channel_member' with 3 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: send_channel_message
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'send_channel_message' with 7 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: get_channel_messages
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'get_channel_messages' with 2 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: add_message_reaction
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'add_message_reaction' with 3 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: remove_message_reaction
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'remove_message_reaction' with 3 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: get_message_reactions
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'get_message_reactions' with 1 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: add_message_view
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'add_message_view' with 2 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: get_message_views_count
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'get_message_views_count' with 1 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: update_channel_message_views
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'update_channel_message_views' with 1 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: remove_channel_member
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'remove_channel_member' with 2 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: update_channel_member_role
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'update_channel_member_role' with 3 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: ban_channel_member
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'ban_channel_member' with 3 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: get_channel_members
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'get_channel_members' with 1 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: count_channel_subscribers
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'count_channel_subscribers' with 1 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: count_channel_members
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'count_channel_members' with 1 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: get_channel_member
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'get_channel_member' with 2 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: pin_channel_message
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'pin_channel_message' with 2 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: unpin_channel_message
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'unpin_channel_message' with 2 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: get_channel_message_meta
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'get_channel_message_meta' with 1 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: delete_channel_message
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'delete_channel_message' with 2 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: get_group_message_meta
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'get_group_message_meta' with 1 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: delete_group_message
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'delete_group_message' with 2 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: set_channel_custom_link
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'set_channel_custom_link' with 2 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: update_channel_name
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'update_channel_name' with 2 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: update_channel_description
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'update_channel_description' with 2 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: set_channel_privacy
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'set_channel_privacy' with 2 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: set_channel_show_author
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'set_channel_show_author' with 2 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: delete_channel_legacy
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'delete_channel_legacy' with 1 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: add_allowed_reaction
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'add_allowed_reaction' with 2 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: remove_allowed_reaction
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'remove_allowed_reaction' with 2 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: get_allowed_reactions
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'get_allowed_reactions' with 1 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: create_channel_join_request
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'create_channel_join_request' with 2 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: accept_channel_join_request
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'accept_channel_join_request' with 2 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: reject_channel_join_request
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'reject_channel_join_request' with 2 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: get_channel_join_requests
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'get_channel_join_requests' with 1 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: create_channel_chat
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'create_channel_chat' with 2 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: create_market_product
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'create_market_product' with 10 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: update_market_product
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'update_market_product' with 8 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: delete_market_product
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'delete_market_product' with 1 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: get_market_products
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'get_market_products' with 2 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: get_market_product_by_id
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'get_market_product_by_id' with 1 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: add_product_key
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'add_product_key' with 2 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: get_unused_product_key
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'get_unused_product_key' with 1 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: mark_product_key_used
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'mark_product_key_used' with 2 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: create_product_purchase
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'create_product_purchase' with 6 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: update_purchase_key
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'update_purchase_key' with 2 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: get_user_purchases
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'get_user_purchases' with 1 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: create_integration_binding
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'create_integration_binding' with 6 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: update_integration_binding
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'update_integration_binding' with 3 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: delete_integration_binding
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'delete_integration_binding' with 1 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: get_integration_bindings
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'get_integration_bindings' with 2 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: get_integration_binding_by_id
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'get_integration_binding_by_id' with 1 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: create_bot_builder_bot
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'create_bot_builder_bot' with 6 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: update_bot_builder_bot
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'update_bot_builder_bot' with 3 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: delete_bot_builder_bot
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'delete_bot_builder_bot' with 1 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: add_bot_developer
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'add_bot_developer' with 3 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: remove_bot_developer
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'remove_bot_developer' with 2 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: get_bot_developers
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'get_bot_developers' with 1 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: is_bot_developer
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'is_bot_developer' with 2 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: upsert_bot_file
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'upsert_bot_file' with 3 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: get_bot_file
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'get_bot_file' with 2 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: delete_bot_file
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'delete_bot_file' with 2 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: list_bot_files
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'list_bot_files' with 1 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: get_user_bots
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'get_user_bots' with 1 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: get_bot_builder_bot_by_token
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'get_bot_builder_bot_by_token' with 1 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: get_bot_builder_bot_by_username
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'get_bot_builder_bot_by_username' with 1 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: get_bot_builder_bot_by_id
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'get_bot_builder_bot_by_id' with 1 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: get_bot_builder_bot_by_user_id
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'get_bot_builder_bot_by_user_id' with 1 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: update_bot_builder_profile
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'update_bot_builder_profile' with 3 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: update_bot_builder_avatar
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'update_bot_builder_avatar' with 2 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: get_bot_builder_script_by_bot_user_id
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'get_bot_builder_script_by_bot_user_id' with 1 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: get_bot_builder_script_by_id
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'get_bot_builder_script_by_id' with 1 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: update_bot_builder_script
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'update_bot_builder_script' with 4 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: log_bot_execution
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'log_bot_execution' with 9 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: upsert_bot_note
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'upsert_bot_note' with 6 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: get_bot_note
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'get_bot_note' with 4 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: list_bot_notes
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'list_bot_notes' with 3 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: delete_bot_note
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'delete_bot_note' with 4 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: create_bot_reminder
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'create_bot_reminder' with 6 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: claim_due_bot_reminders
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'claim_due_bot_reminders' with 1 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: get_group_bot_user_ids
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'get_group_bot_user_ids' with 1 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: create_trigger_rule
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'create_trigger_rule' with 7 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: update_trigger_rule
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'update_trigger_rule' with 5 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: delete_trigger_rule
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'delete_trigger_rule' with 1 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: get_trigger_rules
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'get_trigger_rules' with 2 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: create_event_webhook
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'create_event_webhook' with 5 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: log_trigger_execution
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'log_trigger_execution' with 6 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: create_chat_v2
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'create_chat_v2' with 8 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: update_chat_title_v2
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'update_chat_title_v2' with 2 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: update_chat_about_v2
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'update_chat_about_v2' with 2 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: update_chat_username_v2
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'update_chat_username_v2' with 2 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: update_chat_is_public_v2
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'update_chat_is_public_v2' with 2 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: update_chat_sign_messages_v2
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'update_chat_sign_messages_v2' with 2 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: insert_chat_sequence_v2
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'insert_chat_sequence_v2' with 1 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: insert_chat_participant_owner_v2
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'insert_chat_participant_owner_v2' with 2 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: upsert_chat_member_v2
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'upsert_chat_member_v2' with 2 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: leave_chat_v2
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'leave_chat_v2' with 2 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: get_chat_type_v2
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'get_chat_type_v2' with 1 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: insert_chat_link_v2
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'insert_chat_link_v2' with 2 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: upsert_admin_role_v2
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'upsert_admin_role_v2' with 3 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: upsert_participant_admin_v2
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'upsert_participant_admin_v2' with 3 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: set_owner_adminrole_v2
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'set_owner_adminrole_v2' with 3 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: get_participant_role_v2
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'get_participant_role_v2' with 2 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: get_admin_role_perms_v2
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'get_admin_role_perms_v2' with 1 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: get_participant_restriction_v2
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'get_participant_restriction_v2' with 2 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: get_chat_v2
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'get_chat_v2' with 1 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: get_chat_by_username_v2
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'get_chat_by_username_v2' with 1 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: get_user_channels_v2
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'get_user_channels_v2' with 1 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: get_channel_members_v2
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'get_channel_members_v2' with 1 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: get_chat_link_v2
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'get_chat_link_v2' with 1 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: get_chat_participant_v2
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'get_chat_participant_v2' with 2 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: update_chat_participant_status_v2
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'update_chat_participant_status_v2' with 3 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: demote_chat_admin_v2
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'demote_chat_admin_v2' with 2 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: update_chat_avatar_v2
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'update_chat_avatar_v2' with 2 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: delete_chat_v2
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'delete_chat_v2' with 1 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: update_channel_avatar
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'update_channel_avatar' with 2 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: inc_local_id_v2
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'inc_local_id_v2' with 1 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: insert_chat_message_v2
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'insert_chat_message_v2' with 8 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: insert_reaction_counts_v2
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'insert_reaction_counts_v2' with 1 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: insert_reaction_shard_v2
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'insert_reaction_shard_v2' with 4 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: delete_reaction_shard_v2
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'delete_reaction_shard_v2' with 4 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: update_reaction_count_v2
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'update_reaction_count_v2' with 3 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: get_reaction_counts_v2
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'get_reaction_counts_v2' with 1 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: get_reaction_counts_kv_v2
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'get_reaction_counts_kv_v2' with 1 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: get_chat_messages_v2
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'get_chat_messages_v2' with 3 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: pin_chat_message_v2
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'pin_chat_message_v2' with 3 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: unpin_chat_message_v2
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'unpin_chat_message_v2' with 1 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: get_chat_message_meta_v2
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'get_chat_message_meta_v2' with 1 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: delete_chat_message_v2
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'delete_chat_message_v2' with 2 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: upsert_channel_read_state_v2
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'upsert_channel_read_state_v2' with 3 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: get_channel_unread_v2
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'get_channel_unread_v2' with 2 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: create_chat_join_request
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'create_chat_join_request' with 2 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: accept_chat_join_request
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'accept_chat_join_request' with 2 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: reject_chat_join_request
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'reject_chat_join_request' with 2 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: get_chat_join_requests
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'get_chat_join_requests' with 1 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: add_chat_allowed_reaction
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'add_chat_allowed_reaction' with 2 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: remove_chat_allowed_reaction
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'remove_chat_allowed_reaction' with 2 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: get_chat_allowed_reactions
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'get_chat_allowed_reactions' with 1 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: create_chat_invite_v2
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'create_chat_invite_v2' with 4 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: revoke_chat_invite_v2
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'revoke_chat_invite_v2' with 1 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: get_chat_invite_v2
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'get_chat_invite_v2' with 1 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: inc_chat_invite_usage_v2
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'inc_chat_invite_usage_v2' with 1 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: create_channel_invite_legacy
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'create_channel_invite_legacy' with 4 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: revoke_channel_invite_legacy
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'revoke_channel_invite_legacy' with 1 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: get_channel_invite_legacy
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'get_channel_invite_legacy' with 1 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: inc_channel_invite_usage_legacy
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'inc_channel_invite_usage_legacy' with 1 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: get_channel_subscribers_v2
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'get_channel_subscribers_v2' with 1 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: count_chat_subscribers_v2
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'count_chat_subscribers_v2' with 1 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: count_chat_members_v2
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'count_chat_members_v2' with 1 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: insert_poll_v2
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'insert_poll_v2' with 6 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: insert_poll_option_v2
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'insert_poll_option_v2' with 2 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: vote_poll_v2
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'vote_poll_v2' with 3 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: inc_poll_option_v2
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'inc_poll_option_v2' with 1 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: get_poll_v2
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'get_poll_v2' with 1 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: get_poll_by_message
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'get_poll_by_message' with 2 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: create_message_report
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'create_message_report' with 8 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: get_message_reports_paginated
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'get_message_reports_paginated' with 3 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: count_message_reports
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'count_message_reports' with 1 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: count_reports_for_user_window
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'count_reports_for_user_window' with 3 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: get_message_report_by_id
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'get_message_report_by_id' with 1 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: update_message_report_status
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'update_message_report_status' with 4 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: get_message_context
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'get_message_context' with 4 parameters
+[2026-01-24 00:28:57] [INFO] Database initialized successfully
+[2026-01-24 00:28:57] [INFO] VoIP Access Control DISABLED - all users have access
+[2026-01-24 00:28:57] [WARNING] FCM service account file not found: /root/strotage/firebase-service-account.json
+[2026-01-24 00:28:57] [WARNING] FCM disabled: service account not loaded
+[2026-01-24 00:28:57] [WARNING] RuStore push disabled: missing project id or service token
+[2026-01-24 00:28:57] [INFO] HTTP Server started on 0.0.0.0:8080
+[2026-01-24 00:28:57] [INFO] Connected to PostgreSQL database
+NOTICE:  constraint "no_self_message" of relation "messages" does not exist, skipping
+[2026-01-24 00:28:57] [INFO] Ensured no_self_message constraint is dropped for saved messages support
+[2026-01-24 00:28:57] [INFO] Ensured messages.message_type allows location types
+NOTICE:  relation "chat_pins" already exists, skipping
+NOTICE:  relation "user_chat_pins" already exists, skipping
+NOTICE:  relation "idx_user_chat_pins_user" already exists, skipping
+NOTICE:  relation "user_chat_folders" already exists, skipping
+[2026-01-24 00:28:57] [ERROR] PostgreSQL error: ERROR:  must be owner of table user_profiles
+
+[2026-01-24 00:28:57] [WARNING] Could not ensure user_profiles.linked_channel_id exists: ERROR:  must be owner of table user_profiles
+
+[2026-01-24 00:28:57] [ERROR] PostgreSQL error: ERROR:  must be owner of table user_profiles
+
+[2026-01-24 00:28:57] [WARNING] Could not ensure user_profiles.business_hours_json exists: ERROR:  must be owner of table user_profiles
+
+NOTICE:  column "avatar_url" of relation "channels" already exists, skipping
+[2026-01-24 00:28:57] [ERROR] PostgreSQL error: ERROR:  must be owner of table chats
+CONTEXT:  SQL statement "ALTER TABLE chats ADD COLUMN IF NOT EXISTS avatar_url VARCHAR(500)"
+PL/pgSQL function inline_code_block line 1 at EXECUTE
+
+[2026-01-24 00:28:57] [WARNING] Could not ensure chats.avatar_url exists: ERROR:  must be owner of table chats
+CONTEXT:  SQL statement "ALTER TABLE chats ADD COLUMN IF NOT EXISTS avatar_url VARCHAR(500)"
+PL/pgSQL function inline_code_block line 1 at EXECUTE
+
+[2026-01-24 00:28:57] [ERROR] PostgreSQL error: ERROR:  must be owner of table chats
+CONTEXT:  SQL statement "ALTER TABLE chats ADD COLUMN IF NOT EXISTS is_verified BOOLEAN DEFAULT FALSE"
+PL/pgSQL function inline_code_block line 1 at EXECUTE
+
+[2026-01-24 00:28:57] [WARNING] Could not ensure chats.is_verified exists: ERROR:  must be owner of table chats
+CONTEXT:  SQL statement "ALTER TABLE chats ADD COLUMN IF NOT EXISTS is_verified BOOLEAN DEFAULT FALSE"
+PL/pgSQL function inline_code_block line 1 at EXECUTE
+
+NOTICE:  relation "chat_join_requests" already exists, skipping
+[2026-01-24 00:28:57] [ERROR] PostgreSQL error: ERROR:  must be owner of table chat_join_requests
+CONTEXT:  SQL statement "CREATE INDEX IF NOT EXISTS idx_chat_join_requests_chat ON chat_join_requests(chat_id)"
+PL/pgSQL function inline_code_block line 1 at EXECUTE
+
+[2026-01-24 00:28:57] [WARNING] Could not ensure chat_join_requests table exists: ERROR:  must be owner of table chat_join_requests
+CONTEXT:  SQL statement "CREATE INDEX IF NOT EXISTS idx_chat_join_requests_chat ON chat_join_requests(chat_id)"
+PL/pgSQL function inline_code_block line 1 at EXECUTE
+
+NOTICE:  relation "chat_allowed_reactions" already exists, skipping
+[2026-01-24 00:28:57] [ERROR] PostgreSQL error: ERROR:  must be owner of table chat_allowed_reactions
+CONTEXT:  SQL statement "CREATE INDEX IF NOT EXISTS idx_chat_allowed_reactions_chat ON chat_allowed_reactions(chat_id)"
+PL/pgSQL function inline_code_block line 1 at EXECUTE
+
+[2026-01-24 00:28:57] [WARNING] Could not ensure chat_allowed_reactions table exists: ERROR:  must be owner of table chat_allowed_reactions
+CONTEXT:  SQL statement "CREATE INDEX IF NOT EXISTS idx_chat_allowed_reactions_chat ON chat_allowed_reactions(chat_id)"
+PL/pgSQL function inline_code_block line 1 at EXECUTE
+
+NOTICE:  relation "chat_invite_links" already exists, skipping
+[2026-01-24 00:28:57] [ERROR] PostgreSQL error: ERROR:  must be owner of table chat_invite_links
+CONTEXT:  SQL statement "CREATE INDEX IF NOT EXISTS idx_chat_invite_links_chat ON chat_invite_links(chat_id)"
+PL/pgSQL function inline_code_block line 1 at EXECUTE
+
+[2026-01-24 00:28:57] [WARNING] Could not ensure chat_invite_links table exists: ERROR:  must be owner of table chat_invite_links
+CONTEXT:  SQL statement "CREATE INDEX IF NOT EXISTS idx_chat_invite_links_chat ON chat_invite_links(chat_id)"
+PL/pgSQL function inline_code_block line 1 at EXECUTE
+
+NOTICE:  column "bot_description" of relation "bot_builder_bots" already exists, skipping
+NOTICE:  column "bot_avatar_url" of relation "bot_builder_bots" already exists, skipping
+NOTICE:  column "bot_user_id" of relation "bot_builder_bots" already exists, skipping
+NOTICE:  column "script_lang" of relation "bot_builder_bots" already exists, skipping
+NOTICE:  column "script_enabled" of relation "bot_builder_bots" already exists, skipping
+NOTICE:  column "script_code" of relation "bot_builder_bots" already exists, skipping
+NOTICE:  relation "bot_notes" already exists, skipping
+NOTICE:  relation "idx_bot_notes_scope" already exists, skipping
+NOTICE:  relation "bot_reminders" already exists, skipping
+NOTICE:  relation "idx_bot_reminders_due" already exists, skipping
+NOTICE:  relation "bot_developers" already exists, skipping
+NOTICE:  relation "idx_bot_developers_bot" already exists, skipping
+NOTICE:  relation "idx_bot_developers_user" already exists, skipping
+NOTICE:  relation "bot_files" already exists, skipping
+NOTICE:  relation "idx_bot_files_bot" already exists, skipping
+NOTICE:  column "reply_markup" of relation "messages" already exists, skipping
+NOTICE:  column "is_bot" of relation "users" already exists, skipping
+NOTICE:  column "is_premium" of relation "users" already exists, skipping
+NOTICE:  column "premium_plan" of relation "users" already exists, skipping
+NOTICE:  column "premium_expires_at" of relation "users" already exists, skipping
+NOTICE:  relation "premium_payments" already exists, skipping
+NOTICE:  column "gift_receiver_id" of relation "premium_payments" already exists, skipping
+NOTICE:  relation "idx_premium_payments_user_id" already exists, skipping
+NOTICE:  column "is_admin" of relation "users" already exists, skipping
+NOTICE:  column "role" of relation "users" already exists, skipping
+NOTICE:  column "totp_secret" of relation "users" already exists, skipping
+NOTICE:  column "admin_ip_whitelist" of relation "users" already exists, skipping
+NOTICE:  relation "admin_settings" already exists, skipping
+NOTICE:  relation "user_push_tokens" already exists, skipping
+NOTICE:  relation "idx_user_push_tokens_user" already exists, skipping
+[2026-01-24 00:28:57] [ERROR] PostgreSQL error: ERROR:  must be owner of table user_sessions
+
+[2026-01-24 00:28:57] [WARNING] Could not ensure user_sessions.user_agent exists: ERROR:  must be owner of table user_sessions
+
+NOTICE:  column "category" of relation "groups" already exists, skipping
+NOTICE:  column "is_public" of relation "groups" already exists, skipping
+NOTICE:  column "category" of relation "channels" already exists, skipping
+NOTICE:  column "is_verified" of relation "channels" already exists, skipping
+NOTICE:  relation "idx_groups_is_public" already exists, skipping
+NOTICE:  relation "idx_channels_is_private_false" already exists, skipping
+[2026-01-24 00:28:57] [INFO] Preparing statement: get_user_by_username
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'get_user_by_username' with 1 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: get_user_by_id
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'get_user_by_id' with 1 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: get_user_public
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'get_user_public' with 1 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: check_username_exists
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'check_username_exists' with 1 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: are_friends
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'are_friends' with 2 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: create_user
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'create_user' with 2 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: create_bot_user
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'create_bot_user' with 2 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: update_last_login
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'update_last_login' with 1 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: update_last_activity
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'update_last_activity' with 1 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: upsert_user_session
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'upsert_user_session' with 3 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: get_user_id_by_session
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'get_user_id_by_session' with 1 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: touch_user_session
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'touch_user_session' with 1 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: delete_user_session
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'delete_user_session' with 1 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: list_user_sessions
+[2026-01-24 00:28:57] [ERROR] Failed to prepare statement 'list_user_sessions' with 1 params: ERROR:  column "user_agent" does not exist
+LINE 1: ...ext, ''), COALESCE(last_seen::text, ''), COALESCE(user_agent...
+                                                             ^
+
+[2026-01-24 00:28:57] [INFO] Preparing statement: update_user_session_user_agent
+[2026-01-24 00:28:57] [ERROR] Failed to prepare statement 'update_user_session_user_agent' with 2 params: ERROR:  column "user_agent" of relation "user_sessions" does not exist
+LINE 1: UPDATE user_sessions SET user_agent = $2 WHERE token = $1
+                                 ^
+
+[2026-01-24 00:28:57] [INFO] Preparing statement: upsert_push_token
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'upsert_push_token' with 3 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: delete_push_token
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'delete_push_token' with 2 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: get_push_tokens
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'get_push_tokens' with 1 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: set_user_active
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'set_user_active' with 2 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: update_user_password_hash
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'update_user_password_hash' with 2 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: set_user_role
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'set_user_role' with 2 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: set_user_admin_flag
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'set_user_admin_flag' with 2 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: delete_user_sessions_by_user
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'delete_user_sessions_by_user' with 1 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: count_banned_users
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'count_banned_users' with 0 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: count_active_users_since
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'count_active_users_since' with 1 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: count_groups
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'count_groups' with 0 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: count_channels
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'count_channels' with 0 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: count_bots
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'count_bots' with 0 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: count_reports_by_status
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'count_reports_by_status' with 1 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: upsert_admin_setting
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'upsert_admin_setting' with 2 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: get_admin_setting
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'get_admin_setting' with 1 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: delete_messages_by_user
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'delete_messages_by_user' with 1 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: count_users
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'count_users' with 0 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: count_messages_today
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'count_messages_today' with 0 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: count_online_users
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'count_online_users' with 1 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: admin_search_users
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'admin_search_users' with 4 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: admin_search_messages
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'admin_search_messages' with 3 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: admin_search_groups
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'admin_search_groups' with 3 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: admin_search_channels
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'admin_search_channels' with 3 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: update_user_avatar
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'update_user_avatar' with 2 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: set_user_premium
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'set_user_premium' with 3 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: create_premium_payment
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'create_premium_payment' with 3 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: create_premium_gift_payment
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'create_premium_gift_payment' with 4 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: get_premium_payment_by_label
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'get_premium_payment_by_label' with 1 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: mark_premium_payment_paid
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'mark_premium_payment_paid' with 3 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: reset_premium_payment_status
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'reset_premium_payment_status' with 1 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: has_trial_payment
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'has_trial_payment' with 1 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: admin_list_premium_payments
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'admin_list_premium_payments' with 2 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: get_user_last_activity
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'get_user_last_activity' with 1 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: check_user_online
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'check_user_online' with 2 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: get_user_profile
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'get_user_profile' with 1 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: upsert_user_profile
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'upsert_user_profile' with 7 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: upsert_user_linked_channel
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'upsert_user_linked_channel' with 2 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: set_user_business_hours
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'set_user_business_hours' with 2 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: get_user_privacy
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'get_user_privacy' with 1 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: upsert_user_privacy
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'upsert_user_privacy' with 6 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: get_chat_pins
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'get_chat_pins' with 1 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: pin_chat
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'pin_chat' with 3 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: unpin_chat
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'unpin_chat' with 3 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: get_chat_folders
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'get_chat_folders' with 1 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: set_chat_folders
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'set_chat_folders' with 2 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: count_user_channels_v2
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'count_user_channels_v2' with 1 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: count_user_channels_legacy
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'count_user_channels_legacy' with 1 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: count_user_public_links_v2
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'count_user_public_links_v2' with 1 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: count_user_public_links_legacy
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'count_user_public_links_legacy' with 1 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: create_friend_request
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'create_friend_request' with 2 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: get_friend_request
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'get_friend_request' with 1 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: update_friend_request_status
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'update_friend_request_status' with 2 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: create_friendship
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'create_friendship' with 2 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: create_friendship_pair
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'create_friendship_pair' with 2 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: get_friend_requests
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'get_friend_requests' with 1 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: get_friends
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'get_friends' with 1 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: send_message
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'send_message' with 9 parameters
+[2026-01-24 00:28:57] [INFO] Prepared statement 'send_message' creation attempted
+[2026-01-24 00:28:57] [INFO] Preparing statement: get_messages
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'get_messages' with 3 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: get_saved_messages
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'get_saved_messages' with 2 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: get_last_message
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'get_last_message' with 2 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: get_last_saved_message
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'get_last_saved_message' with 1 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: get_message_by_id
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'get_message_by_id' with 1 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: delete_message_by_id
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'delete_message_by_id' with 1 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: get_unread_count
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'get_unread_count' with 2 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: mark_messages_read
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'mark_messages_read' with 2 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: mark_messages_delivered
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'mark_messages_delivered' with 2 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: mark_message_delivered_by_id
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'mark_message_delivered_by_id' with 1 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: get_chat_partners
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'get_chat_partners' with 1 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: has_saved_messages
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'has_saved_messages' with 1 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: pin_direct_message
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'pin_direct_message' with 4 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: unpin_direct_message
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'unpin_direct_message' with 2 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: get_direct_pinned_message
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'get_direct_pinned_message' with 2 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: create_group
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'create_group' with 3 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: get_group_by_id
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'get_group_by_id' with 1 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: get_user_groups
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'get_user_groups' with 1 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: add_group_member
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'add_group_member' with 3 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: send_group_message
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'send_group_message' with 11 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: get_group_messages
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'get_group_messages' with 2 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: create_group_invite
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'create_group_invite' with 4 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: update_group_name
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'update_group_name' with 2 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: update_group_description
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'update_group_description' with 2 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: pin_group_message
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'pin_group_message' with 3 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: update_message_pinned
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'update_message_pinned' with 1 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: remove_group_member
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'remove_group_member' with 2 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: update_group_member_role
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'update_group_member_role' with 3 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: mute_group_member
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'mute_group_member' with 3 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: ban_group_member
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'ban_group_member' with 4 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: get_group_members
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'get_group_members' with 1 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: get_group_member
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'get_group_member' with 2 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: update_admin_permissions
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'update_admin_permissions' with 3 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: get_invite_info
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'get_invite_info' with 1 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: unpin_group_message
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'unpin_group_message' with 2 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: update_message_unpinned
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'update_message_unpinned' with 1 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: delete_group
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'delete_group' with 1 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: delete_group_messages
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'delete_group_messages' with 1 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: delete_group_members
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'delete_group_members' with 1 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: delete_group_invites
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'delete_group_invites' with 1 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: delete_group_pinned
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'delete_group_pinned' with 1 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: search_group_messages
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'search_group_messages' with 3 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: update_group_permissions
+[2026-01-24 00:28:57] [ERROR] Failed to prepare statement 'update_group_permissions' with 2 params: ERROR:  column "permissions" does not exist
+LINE 1: UPDATE groups SET permissions = COALESCE(permissions, '{}'::...
+                                                 ^
+
+[2026-01-24 00:28:57] [INFO] Preparing statement: create_channel
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'create_channel' with 4 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: check_channel_custom_link
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'check_channel_custom_link' with 1 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: get_channel_by_id
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'get_channel_by_id' with 1 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: get_channel_by_custom_link
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'get_channel_by_custom_link' with 1 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: get_user_channels
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'get_user_channels' with 1 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: add_channel_member
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'add_channel_member' with 3 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: send_channel_message
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'send_channel_message' with 7 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: get_channel_messages
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'get_channel_messages' with 2 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: add_message_reaction
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'add_message_reaction' with 3 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: remove_message_reaction
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'remove_message_reaction' with 3 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: get_message_reactions
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'get_message_reactions' with 1 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: add_message_view
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'add_message_view' with 2 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: get_message_views_count
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'get_message_views_count' with 1 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: update_channel_message_views
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'update_channel_message_views' with 1 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: remove_channel_member
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'remove_channel_member' with 2 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: update_channel_member_role
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'update_channel_member_role' with 3 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: ban_channel_member
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'ban_channel_member' with 3 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: get_channel_members
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'get_channel_members' with 1 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: count_channel_subscribers
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'count_channel_subscribers' with 1 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: count_channel_members
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'count_channel_members' with 1 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: get_channel_member
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'get_channel_member' with 2 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: pin_channel_message
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'pin_channel_message' with 2 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: unpin_channel_message
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'unpin_channel_message' with 2 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: get_channel_message_meta
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'get_channel_message_meta' with 1 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: delete_channel_message
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'delete_channel_message' with 2 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: get_group_message_meta
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'get_group_message_meta' with 1 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: delete_group_message
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'delete_group_message' with 2 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: set_channel_custom_link
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'set_channel_custom_link' with 2 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: update_channel_name
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'update_channel_name' with 2 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: update_channel_description
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'update_channel_description' with 2 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: set_channel_privacy
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'set_channel_privacy' with 2 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: set_channel_show_author
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'set_channel_show_author' with 2 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: delete_channel_legacy
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'delete_channel_legacy' with 1 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: add_allowed_reaction
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'add_allowed_reaction' with 2 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: remove_allowed_reaction
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'remove_allowed_reaction' with 2 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: get_allowed_reactions
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'get_allowed_reactions' with 1 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: create_channel_join_request
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'create_channel_join_request' with 2 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: accept_channel_join_request
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'accept_channel_join_request' with 2 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: reject_channel_join_request
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'reject_channel_join_request' with 2 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: get_channel_join_requests
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'get_channel_join_requests' with 1 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: create_channel_chat
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'create_channel_chat' with 2 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: create_market_product
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'create_market_product' with 10 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: update_market_product
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'update_market_product' with 8 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: delete_market_product
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'delete_market_product' with 1 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: get_market_products
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'get_market_products' with 2 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: get_market_product_by_id
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'get_market_product_by_id' with 1 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: add_product_key
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'add_product_key' with 2 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: get_unused_product_key
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'get_unused_product_key' with 1 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: mark_product_key_used
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'mark_product_key_used' with 2 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: create_product_purchase
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'create_product_purchase' with 6 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: update_purchase_key
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'update_purchase_key' with 2 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: get_user_purchases
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'get_user_purchases' with 1 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: create_integration_binding
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'create_integration_binding' with 6 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: update_integration_binding
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'update_integration_binding' with 3 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: delete_integration_binding
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'delete_integration_binding' with 1 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: get_integration_bindings
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'get_integration_bindings' with 2 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: get_integration_binding_by_id
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'get_integration_binding_by_id' with 1 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: create_bot_builder_bot
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'create_bot_builder_bot' with 6 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: update_bot_builder_bot
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'update_bot_builder_bot' with 3 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: delete_bot_builder_bot
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'delete_bot_builder_bot' with 1 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: add_bot_developer
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'add_bot_developer' with 3 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: remove_bot_developer
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'remove_bot_developer' with 2 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: get_bot_developers
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'get_bot_developers' with 1 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: is_bot_developer
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'is_bot_developer' with 2 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: upsert_bot_file
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'upsert_bot_file' with 3 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: get_bot_file
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'get_bot_file' with 2 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: delete_bot_file
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'delete_bot_file' with 2 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: list_bot_files
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'list_bot_files' with 1 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: get_user_bots
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'get_user_bots' with 1 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: get_bot_builder_bot_by_token
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'get_bot_builder_bot_by_token' with 1 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: get_bot_builder_bot_by_username
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'get_bot_builder_bot_by_username' with 1 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: get_bot_builder_bot_by_id
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'get_bot_builder_bot_by_id' with 1 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: get_bot_builder_bot_by_user_id
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'get_bot_builder_bot_by_user_id' with 1 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: update_bot_builder_profile
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'update_bot_builder_profile' with 3 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: update_bot_builder_avatar
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'update_bot_builder_avatar' with 2 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: get_bot_builder_script_by_bot_user_id
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'get_bot_builder_script_by_bot_user_id' with 1 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: get_bot_builder_script_by_id
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'get_bot_builder_script_by_id' with 1 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: update_bot_builder_script
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'update_bot_builder_script' with 4 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: log_bot_execution
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'log_bot_execution' with 9 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: upsert_bot_note
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'upsert_bot_note' with 6 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: get_bot_note
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'get_bot_note' with 4 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: list_bot_notes
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'list_bot_notes' with 3 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: delete_bot_note
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'delete_bot_note' with 4 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: create_bot_reminder
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'create_bot_reminder' with 6 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: claim_due_bot_reminders
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'claim_due_bot_reminders' with 1 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: get_group_bot_user_ids
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'get_group_bot_user_ids' with 1 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: create_trigger_rule
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'create_trigger_rule' with 7 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: update_trigger_rule
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'update_trigger_rule' with 5 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: delete_trigger_rule
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'delete_trigger_rule' with 1 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: get_trigger_rules
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'get_trigger_rules' with 2 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: create_event_webhook
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'create_event_webhook' with 5 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: log_trigger_execution
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'log_trigger_execution' with 6 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: create_chat_v2
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'create_chat_v2' with 8 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: update_chat_title_v2
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'update_chat_title_v2' with 2 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: update_chat_about_v2
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'update_chat_about_v2' with 2 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: update_chat_username_v2
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'update_chat_username_v2' with 2 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: update_chat_is_public_v2
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'update_chat_is_public_v2' with 2 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: update_chat_sign_messages_v2
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'update_chat_sign_messages_v2' with 2 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: insert_chat_sequence_v2
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'insert_chat_sequence_v2' with 1 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: insert_chat_participant_owner_v2
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'insert_chat_participant_owner_v2' with 2 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: upsert_chat_member_v2
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'upsert_chat_member_v2' with 2 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: leave_chat_v2
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'leave_chat_v2' with 2 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: get_chat_type_v2
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'get_chat_type_v2' with 1 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: insert_chat_link_v2
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'insert_chat_link_v2' with 2 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: upsert_admin_role_v2
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'upsert_admin_role_v2' with 3 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: upsert_participant_admin_v2
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'upsert_participant_admin_v2' with 3 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: set_owner_adminrole_v2
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'set_owner_adminrole_v2' with 3 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: get_participant_role_v2
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'get_participant_role_v2' with 2 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: get_admin_role_perms_v2
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'get_admin_role_perms_v2' with 1 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: get_participant_restriction_v2
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'get_participant_restriction_v2' with 2 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: get_chat_v2
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'get_chat_v2' with 1 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: get_chat_by_username_v2
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'get_chat_by_username_v2' with 1 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: get_user_channels_v2
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'get_user_channels_v2' with 1 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: get_channel_members_v2
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'get_channel_members_v2' with 1 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: get_chat_link_v2
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'get_chat_link_v2' with 1 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: get_chat_participant_v2
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'get_chat_participant_v2' with 2 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: update_chat_participant_status_v2
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'update_chat_participant_status_v2' with 3 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: demote_chat_admin_v2
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'demote_chat_admin_v2' with 2 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: update_chat_avatar_v2
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'update_chat_avatar_v2' with 2 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: delete_chat_v2
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'delete_chat_v2' with 1 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: update_channel_avatar
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'update_channel_avatar' with 2 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: inc_local_id_v2
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'inc_local_id_v2' with 1 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: insert_chat_message_v2
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'insert_chat_message_v2' with 8 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: insert_reaction_counts_v2
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'insert_reaction_counts_v2' with 1 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: insert_reaction_shard_v2
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'insert_reaction_shard_v2' with 4 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: delete_reaction_shard_v2
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'delete_reaction_shard_v2' with 4 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: update_reaction_count_v2
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'update_reaction_count_v2' with 3 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: get_reaction_counts_v2
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'get_reaction_counts_v2' with 1 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: get_reaction_counts_kv_v2
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'get_reaction_counts_kv_v2' with 1 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: get_chat_messages_v2
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'get_chat_messages_v2' with 3 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: pin_chat_message_v2
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'pin_chat_message_v2' with 3 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: unpin_chat_message_v2
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'unpin_chat_message_v2' with 1 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: get_chat_message_meta_v2
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'get_chat_message_meta_v2' with 1 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: delete_chat_message_v2
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'delete_chat_message_v2' with 2 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: upsert_channel_read_state_v2
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'upsert_channel_read_state_v2' with 3 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: get_channel_unread_v2
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'get_channel_unread_v2' with 2 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: create_chat_join_request
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'create_chat_join_request' with 2 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: accept_chat_join_request
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'accept_chat_join_request' with 2 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: reject_chat_join_request
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'reject_chat_join_request' with 2 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: get_chat_join_requests
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'get_chat_join_requests' with 1 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: add_chat_allowed_reaction
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'add_chat_allowed_reaction' with 2 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: remove_chat_allowed_reaction
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'remove_chat_allowed_reaction' with 2 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: get_chat_allowed_reactions
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'get_chat_allowed_reactions' with 1 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: create_chat_invite_v2
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'create_chat_invite_v2' with 4 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: revoke_chat_invite_v2
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'revoke_chat_invite_v2' with 1 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: get_chat_invite_v2
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'get_chat_invite_v2' with 1 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: inc_chat_invite_usage_v2
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'inc_chat_invite_usage_v2' with 1 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: create_channel_invite_legacy
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'create_channel_invite_legacy' with 4 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: revoke_channel_invite_legacy
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'revoke_channel_invite_legacy' with 1 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: get_channel_invite_legacy
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'get_channel_invite_legacy' with 1 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: inc_channel_invite_usage_legacy
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'inc_channel_invite_usage_legacy' with 1 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: get_channel_subscribers_v2
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'get_channel_subscribers_v2' with 1 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: count_chat_subscribers_v2
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'count_chat_subscribers_v2' with 1 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: count_chat_members_v2
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'count_chat_members_v2' with 1 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: insert_poll_v2
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'insert_poll_v2' with 6 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: insert_poll_option_v2
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'insert_poll_option_v2' with 2 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: vote_poll_v2
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'vote_poll_v2' with 3 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: inc_poll_option_v2
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'inc_poll_option_v2' with 1 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: get_poll_v2
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'get_poll_v2' with 1 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: get_poll_by_message
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'get_poll_by_message' with 2 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: create_message_report
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'create_message_report' with 8 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: get_message_reports_paginated
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'get_message_reports_paginated' with 3 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: count_message_reports
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'count_message_reports' with 1 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: count_reports_for_user_window
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'count_reports_for_user_window' with 3 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: get_message_report_by_id
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'get_message_report_by_id' with 1 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: update_message_report_status
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'update_message_report_status' with 4 parameters
+[2026-01-24 00:28:57] [INFO] Preparing statement: get_message_context
+[2026-01-24 00:28:57] [INFO] Successfully prepared statement 'get_message_context' with 4 parameters
+[2026-01-24 00:28:57] [INFO] Database initialized successfully
+[2026-01-24 00:28:57] [INFO] BotScheduler started
+
+Shutting down server...
+[2026-01-24 00:34:33] [INFO] BotScheduler stopped
+[2026-01-24 00:34:33] [INFO] HTTP Server stopped

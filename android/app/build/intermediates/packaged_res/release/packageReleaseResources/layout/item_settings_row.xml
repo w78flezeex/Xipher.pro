@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="52dp"
+    android:background="?attr/selectableItemBackground"
+    android:gravity="center_vertical"
+    android:paddingHorizontal="16dp">
+
+    <ImageView
+        android:id="@+id/rowIcon"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:src="@drawable/ic_person"
+        app:tint="@color/x_text_secondary" />
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:layout_marginStart="16dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/rowTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/x_text_primary"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/rowSubtitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="1dp"
+            android:textColor="@color/x_text_secondary"
+            android:textSize="13sp"
+            android:visibility="gone" />
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/rowArrow"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:src="@drawable/ic_arrow_right"
+        app:tint="@color/x_text_secondary"
+        android:visibility="gone" />
+</LinearLayout>

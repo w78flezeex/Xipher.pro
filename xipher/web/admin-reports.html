@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" href="/xipher.ico" type="image/x-icon">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Очередь жалоб — Xipher</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/admin.css">
+</head>
+<body class="admin-page">
+<main class="container admin-shell">
+    <header class="admin-hero">
+        <div>
+            <div class="admin-badges">
+                <span class="admin-badge">Модерация</span>
+                <span class="admin-badge secondary">Жалобы</span>
+            </div>
+            <h1 class="admin-title">Очередь жалоб</h1>
+            <p class="admin-subtitle">Требуется роль admin · Проверка по сессионным cookies</p>
+        </div>
+        <div class="admin-actions">
+            <select id="statusFilter" class="form-input" aria-label="Статус">
+                <option value="">Все</option>
+                <option value="pending" selected>В ожидании</option>
+                <option value="resolved">Решено</option>
+                <option value="dismissed">Отклонено</option>
+            </select>
+            <button id="refreshBtn" class="btn-ghost btn-small">Обновить</button>
+        </div>
+    </header>
+
+    <section class="admin-layout">
+        <div class="admin-card">
+            <div class="table-wrapper">
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>Статус</th>
+                            <th>Дата</th>
+                            <th>Причина</th>
+                            <th>На кого</th>
+                            <th>Кто отправил</th>
+                        </tr>
+                    </thead>
+                    <tbody id="reportsBody"></tbody>
+                </table>
+                <div id="emptyState" class="admin-empty" style="display:none;">Нет жалоб для отображения</div>
+            </div>
+            <div class="admin-pagination">
+                <div class="admin-muted" id="paginationMeta"></div>
+                <div class="admin-actions">
+                    <button id="prevPage" class="btn-ghost btn-small" aria-label="Предыдущая страница">‹</button>
+                    <button id="nextPage" class="btn-ghost btn-small" aria-label="Следующая страница">›</button>
+                </div>
+            </div>
+        </div>
+        <aside class="detail-card">
+            <h3>Детали</h3>
+            <div id="detailPanel" class="admin-muted">Выберите жалобу</div>
+        </aside>
+    </section>
+</main>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<script type="module" src="/js/admin-reports.js"></script>
+</body>
+</html>

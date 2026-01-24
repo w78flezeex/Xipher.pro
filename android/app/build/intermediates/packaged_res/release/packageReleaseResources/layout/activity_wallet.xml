@@ -1,0 +1,254 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/wallet_background">
+
+    <!-- Loading Progress -->
+    <ProgressBar
+        android:id="@+id/wallet_loading"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:visibility="gone" />
+
+    <!-- Setup Layout (no wallet) -->
+    <LinearLayout
+        android:id="@+id/wallet_setup_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:padding="32dp"
+        android:visibility="gone">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="🔐"
+            android:textSize="64sp"
+            android:layout_marginBottom="24dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Xipher Wallet"
+            android:textSize="28sp"
+            android:textStyle="bold"
+            android:textColor="@color/wallet_text_primary"
+            android:layout_marginBottom="8dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Безопасный мультивалютный кошелёк"
+            android:textSize="16sp"
+            android:textColor="@color/wallet_text_secondary"
+            android:layout_marginBottom="48dp" />
+
+        <Button
+            android:id="@+id/btn_create_wallet"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:text="Создать кошелёк"
+            android:textSize="16sp"
+            android:textAllCaps="false"
+            android:background="@drawable/btn_primary_bg"
+            android:textColor="@android:color/white"
+            android:layout_marginBottom="16dp" />
+
+        <Button
+            android:id="@+id/btn_import_wallet"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:text="Импортировать кошелёк"
+            android:textSize="16sp"
+            android:textAllCaps="false"
+            android:background="@drawable/btn_secondary_bg"
+            android:textColor="@color/wallet_accent" />
+
+    </LinearLayout>
+
+    <!-- Main Wallet Layout -->
+    <LinearLayout
+        android:id="@+id/wallet_main_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:visibility="visible">
+
+        <!-- Balance Card -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@drawable/card_bg"
+            android:padding="24dp"
+            android:layout_margin="16dp"
+            android:gravity="center">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Общий баланс"
+                android:textSize="14sp"
+                android:textColor="@color/wallet_text_secondary" />
+
+            <TextView
+                android:id="@+id/wallet_total_balance"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="$0.00"
+                android:textSize="36sp"
+                android:textStyle="bold"
+                android:textColor="@color/wallet_text_primary"
+                android:layout_marginTop="8dp" />
+
+            <TextView
+                android:id="@+id/wallet_balance_change"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="+0.00%"
+                android:textSize="14sp"
+                android:textColor="@color/wallet_green"
+                android:layout_marginTop="4dp" />
+
+        </LinearLayout>
+
+        <!-- Action Buttons -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingHorizontal="16dp"
+            android:layout_marginBottom="16dp">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:padding="12dp">
+
+                <Button
+                    android:id="@+id/btn_send"
+                    android:layout_width="56dp"
+                    android:layout_height="56dp"
+                    android:text="↑"
+                    android:textSize="24sp"
+                    android:background="@drawable/btn_action_bg"
+                    android:textColor="@android:color/white" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Отправить"
+                    android:textSize="12sp"
+                    android:textColor="@color/wallet_text_secondary"
+                    android:layout_marginTop="8dp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:padding="12dp">
+
+                <Button
+                    android:id="@+id/btn_receive"
+                    android:layout_width="56dp"
+                    android:layout_height="56dp"
+                    android:text="↓"
+                    android:textSize="24sp"
+                    android:background="@drawable/btn_action_bg"
+                    android:textColor="@android:color/white" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Получить"
+                    android:textSize="12sp"
+                    android:textColor="@color/wallet_text_secondary"
+                    android:layout_marginTop="8dp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:padding="12dp">
+
+                <Button
+                    android:id="@+id/btn_earn"
+                    android:layout_width="56dp"
+                    android:layout_height="56dp"
+                    android:text="💰"
+                    android:textSize="20sp"
+                    android:background="@drawable/btn_action_bg"
+                    android:textColor="@android:color/white" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Earn"
+                    android:textSize="12sp"
+                    android:textColor="@color/wallet_text_secondary"
+                    android:layout_marginTop="8dp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:padding="12dp">
+
+                <Button
+                    android:id="@+id/btn_settings"
+                    android:layout_width="56dp"
+                    android:layout_height="56dp"
+                    android:text="⚙️"
+                    android:textSize="20sp"
+                    android:background="@drawable/btn_action_bg"
+                    android:textColor="@android:color/white" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Настройки"
+                    android:textSize="12sp"
+                    android:textColor="@color/wallet_text_secondary"
+                    android:layout_marginTop="8dp" />
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <!-- Assets List -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Активы"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:textColor="@color/wallet_text_primary"
+            android:paddingHorizontal="16dp"
+            android:layout_marginBottom="8dp" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/wallet_assets_recycler"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:paddingHorizontal="16dp"
+            android:clipToPadding="false" />
+
+    </LinearLayout>
+
+</LinearLayout>

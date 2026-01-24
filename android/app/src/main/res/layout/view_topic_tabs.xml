@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Topic Tabs Container - Horizontal scrollable tabs above messages -->
+<HorizontalScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/topicTabsScroll"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:fillViewport="true"
+    android:scrollbars="none"
+    android:background="@color/x_bg_primary"
+    android:visibility="gone">
+
+    <LinearLayout
+        android:id="@+id/topicTabsContainer"
+        android:layout_width="wrap_content"
+        android:layout_height="48dp"
+        android:paddingHorizontal="12dp"
+        android:paddingVertical="4dp"
+        android:orientation="horizontal"
+        android:gravity="center_vertical">
+
+        <!-- Topic tabs will be added programmatically here -->
+
+        <!-- Add Topic Button -->
+        <FrameLayout
+            android:id="@+id/topicAddButton"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:layout_marginStart="8dp"
+            android:background="@drawable/topic_add_button_bg"
+            android:clickable="true"
+            android:focusable="true"
+            android:visibility="gone">
+
+            <ImageView
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                android:layout_gravity="center"
+                android:src="@drawable/ic_add"
+                android:tint="@color/x_accent_primary" />
+
+        </FrameLayout>
+
+    </LinearLayout>
+
+</HorizontalScrollView>

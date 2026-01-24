@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <link rel="icon" href="/xipher.ico" type="image/x-icon">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Мои боты — Xipher</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/notifications.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    body { margin: 0; background: var(--bg-primary); color: var(--text-primary); }
+    .wrap { max-width: 980px; margin: 0 auto; padding: 24px; }
+    .topbar { display:flex; align-items:center; justify-content:space-between; gap: 12px; margin-bottom: 16px; }
+    .title { font-size: 1.6rem; font-weight: 700; }
+    .actions { display:flex; gap: 10px; align-items:center; }
+    .btn { padding: 10px 14px; border-radius: 10px; border: 1px solid var(--border-color); background: var(--bg-tertiary); color: var(--text-primary); cursor:pointer; }
+    .btn.primary { background: var(--purple-primary); border-color: transparent; color: #fff; }
+    .card { background: var(--gradient-card); border: 1px solid var(--border-color); border-radius: 14px; padding: 16px; }
+    .bots { display:flex; flex-direction:column; gap: 10px; margin-top: 12px; }
+    .bot-row { display:flex; align-items:center; justify-content:space-between; gap: 12px; padding: 12px; border: 1px solid var(--border-color); border-radius: 12px; background: var(--bg-tertiary); }
+    .bot-left { display:flex; align-items:center; gap: 12px; min-width:0; }
+    .bot-avatar { width: 44px; height: 44px; border-radius: 50%; background: var(--gradient-purple); display:flex; align-items:center; justify-content:center; color:#fff; font-weight:700; flex-shrink:0; overflow:hidden; }
+    .bot-avatar img { width: 100%; height: 100%; object-fit: cover; }
+    .bot-meta { display:flex; flex-direction:column; gap: 2px; min-width: 0; }
+    .bot-name { font-weight: 700; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+    .bot-username { color: var(--text-secondary); font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace; }
+    .bot-state { color: var(--text-muted); font-size: 0.9rem; }
+    .muted { color: var(--text-secondary); }
+    .row-actions { 
+      display:flex; 
+      gap: 6px; 
+      flex-wrap: wrap;
+      align-items: center;
+    }
+    .link { color: var(--purple-primary); text-decoration:none; }
+    
+    /* Improved button styles */
+    .row-actions .btn {
+      padding: 8px 12px;
+      font-size: 0.85rem;
+      font-weight: 500;
+      border-radius: 8px;
+      transition: all 0.2s ease;
+      white-space: nowrap;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      border: 1px solid var(--border-color);
+      background: rgba(255, 255, 255, 0.03);
+      color: var(--text-primary);
+      text-decoration: none;
+    }
+    .row-actions .btn i {
+      font-size: 0.8rem;
+      opacity: 0.8;
+    }
+    .row-actions .btn:hover i {
+      opacity: 1;
+    }
+    .row-actions .btn span {
+      display: inline-block;
+    }
+    .row-actions .btn:hover {
+      background: rgba(147, 51, 234, 0.12);
+      border-color: rgba(147, 51, 234, 0.4);
+      color: var(--text-primary);
+      transform: translateY(-1px);
+    }
+    .row-actions .btn[style*="error-color"] {
+      color: #ef4444 !important;
+      border-color: rgba(239, 68, 68, 0.3);
+    }
+    .row-actions .btn[style*="error-color"]:hover {
+      background: rgba(239, 68, 68, 0.1);
+      border-color: rgba(239, 68, 68, 0.5);
+    }
+    .row-actions .btn[href="/api"] {
+      text-decoration: underline;
+      text-decoration-color: rgba(147, 51, 234, 0.5);
+    }
+    
+    /* Bot row improvements */
+    .bot-row {
+      transition: all 0.2s ease;
+      padding: 14px 16px;
+    }
+    .bot-row:hover {
+      border-color: rgba(147, 51, 234, 0.3);
+      background: rgba(147, 51, 234, 0.03);
+    }
+
+    .modal-backdrop { position: fixed; inset: 0; background: rgba(0,0,0,.55); display:none; align-items:center; justify-content:center; padding: 16px; }
+    .modal { width: 100%; max-width: 520px; background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 14px; padding: 16px; }
+    .modal h2 { margin: 0 0 10px 0; font-size: 1.2rem; }
+    .field { display:flex; flex-direction:column; gap: 6px; margin-top: 10px; }
+    .field label { color: var(--text-secondary); font-size: .9rem; }
+    .field input { padding: 10px 12px; border-radius: 10px; border: 1px solid var(--border-color); background: var(--bg-tertiary); color: var(--text-primary); }
+    .hint { color: var(--text-muted); font-size: .85rem; line-height: 1.4; }
+    .modal-actions { display:flex; justify-content:flex-end; gap: 10px; margin-top: 14px; }
+    .token-box { margin-top: 12px; padding: 12px; border-radius: 12px; border: 1px dashed var(--border-color); background: rgba(147, 51, 234, 0.08); }
+    .token-mono { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace; word-break: break-all; }
+
+    .templates { margin-bottom: 14px; }
+    .tpl-head { display:flex; align-items:center; justify-content:space-between; gap: 10px; margin-bottom: 10px; }
+    .tpl-head .muted { margin: 0; }
+    .tpl-search { width: 100%; max-width: 340px; padding: 10px 12px; border-radius: 10px; border: 1px solid var(--border-color); background: var(--bg-tertiary); color: var(--text-primary); }
+    .tpl-list { display:flex; flex-direction:column; gap: 16px; }
+    .tpl-grid { display:grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+    @media (max-width: 900px) { .tpl-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+    @media (max-width: 600px) { .tpl-grid { grid-template-columns: 1fr; } }
+    .tpl-card { border: 1px solid var(--border-color); border-radius: 14px; background: var(--bg-tertiary); padding: 14px; display:flex; flex-direction:column; gap: 10px; min-height: 150px; }
+    .tpl-title { font-weight: 800; letter-spacing: .2px; }
+    .tpl-desc { color: var(--text-muted); font-size: .92rem; line-height: 1.4; min-height: 44px; }
+    .tpl-tags { display:flex; flex-wrap:wrap; gap: 6px; }
+    .tag { font-size: .78rem; padding: 4px 8px; border-radius: 999px; border: 1px solid var(--border-color); color: var(--text-secondary); background: rgba(255,255,255,0.03); }
+    .tpl-filters { display:flex; flex-wrap:wrap; gap: 8px; margin-bottom: 10px; }
+    .chip { font-size: .82rem; padding: 8px 10px; border-radius: 999px; border: 1px solid var(--border-color); background: rgba(255,255,255,0.03); color: var(--text-secondary); cursor:pointer; user-select:none; }
+    .chip.active { background: rgba(147, 51, 234, 0.16); color: var(--text-primary); border-color: rgba(147, 51, 234, 0.55); }
+    .tpl-section { padding-top: 6px; }
+    .tpl-section-title { font-weight: 900; margin: 0 0 10px; display:flex; align-items:center; justify-content:space-between; gap: 10px; }
+    .tpl-section-title small { font-weight: 500; color: var(--text-muted); }
+
+    .tabs { display:flex; gap: 8px; flex-wrap:wrap; margin-top: 10px; }
+    .tab { padding: 8px 10px; border-radius: 999px; border: 1px solid var(--border-color); background: rgba(255,255,255,0.03); color: var(--text-secondary); cursor:pointer; user-select:none; }
+    .tab.active { background: rgba(147, 51, 234, 0.16); color: var(--text-primary); border-color: rgba(147, 51, 234, 0.55); }
+    .panel { display:none; margin-top: 10px; }
+    .panel.active { display:block; }
+    textarea.input { width: 100%; min-height: 110px; padding: 10px 12px; border-radius: 10px; border: 1px solid var(--border-color); background: var(--bg-tertiary); color: var(--text-primary); resize: vertical; }
+    .two-col { display:grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    @media (max-width: 700px) { .two-col { grid-template-columns: 1fr; } }
+    .switch { display:flex; align-items:center; justify-content:space-between; gap: 10px; padding: 10px 12px; border: 1px solid var(--border-color); border-radius: 12px; background: rgba(255,255,255,0.03); }
+    .switch strong { font-weight: 800; }
+    .kv-row { display:flex; gap: 8px; align-items:center; margin-top: 8px; }
+    .kv-row input { flex:1; }
+    .kv-row textarea { flex:2; min-height: 64px; padding: 10px 12px; border-radius: 10px; border: 1px solid var(--border-color); background: var(--bg-tertiary); color: var(--text-primary); resize: vertical; }
+    .kv-row .btn { padding: 10px 12px; }
+
+    .premium-lock { position: fixed; inset: 0; z-index: 2000; display: none; align-items: center; justify-content: center; padding: 24px; background: rgba(6, 10, 18, 0.6); -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); }
+    .premium-lock.active { display: flex; }
+    .premium-lock-card { width: 100%; max-width: 520px; background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 16px; padding: 20px; text-align: center; box-shadow: 0 22px 60px rgba(0,0,0,0.35); }
+    .premium-lock-badge { display: inline-flex; align-items: center; gap: 6px; padding: 6px 12px; border-radius: 999px; background: rgba(147, 51, 234, 0.16); font-size: 0.85rem; font-weight: 700; margin-bottom: 10px; }
+    .premium-lock-title { margin: 0 0 8px; font-size: 1.4rem; font-weight: 800; }
+    .premium-lock-text { margin: 0 0 16px; color: var(--text-secondary); line-height: 1.5; }
+    .premium-lock-actions { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
+    .premium-lock-note { margin-top: 12px; color: var(--text-muted); font-size: 0.9rem; line-height: 1.4; }
+    body.premium-locked { overflow: hidden; }
+    body.premium-locked .wrap { filter: blur(4px); pointer-events: none; user-select: none; }
+    body.premium-locked .modal-backdrop { filter: blur(4px); pointer-events: none; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="topbar">
+      <div>
+        <div class="title">Мои боты</div>
+        <div class="muted">Создавай бота для вашего проекта: имя + @username, токен показываем один раз.</div>
+      </div>
+      <div class="actions">
+        <a class="btn" href="/chat">← В чат</a>
+        <button class="btn primary" id="openCreate">Создать бота</button>
+      </div>
+    </div>
+
+    <div class="card templates">
+      <div class="tpl-head">
+        <div>
+          <div class="muted">Готовые боты (шаблоны)</div>
+          <div class="hint">Выбирай и создавай бота за 10 секунд. Все шаблоны — “лёгкие” (auto‑mod, заметки, welcome, rules, fun).</div>
+        </div>
+        <input class="tpl-search" id="tplSearch" placeholder="Поиск по шаблонам…">
+      </div>
+      <div class="tpl-filters" id="tplScopeFilters"></div>
+      <div class="tpl-filters" id="tplCategoryFilters"></div>
+      <div class="tpl-list" id="tplGrid"></div>
+      <div class="muted" id="tplEmpty" style="margin-top: 10px; display:none;">Ничего не найдено.</div>
+    </div>
+
+    <div class="card">
+      <div class="muted">Список ботов</div>
+      <div class="bots" id="botsList"></div>
+      <div class="muted" id="emptyHint" style="margin-top: 10px; display:none;">
+        Пока пусто. Нажми «Создать бота».
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-backdrop" id="addToGroupBackdrop" role="dialog" aria-modal="true">
+    <div class="modal">
+      <h2>Добавить бота в группу</h2>
+      <div class="hint">Бот добавится как участник (как в Xipher). После этого авто‑мод/заметки начнут работать в группе.</div>
+
+      <div class="field">
+        <label>Бот</label>
+        <div class="hint" id="addToGroupBotLabel">—</div>
+      </div>
+
+      <div class="field">
+        <label for="groupSelect">Группа</label>
+        <select id="groupSelect" class="btn" style="width:100%; padding:10px 12px; border-radius:10px;">
+          <option value="">Загрузка…</option>
+        </select>
+        <div class="hint" id="groupSelectHint">Если групп нет — сначала создай группу в чате.</div>
+      </div>
+
+      <div class="modal-actions">
+        <button class="btn" id="closeAddToGroup">Закрыть</button>
+        <button class="btn primary" id="confirmAddToGroup">Добавить</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-backdrop" id="createBackdrop" role="dialog" aria-modal="true">
+    <div class="modal">
+      <h2>Создать бота</h2>
+      <div class="hint">
+        Требования к username: 5–32 символа, только <b>A‑Z</b>, <b>a‑z</b>, <b>0‑9</b>, <b>_</b> и должен оканчиваться на <b>bot</b>.
+      </div>
+      <div class="hint" id="createTemplateHint" style="margin-top:8px; display:none;"></div>
+
+      <div class="field">
+        <label for="botName">Название</label>
+        <input id="botName" placeholder="Напр.: Xipher Helper Bot">
+      </div>
+
+      <div class="field">
+        <label for="botUsername">Username</label>
+        <input id="botUsername" placeholder="Напр.: xipher_helper_bot">
+        <div class="hint">В UI показываем как <b>@username</b>.</div>
+      </div>
+
+      <div class="token-box" id="tokenBox" style="display:none;">
+        <div class="muted">Токен (покажем один раз):</div>
+        <div class="token-mono" id="createdToken"></div>
+        <div style="margin-top: 10px; display:flex; gap:8px;">
+          <button class="btn" id="copyToken">Скопировать</button>
+          <a class="btn" id="openApiDoc" href="/api">Открыть API доку</a>
+        </div>
+      </div>
+
+      <div class="modal-actions">
+        <button class="btn" id="closeCreate">Закрыть</button>
+        <button class="btn primary" id="createBtn">Создать</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-backdrop" id="revealBackdrop" role="dialog" aria-modal="true">
+    <div class="modal">
+      <h2>Показать токен</h2>
+      <div class="hint">
+        Для безопасности введи пароль от аккаунта. Токен даст полный доступ к Bot API.
+      </div>
+
+      <div class="field">
+        <label>Бот</label>
+        <div class="hint" id="revealBotLabel">—</div>
+      </div>
+
+      <div class="field">
+        <label for="revealPassword">Пароль</label>
+        <input id="revealPassword" type="password" placeholder="Пароль аккаунта">
+      </div>
+
+      <div class="token-box" id="revealTokenBox" style="display:none;">
+        <div class="muted">Токен:</div>
+        <div class="token-mono" id="revealToken"></div>
+        <div style="margin-top: 10px; display:flex; gap:8px;">
+          <button class="btn" id="copyRevealToken">Скопировать</button>
+        </div>
+      </div>
+
+      <div class="modal-actions">
+        <button class="btn" id="closeReveal">Закрыть</button>
+        <button class="btn primary" id="revealBtn">Показать</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-backdrop" id="editBackdrop" role="dialog" aria-modal="true">
+    <div class="modal">
+      <h2>Профиль бота</h2>
+      <div class="hint">Можно поменять имя, описание и аватарку (как в TG).</div>
+
+      <div class="field">
+        <label>Аватар</label>
+        <input id="editAvatar" type="file" accept="image/*">
+        <div class="hint">Максимум 10 МБ. Форматы: jpg/png/gif/webp.</div>
+      </div>
+
+      <div class="field">
+        <label for="editName">Название</label>
+        <input id="editName" placeholder="Название бота">
+      </div>
+
+      <div class="field">
+        <label for="editDescription">Описание</label>
+        <input id="editDescription" placeholder="Коротко: что делает бот">
+      </div>
+
+      <div class="modal-actions">
+        <button class="btn" id="closeEdit">Закрыть</button>
+        <button class="btn primary" id="saveEdit">Сохранить</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-backdrop" id="builderBackdrop" role="dialog" aria-modal="true">
+    <div class="modal" style="max-width: 720px;">
+      <h2>Конструктор бота</h2>
+      <div class="hint" id="builderBotLabel">—</div>
+      <div class="tabs" id="builderTabs">
+        <div class="tab active" data-tab="simple">Простой</div>
+        <div class="tab" data-tab="python">Python</div>
+        <div class="tab" data-tab="advanced">JSON</div>
+      </div>
+
+      <div class="panel active" id="panelSimple">
+        <div class="hint">Включай модули и правь тексты. Для многострочных текстов просто пиши с переносами — мы сохраним безопасно.</div>
+
+        <div class="two-col" style="margin-top: 10px;">
+          <div class="switch"><strong>Бот активен</strong><input type="checkbox" id="cfgIsActive"></div>
+          <div class="switch"><strong>Авто‑ответы (ЛС)</strong><input type="checkbox" id="cfgAutoReply"></div>
+          <div class="switch"><strong>Заметки</strong><input type="checkbox" id="cfgNotes"></div>
+          <div class="switch"><strong>Напоминания</strong><input type="checkbox" id="cfgRemind"></div>
+          <div class="switch"><strong>Правила (/rules)</strong><input type="checkbox" id="cfgRules"></div>
+          <div class="switch"><strong>Welcome (в группе)</strong><input type="checkbox" id="cfgWelcome"></div>
+          <div class="switch"><strong>Модерация (в группе)</strong><input type="checkbox" id="cfgModeration"></div>
+          <div class="switch"><strong>Fun (/roll)</strong><input type="checkbox" id="cfgFun"></div>
+        </div>
+
+        <div class="field">
+          <label>Ответ по умолчанию в ЛС (если не команда)</label>
+          <textarea class="input" id="cfgDmDefault" placeholder="Напр.: Напиши /help"></textarea>
+        </div>
+
+        <div class="field">
+          <label>Текст /help и /start (можно любой)</label>
+          <textarea class="input" id="cfgHelpText" placeholder="Напр.: Привет! Вот команды..."></textarea>
+        </div>
+
+        <div class="field">
+          <label>Текст для неизвестной команды (например, /abc)</label>
+          <input id="cfgUnknownCmd" placeholder="Напр.: Не понимаю команду. Напиши /help">
+        </div>
+
+        <div class="field">
+          <label>Свои команды → ответы (любой текст)</label>
+          <div class="hint">Добавь команду без “/” (например: <b>price</b>), а бот ответит на <b>/price</b>.</div>
+          <div id="cfgCmdList"></div>
+          <div class="kv-row">
+            <button class="btn" id="cfgAddCmd">+ Добавить команду</button>
+          </div>
+        </div>
+
+        <div class="field" id="rulesBox">
+          <label>Текст правил (/rules)</label>
+          <textarea class="input" id="cfgRulesText" placeholder="Правила..."></textarea>
+        </div>
+
+        <div class="field" id="welcomeBox">
+          <label>Welcome текст (когда человек заходит в группу)</label>
+          <textarea class="input" id="cfgWelcomeText" placeholder="Привет, @{username}!"></textarea>
+          <div class="hint">Поддерживается @{username}</div>
+        </div>
+
+        <div class="field" id="moderationBox">
+          <label>Модерация</label>
+          <div class="two-col">
+            <div class="switch"><strong>Блок ссылок</strong><input type="checkbox" id="cfgModLinks"></div>
+            <div class="switch"><strong>Блок капса</strong><input type="checkbox" id="cfgModCaps"></div>
+            <div class="switch"><strong>Блок матов</strong><input type="checkbox" id="cfgModBadWords"></div>
+            <div class="switch"><strong>Авто‑мут</strong><input type="checkbox" id="cfgModAutoMute"></div>
+          </div>
+          <div class="field">
+            <label>Список запрещённых слов (через запятую)</label>
+            <input id="cfgModWords" placeholder="слово1,слово2,слово3">
+          </div>
+          <div class="field">
+            <label>Текст предупреждения</label>
+            <input id="cfgModWarn" placeholder="⚠️ {reason}">
+            <div class="hint">Переменная: {reason}</div>
+          </div>
+        </div>
+
+        <div class="field" id="autoreplyBox">
+          <label>Авто‑ответы (ключ → ответ) в ЛС</label>
+          <div class="hint">Пример: “оплата” → “Скинь номер заказа”.</div>
+          <div id="cfgAutoReplyList"></div>
+          <div class="kv-row">
+            <button class="btn" id="cfgAddAutoReply">+ Добавить правило</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel" id="panelAdvanced">
+        <div class="hint">Тут можно править “код” поведения — JSON конфиг. Должен быть валидным JSON.</div>
+        <div class="field">
+          <label>flow_json</label>
+          <textarea class="input" id="cfgRawJson" style="min-height: 220px;"></textarea>
+        </div>
+      </div>
+
+      <div class="panel" id="panelPython">
+        <div class="hint">
+          Полноценный код бота на Python. Скрипт выполняется на каждое сообщение/ивент с ограничениями по времени и памяти.
+          <br>Функция: <b>handle(update, api)</b> или <b>handle(update)</b>.
+          <br>API: <b>api.send(text)</b>, <b>api.send_dm(user_id, text)</b>, <b>api.send_group(group_id, text)</b>.
+        </div>
+        <div class="switch" style="margin-top: 10px;">
+          <strong>Включить Python‑скрипт</strong>
+          <input type="checkbox" id="pyEnabled">
+        </div>
+        <div class="field">
+          <label>Код</label>
+          <textarea class="input" id="pyCode" style="min-height: 260px; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;"></textarea>
+          <div class="hint">Подсказка: чтобы ответить — <b>api.send('текст')</b>.</div>
+        </div>
+        <div class="modal-actions" style="justify-content:flex-start; margin-top: 6px;">
+          <button class="btn" id="pyInsertTemplate">Вставить шаблон</button>
+        </div>
+      </div>
+
+      <div class="modal-actions">
+        <button class="btn" id="closeBuilder">Закрыть</button>
+        <button class="btn primary" id="saveBuilder">Сохранить</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-backdrop" id="deleteBackdrop" role="dialog" aria-modal="true">
+    <div class="modal">
+      <h2>Удалить бота</h2>
+      <div class="hint">Это действие нельзя отменить. Бот и все его данные будут удалены навсегда.</div>
+
+      <div class="field">
+        <label>Бот</label>
+        <div class="hint" id="deleteBotLabel">—</div>
+      </div>
+
+      <div class="modal-actions">
+        <button class="btn" id="closeDelete">Отмена</button>
+        <button class="btn" id="confirmDelete" style="background: var(--error-color, #ef4444); color: #fff; border-color: transparent;">Удалить</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-backdrop" id="developersBackdrop" role="dialog" aria-modal="true">
+    <div class="modal" style="max-width: 600px;">
+      <h2>Разработчики бота</h2>
+      <div class="hint">Добавь других пользователей как разработчиков. Они смогут редактировать бота вместе с тобой.</div>
+
+      <div class="field">
+        <label>Бот</label>
+        <div class="hint" id="developersBotLabel">—</div>
+      </div>
+
+      <div class="field">
+        <label for="developerUsername">Добавить разработчика (username)</label>
+        <div style="display: flex; gap: 8px;">
+          <input id="developerUsername" placeholder="@username" style="flex: 1;">
+          <button class="btn primary" id="addDeveloperBtn">Добавить</button>
+        </div>
+        <div class="hint">Введи username без @</div>
+      </div>
+
+      <div class="field">
+        <label>Список разработчиков</label>
+        <div id="developersList" style="max-height: 300px; overflow-y: auto; border: 1px solid var(--border-color); border-radius: 8px; padding: 8px;"></div>
+      </div>
+
+      <div class="modal-actions">
+        <button class="btn" id="closeDevelopers">Закрыть</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="premium-lock" id="premiumLock" role="dialog" aria-modal="true" aria-labelledby="premiumLockTitle">
+    <div class="premium-lock-card">
+      <div class="premium-lock-badge">★ Premium</div>
+      <h2 class="premium-lock-title" id="premiumLockTitle">Боты доступны только в Premium</h2>
+      <p class="premium-lock-text">Подключите Premium, чтобы создавать ботов, управлять ими и использовать шаблоны.</p>
+      <div class="premium-lock-actions">
+        <a class="btn primary" href="/chat">Открыть Premium</a>
+      </div>
+      <div class="premium-lock-note">Оформление: чат → Настройки → Xipher Premium.</div>
+    </div>
+  </div>
+
+  <script src="/js/session.js"></script>
+  <script src="/js/notifications.js"></script>
+  <script src="/js/bot_templates.js"></script>
+  <script src="/js/bots.js"></script>
+</body>
+</html>

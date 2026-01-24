@@ -1,0 +1,6 @@
+[
+    {
+        "merged": "com.xipher.wrapper.app-mergeReleaseResources-72:/layout-sw600dp-v13/activity_chat.xml",
+        "source": "com.xipher.wrapper.app-main-74:/layout-sw600dp/activity_chat.xml"
+    }
+]

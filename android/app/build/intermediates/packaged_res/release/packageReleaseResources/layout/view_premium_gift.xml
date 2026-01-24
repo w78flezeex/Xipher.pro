@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="240dp"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="4dp"
+    android:clipChildren="false"
+    android:clipToPadding="false">
+
+    <FrameLayout
+        android:id="@+id/giftCard"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/msg_gift_card_bg"
+        android:clipToOutline="true"
+        android:outlineProvider="background"
+        android:paddingStart="16dp"
+        android:paddingTop="50dp"
+        android:paddingEnd="16dp"
+        android:paddingBottom="12dp">
+
+        <View
+            android:id="@+id/giftShine"
+            android:layout_width="200dp"
+            android:layout_height="120dp"
+            android:layout_gravity="center"
+            android:alpha="0.24"
+            android:background="@drawable/msg_gift_shine"
+            android:rotation="-18" />
+
+        <LinearLayout
+            android:id="@+id/giftContent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/giftTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:textColor="@color/x_on_accent"
+                android:textSize="14sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/giftSubtitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:gravity="center"
+                android:textColor="#B8C1CE"
+                android:textSize="12sp" />
+
+            <LinearLayout
+                android:id="@+id/giftMeta"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/giftDuration"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="#B8C1CE"
+                    android:textSize="12sp" />
+
+                <TextView
+                    android:id="@+id/giftDot"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="6dp"
+                    android:layout_marginEnd="6dp"
+                    android:text="•"
+                    android:textColor="#B8C1CE"
+                    android:textSize="12sp" />
+
+                <TextView
+                    android:id="@+id/giftPrice"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/x_on_accent"
+                    android:textSize="12sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+        </LinearLayout>
+    </FrameLayout>
+
+    <LinearLayout
+        android:id="@+id/giftIconWrap"
+        android:layout_width="46dp"
+        android:layout_height="46dp"
+        android:layout_gravity="top|center_horizontal"
+        android:layout_marginTop="2dp"
+        android:background="@drawable/msg_gift_icon_bg"
+        android:gravity="center">
+
+        <ImageView
+            android:id="@+id/giftIcon"
+            android:layout_width="26dp"
+            android:layout_height="26dp"
+            android:contentDescription="@string/premium_gift_preview"
+            android:src="@drawable/ic_gift_box" />
+    </LinearLayout>
+</FrameLayout>

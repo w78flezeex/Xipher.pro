@@ -1,0 +1,55 @@
+/.android
+/.bash_history
+/.bashrc
+/.cache
+/.codex
+/.config
+/.dotnet
+/.gradle
+/.gradle-wrapper
+/.kotlin
+/.lesshst
+/.local
+/.npm
+/.profile
+/.secrets
+/.viminfo
+/.vscode-server
+/.wget-hsts
+/:
+/\root
+/android-sdk
+/androidx
+/docs
+/e()
+/er_id UUID NOT NULL,
+/gradle-8.1.1
+/gradle-8.1.1-bin.zip
+/gradle-8.1.1-bin.zip.1
+/messenger
+/orders.db
+/phone-images
+/ql -h localhost -U xipher -d xipher --no-psqlrc --tuples-only -c SELECT COUNT(*) FROM channels WHERE COALESCE(is_private, false) = false;
+/ql -h localhost -U xipher -d xipher --no-psqlrc -t -c SELECT column_name FROM information_schema.columns WHERE table_name = 'group_topics';
+/ql -h localhost -U xipher -d xipher -X -A -t -c SELECT 'col: ' || column_name || ' type: ' || data_type FROM information_schema.columns WHERE table_name = 'group_topics'
+/ql -h localhost -U xipher -d xipher -c "
+/ql -h localhost -U xipher -d xipher -c ALTER TABLE channels ADD COLUMN IF NOT EXISTS is_public BOOLEAN DEFAULT false; ALTER TABLE channels ADD COLUMN IF NOT EXISTS category VARCHAR(50) DEFAULT ''; SELECT 'done';
+/ql -h localhost -U xipher -d xipher -c ALTER TABLE group_topics ADD COLUMN IF NOT EXISTS is_hidden BOOLEAN DEFAULT false
+/ql -h localhost -U xipher -d xipher -c SELECT column_name, data_type FROM information_schema.columns WHERE table_name = 'channels';
+/ql -h localhost -U xipher -d xipher -f -
+/ql -h localhost -U xipher -d xipher -t -A -c SELECT column_name, data_type FROM information_schema.columns WHERE table_name = 'group_topics' ORDER BY ordinal_position;
+/rebuild_and_restart.sh
+/rebuild_server.sh
+/restart_server.sh
+/setup_turn.sh
+/strotage
+/tmp_restore
+/tmp_rustore
+/tmp_work
+/worksbot_main.py
+/xipher.ico
+/xipher.tar.gz
+/xipher_backup_20251203_124759.tar.gz
+/xipher_desktop.tar.gz
+/xipher_desktop_qt.tar.gz
+/xipher_imresizer.png

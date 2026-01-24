@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="4dp">
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardCornerRadius="12dp"
+        app:cardElevation="2dp"
+        app:cardBackgroundColor="@color/x_bg_card">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <!-- Theme Preview Image -->
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="100dp">
+
+                <ImageView
+                    android:id="@+id/themePreviewImage"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="centerCrop" />
+
+                <!-- Selected Border Overlay -->
+                <View
+                    android:id="@+id/themeSelectedBorder"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/theme_selected_overlay"
+                    android:visibility="gone" />
+
+                <!-- Checkmark -->
+                <ImageView
+                    android:id="@+id/themeCheckMark"
+                    android:layout_width="28dp"
+                    android:layout_height="28dp"
+                    android:layout_gravity="center"
+                    android:background="@drawable/check_circle_bg"
+                    android:padding="4dp"
+                    android:src="@drawable/ic_check"
+                    android:visibility="gone"
+                    app:tint="@android:color/white" />
+            </FrameLayout>
+
+            <!-- Theme Name -->
+            <TextView
+                android:id="@+id/themePreviewName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:paddingVertical="8dp"
+                android:textColor="@color/x_text_primary"
+                android:textSize="12sp"
+                android:fontFamily="sans-serif-medium"
+                android:maxLines="1"
+                android:ellipsize="end" />
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+</FrameLayout>

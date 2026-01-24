@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" href="/xipher.ico" type="image/x-icon">
+    <title>Xipher — Админ-панель</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/admin.css">
+</head>
+<body class="admin-page">
+<main class="container admin-shell">
+    <header class="admin-hero">
+        <div>
+            <div class="admin-badges">
+                <span class="admin-badge">Суперадмин</span>
+                <span class="admin-badge secondary">prd</span>
+                <span id="sessionState" class="admin-status">Сессия закрыта</span>
+            </div>
+            <h1 class="admin-title">Админ-панель</h1>
+            <p class="admin-subtitle">Доступ только для prd. Сессия действует 30 минут.</p>
+        </div>
+        <div class="admin-actions">
+            <button id="refreshStats" class="btn-ghost btn-small" disabled>Обновить статистику</button>
+            <a href="/admin/reports" class="btn-secondary btn-small">Жалобы</a>
+        </div>
+    </header>
+
+    <section class="admin-card">
+        <div class="admin-card-head">
+            <div>
+                <h3>Системная статистика</h3>
+                <p class="admin-muted">Данные обновляются после авторизации.</p>
+            </div>
+            <div id="statsMeta" class="admin-muted">Требуется вход</div>
+        </div>
+        <div class="admin-stats admin-stats-wide">
+            <div class="stat-card">
+                <div class="stat-label">Пользователи</div>
+                <div class="stat-value" id="statUsers">—</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Онлайн</div>
+                <div class="stat-value" id="statOnline">—</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Сообщений сегодня</div>
+                <div class="stat-value" id="statMessages">—</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Забанено</div>
+                <div class="stat-value" id="statBanned">—</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Активны 24ч</div>
+                <div class="stat-value" id="statActive">—</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Группы</div>
+                <div class="stat-value" id="statGroups">—</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Каналы</div>
+                <div class="stat-value" id="statChannels">—</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Боты</div>
+                <div class="stat-value" id="statBots">—</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Жалобы (pending)</div>
+                <div class="stat-value" id="statReports">—</div>
+            </div>
+        </div>
+    </section>
+
+    <section class="admin-card">
+        <div class="admin-card-head">
+            <div>
+                <h3>Умный поиск</h3>
+                <p class="admin-muted">Поиск по пользователям, сообщениям, группам и каналам с быстрыми действиями.</p>
+            </div>
+            <div id="searchMeta" class="admin-muted">Готов к поиску</div>
+        </div>
+        <form id="searchForm" class="admin-form admin-search-form">
+            <div class="form-group">
+                <label class="form-label" for="searchQuery">Запрос</label>
+                <input type="text" id="searchQuery" class="form-input" placeholder="username, uuid, текст" required disabled>
+            </div>
+            <div class="form-group">
+                <label class="form-label" for="searchScope">Область</label>
+                <select id="searchScope" class="form-input" disabled>
+                    <option value="all">Везде</option>
+                    <option value="users">Пользователи</option>
+                    <option value="messages">Сообщения</option>
+                    <option value="groups">Группы</option>
+                    <option value="channels">Каналы</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label class="form-label" for="searchLimit">Лимит</label>
+                <select id="searchLimit" class="form-input" disabled>
+                    <option value="10">10</option>
+                    <option value="20" selected>20</option>
+                    <option value="30">30</option>
+                    <option value="50">50</option>
+                </select>
+            </div>
+            <button type="submit" class="btn-primary" disabled>Найти</button>
+        </form>
+        <div class="admin-search-grid">
+            <div class="admin-result-group">
+                <div class="admin-result-head">Пользователи</div>
+                <div id="searchUsers" class="result-list admin-muted">Пока пусто</div>
+            </div>
+            <div class="admin-result-group">
+                <div class="admin-result-head">Сообщения</div>
+                <div id="searchMessages" class="result-list admin-muted">Пока пусто</div>
+            </div>
+            <div class="admin-result-group">
+                <div class="admin-result-head">Группы</div>
+                <div id="searchGroups" class="result-list admin-muted">Пока пусто</div>
+            </div>
+            <div class="admin-result-group">
+                <div class="admin-result-head">Каналы</div>
+                <div id="searchChannels" class="result-list admin-muted">Пока пусто</div>
+            </div>
+        </div>
+    </section>
+
+    <section class="admin-grid admin-grid-wide">
+        <div class="admin-card">
+            <h3>Пользователи</h3>
+            <p class="admin-muted">Блокировки, роли, админ-флаг и сброс сессий.</p>
+            <form id="userLookupForm" class="admin-form admin-form-inline">
+                <div class="form-group">
+                    <label class="form-label" for="userLookupQuery">Найти пользователя</label>
+                    <input type="text" id="userLookupQuery" class="form-input" placeholder="username или UUID" required disabled>
+                </div>
+                <button type="submit" class="btn-secondary" disabled>Проверить</button>
+            </form>
+            <div id="userLookupResult" class="admin-insight admin-muted">Введите username или UUID.</div>
+            <div class="admin-divider"></div>
+            <form id="banForm" class="admin-form admin-form-inline">
+                <div class="form-group">
+                    <label class="form-label" for="banUserId">ID пользователя</label>
+                    <input type="text" id="banUserId" class="form-input user-id-input" placeholder="UUID пользователя" required disabled>
+                </div>
+                <button type="submit" class="btn-secondary" disabled>Забанить</button>
+            </form>
+            <form id="unbanForm" class="admin-form admin-form-inline">
+                <div class="form-group">
+                    <label class="form-label" for="unbanUserId">ID пользователя</label>
+                    <input type="text" id="unbanUserId" class="form-input user-id-input" placeholder="UUID пользователя" required disabled>
+                </div>
+                <button type="submit" class="btn-secondary" disabled>Разбанить</button>
+            </form>
+            <form id="forceLogoutForm" class="admin-form admin-form-inline">
+                <div class="form-group">
+                    <label class="form-label" for="forceLogoutUserId">ID пользователя</label>
+                    <input type="text" id="forceLogoutUserId" class="form-input user-id-input" placeholder="UUID пользователя" required disabled>
+                </div>
+                <button type="submit" class="btn-ghost" disabled>Сбросить сессии</button>
+            </form>
+            <form id="roleForm" class="admin-form">
+                <div class="admin-form-grid">
+                    <div class="form-group">
+                        <label class="form-label" for="roleUserId">ID пользователя</label>
+                        <input type="text" id="roleUserId" class="form-input user-id-input" placeholder="UUID пользователя" required disabled>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="roleSelect">Роль</label>
+                        <select id="roleSelect" class="form-input" disabled>
+                            <option value="user">user</option>
+                            <option value="moderator">moderator</option>
+                            <option value="admin">admin</option>
+                            <option value="owner">owner</option>
+                        </select>
+                    </div>
+                </div>
+                <button type="submit" class="btn-primary" disabled>Назначить роль</button>
+            </form>
+            <form id="adminFlagForm" class="admin-form">
+                <div class="admin-form-grid">
+                    <div class="form-group">
+                        <label class="form-label" for="adminUserId">ID пользователя</label>
+                        <input type="text" id="adminUserId" class="form-input user-id-input" placeholder="UUID пользователя" required disabled>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="adminFlag">Админ-флаг</label>
+                        <select id="adminFlag" class="form-input" disabled>
+                            <option value="true">true</option>
+                            <option value="false">false</option>
+                        </select>
+                    </div>
+                </div>
+                <button type="submit" class="btn-primary" disabled>Обновить флаг</button>
+            </form>
+            <form id="resetForm" class="admin-form">
+                <div class="admin-form-grid">
+                    <div class="form-group">
+                        <label class="form-label" for="resetUserId">ID пользователя</label>
+                        <input type="text" id="resetUserId" class="form-input user-id-input" placeholder="UUID пользователя" required disabled>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="resetPassword">Новый пароль</label>
+                        <input type="password" id="resetPassword" class="form-input" placeholder="Новый пароль" required disabled>
+                    </div>
+                </div>
+                <button type="submit" class="btn-primary" disabled>Сбросить пароль</button>
+            </form>
+        </div>
+
+        <div class="admin-card">
+            <h3>Сообщения и инциденты</h3>
+            <p class="admin-muted">Удаление сообщений и принудительные чистки.</p>
+            <form id="deleteMsgForm" class="admin-form">
+                <div class="admin-form-grid">
+                    <div class="form-group">
+                        <label class="form-label" for="messageId">ID сообщения</label>
+                        <input type="text" id="messageId" class="form-input" placeholder="UUID сообщения" required disabled>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="messageType">Тип чата</label>
+                        <select id="messageType" class="form-input" disabled>
+                            <option value="">Авто</option>
+                            <option value="direct">Direct</option>
+                            <option value="group">Group</option>
+                            <option value="channel">Channel</option>
+                            <option value="chat_v2">Chat v2</option>
+                        </select>
+                    </div>
+                </div>
+                <button type="submit" class="btn-secondary" disabled>Удалить сообщение</button>
+            </form>
+            <div class="admin-divider"></div>
+            <form id="nukeForm" class="admin-form admin-form-inline">
+                <div class="form-group">
+                    <label class="form-label" for="nukeUserId">ID пользователя</label>
+                    <input type="text" id="nukeUserId" class="form-input user-id-input" placeholder="UUID пользователя" required disabled>
+                </div>
+                <button type="submit" class="btn-primary" disabled>Удалить все сообщения</button>
+            </form>
+            <div class="admin-divider"></div>
+            <form id="broadcastForm" class="admin-form">
+                <div class="form-group">
+                    <label class="form-label" for="broadcastText">Системное сообщение</label>
+                    <textarea id="broadcastText" class="form-input" rows="3" placeholder="Текст системного сообщения" required disabled></textarea>
+                </div>
+                <button type="submit" class="btn-primary" disabled>Отправить</button>
+            </form>
+            <div class="admin-divider"></div>
+            <button id="restartBtn" class="btn-danger" disabled>Поставить рестарт в очередь</button>
+        </div>
+
+        <div class="admin-card">
+            <h3>Автомодерация</h3>
+            <p class="admin-muted">Авто-реакции на повторные жалобы и пороги для спама/абьюза.</p>
+            <form id="autoModForm" class="admin-form">
+                <div class="admin-toggle-grid">
+                    <label class="admin-toggle">
+                        <input type="checkbox" id="autoModEnabled" class="toggle" disabled>
+                        <span>Автомодерация</span>
+                    </label>
+                    <label class="admin-toggle">
+                        <input type="checkbox" id="autoModDelete" class="toggle" disabled>
+                        <span>Удалять сообщения</span>
+                    </label>
+                    <label class="admin-toggle">
+                        <input type="checkbox" id="autoModBan" class="toggle" disabled>
+                        <span>Банить пользователя</span>
+                    </label>
+                    <label class="admin-toggle">
+                        <input type="checkbox" id="autoModResolve" class="toggle" disabled>
+                        <span>Авто-решение жалобы</span>
+                    </label>
+                </div>
+                <div class="admin-form-grid">
+                    <div class="form-group">
+                        <label class="form-label" for="autoModSpam">Порог spam</label>
+                        <input type="number" id="autoModSpam" class="form-input" min="1" max="20" value="3" disabled>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="autoModAbuse">Порог abuse</label>
+                        <input type="number" id="autoModAbuse" class="form-input" min="1" max="20" value="2" disabled>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="autoModWindow">Окно (мин)</label>
+                        <input type="number" id="autoModWindow" class="form-input" min="5" max="1440" value="60" disabled>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="autoModBanHours">Бан (часов)</label>
+                        <input type="number" id="autoModBanHours" class="form-input" min="0" max="720" value="24" disabled>
+                    </div>
+                </div>
+                <button type="submit" class="btn-primary" disabled>Сохранить настройки</button>
+            </form>
+        </div>
+
+        <div class="admin-card">
+            <h3>Премиум-платежи</h3>
+            <p class="admin-muted">Ручная сверка YooMoney и повторная активация.</p>
+            <form id="premiumPaymentLookupForm" class="admin-form admin-form-inline">
+                <div class="form-group">
+                    <label class="form-label" for="premiumPaymentLabel">Label платежа</label>
+                    <input type="text" id="premiumPaymentLabel" class="form-input" placeholder="pp_..." required disabled>
+                </div>
+                <button type="submit" class="btn-secondary" disabled>Проверить</button>
+            </form>
+            <div id="premiumPaymentResult" class="admin-insight admin-muted">Введите label платежа.</div>
+            <div class="admin-divider"></div>
+            <form id="premiumPaymentConfirmForm" class="admin-form">
+                <div class="admin-form-grid">
+                    <div class="form-group">
+                        <label class="form-label" for="premiumPaymentConfirmLabel">Label платежа</label>
+                        <input type="text" id="premiumPaymentConfirmLabel" class="form-input" placeholder="pp_..." required disabled>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="premiumPaymentOperationId">Operation ID (опционально)</label>
+                        <input type="text" id="premiumPaymentOperationId" class="form-input" placeholder="manual" disabled>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="premiumPaymentType">Payment type (опционально)</label>
+                        <input type="text" id="premiumPaymentType" class="form-input" placeholder="manual" disabled>
+                    </div>
+                </div>
+                <button type="submit" class="btn-primary" disabled>Подтвердить оплату и активировать</button>
+            </form>
+            <form id="premiumPaymentReactivateForm" class="admin-form admin-form-inline">
+                <div class="form-group">
+                    <label class="form-label" for="premiumPaymentReactivateLabel">Label для повтора</label>
+                    <input type="text" id="premiumPaymentReactivateLabel" class="form-input" placeholder="pp_..." required disabled>
+                </div>
+                <button type="submit" class="btn-ghost" disabled>Повторно активировать</button>
+            </form>
+            <div class="admin-divider"></div>
+            <div class="admin-card-head">
+                <div>
+                    <h4>Ожидают подтверждения</h4>
+                    <p class="admin-muted">Последние платежи со статусом pending.</p>
+                </div>
+                <button id="premiumPaymentRefresh" class="btn-ghost btn-small" disabled>Обновить</button>
+            </div>
+            <div id="premiumPaymentPendingList" class="result-list admin-muted">Пока пусто</div>
+        </div>
+    </section>
+
+    <!-- Заявки на верификацию -->
+    <section class="admin-card verification-section">
+        <div class="admin-card-head">
+            <div>
+                <h3>✓ Заявки на верификацию</h3>
+                <p class="admin-muted">Рассмотрение заявок на получение галочки для каналов</p>
+            </div>
+            <div class="verification-tabs">
+                <button class="verify-tab active" data-status="pending">На рассмотрении</button>
+                <button class="verify-tab" data-status="approved">Одобренные</button>
+                <button class="verify-tab" data-status="rejected">Отклонённые</button>
+            </div>
+        </div>
+        <div id="verificationRequestsList" class="verification-list admin-muted">Требуется авторизация</div>
+    </section>
+
+    <section class="admin-card">
+        <h3>Журнал действий</h3>
+        <pre id="logBox" class="admin-log">Готово.</pre>
+    </section>
+</main>
+
+<script src="/js/admin-panel.js"></script>
+</body>
+</html>

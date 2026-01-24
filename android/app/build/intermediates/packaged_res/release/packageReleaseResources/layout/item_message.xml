@@ -1,0 +1,785 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingVertical="2dp">
+
+    <!-- Incoming -->
+    <LinearLayout
+        android:id="@+id/rowIn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="start"
+        android:orientation="horizontal"
+        android:layout_marginBottom="4dp">
+
+        <FrameLayout
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:layout_marginEnd="6dp">
+
+            <ImageView
+                android:id="@+id/avatarInImage"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:background="@drawable/avatar_circle_bg"
+                android:scaleType="centerCrop"
+                android:visibility="gone" />
+
+            <TextView
+                android:id="@+id/avatarIn"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:background="@drawable/avatar_circle_bg"
+                android:gravity="center"
+                android:textColor="@color/x_on_accent"
+                android:textStyle="bold"
+                android:textSize="14sp" />
+        </FrameLayout>
+
+        <LinearLayout
+            android:id="@+id/bubbleIn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/msg_in_bg"
+            android:paddingHorizontal="12dp"
+            android:paddingVertical="8dp"
+            android:orientation="vertical">
+
+            <!-- Reply block -->
+            <LinearLayout
+                android:id="@+id/replyBlockIn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:background="@drawable/reply_block_bg_in"
+                android:padding="8dp"
+                android:layout_marginBottom="6dp"
+                android:visibility="gone">
+
+                <View
+                    android:layout_width="3dp"
+                    android:layout_height="match_parent"
+                    android:background="@color/x_accent_primary" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_marginStart="8dp">
+
+                    <TextView
+                        android:id="@+id/replySenderIn"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/x_accent_primary"
+                        android:textSize="12sp"
+                        android:fontFamily="sans-serif-medium"
+                        android:maxLines="1"
+                        android:ellipsize="end" />
+
+                    <TextView
+                        android:id="@+id/replyContentIn"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/x_bubble_time_in"
+                        android:textSize="13sp"
+                        android:maxLines="1"
+                        android:ellipsize="end"
+                        android:maxWidth="@dimen/message_max_width" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/msgSenderIn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/x_accent_primary"
+                android:textSize="13sp"
+                android:fontFamily="sans-serif-medium"
+                android:visibility="gone"
+                android:layout_marginBottom="4dp" />
+
+            <include
+                android:id="@+id/msgGiftIn"
+                layout="@layout/view_premium_gift"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="gone" />
+
+            <androidx.emoji2.widget.EmojiTextView
+                android:id="@+id/msgTextIn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/x_bubble_text_in"
+                android:textSize="15sp"
+                android:maxWidth="@dimen/message_max_width"
+                android:breakStrategy="simple"
+                android:hyphenationFrequency="none"
+                android:scrollHorizontally="false" />
+
+            <LinearLayout
+                android:id="@+id/msgChecklistIn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/msgChecklistTitleIn"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:ellipsize="end"
+                        android:maxLines="1"
+                        android:textColor="@color/x_bubble_text_in"
+                        android:textSize="14sp"
+                        android:fontFamily="sans-serif-medium" />
+
+                    <TextView
+                        android:id="@+id/msgChecklistProgressIn"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:textColor="@color/x_bubble_time_in"
+                        android:textSize="12sp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/msgChecklistItemsIn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="6dp"
+                    android:orientation="vertical" />
+
+                <TextView
+                    android:id="@+id/msgChecklistAddIn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="6dp"
+                    android:text="@string/checklist_add_item"
+                    android:textColor="@color/x_accent_primary"
+                    android:textSize="13sp"
+                    android:visibility="gone" />
+            </LinearLayout>
+
+            <FrameLayout
+                android:id="@+id/msgImageInContainer"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:visibility="gone">
+
+                <ImageView
+                    android:id="@+id/msgImageIn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:adjustViewBounds="true"
+                    android:maxWidth="280dp"
+                    android:maxHeight="400dp"
+                    android:background="@drawable/msg_image_bg"
+                    android:clipToOutline="true"
+                    android:scaleType="fitCenter" />
+
+                <ImageView
+                    android:id="@+id/msgImageInSpoiler"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/msg_image_bg"
+                    android:clipToOutline="true"
+                    android:scaleType="centerCrop"
+                    android:visibility="gone" />
+
+                <TextView
+                    android:id="@+id/msgImageInSpoilerLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:background="@drawable/pill_badge"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp"
+                    android:paddingTop="4dp"
+                    android:paddingBottom="4dp"
+                    android:text="@string/spoiler_tap_to_reveal"
+                    android:textColor="@color/x_text_primary"
+                    android:textSize="12sp"
+                    android:visibility="gone" />
+
+                <include
+                    android:id="@+id/msgImageTransferIn"
+                    layout="@layout/view_transfer_loader"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+            </FrameLayout>
+
+            <com.xipher.wrapper.ui.videonote.VideoNoteView
+                android:id="@+id/msgVideoNoteIn"
+                android:layout_width="180dp"
+                android:layout_height="180dp"
+                android:layout_marginTop="4dp"
+                android:visibility="gone" />
+
+            <LinearLayout
+                android:id="@+id/msgLocationIn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <ImageView
+                    android:id="@+id/msgLocationMapIn"
+                    android:layout_width="220dp"
+                    android:layout_height="130dp"
+                    android:background="@drawable/msg_image_bg"
+                    android:clipToOutline="true"
+                    android:scaleType="centerCrop" />
+
+                <TextView
+                    android:id="@+id/msgLocationTitleIn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="6dp"
+                    android:textColor="@color/x_bubble_text_in"
+                    android:textSize="14sp"
+                    android:fontFamily="sans-serif-medium" />
+
+                <TextView
+                    android:id="@+id/msgLocationSubtitleIn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/x_bubble_time_in"
+                    android:textSize="12sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/msgVoiceIn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:visibility="gone">
+
+                <ImageButton
+                    android:id="@+id/btnVoicePlayIn"
+                    android:layout_width="38dp"
+                    android:layout_height="38dp"
+                    android:background="@drawable/btn_circle_accent"
+                    android:contentDescription="@string/voice_play"
+                    android:padding="8dp"
+                    android:src="@drawable/ic_play"
+                    app:tint="@color/x_on_accent" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:orientation="vertical">
+
+                    <ProgressBar
+                        android:id="@+id/msgVoiceProgressIn"
+                        style="@android:style/Widget.ProgressBar.Horizontal"
+                        android:layout_width="160dp"
+                        android:layout_height="4dp"
+                        android:indeterminate="false"
+                        android:max="1000"
+                        android:progress="0"
+                        android:progressTint="@color/x_accent_primary"
+                        android:progressBackgroundTint="@color/x_border" />
+
+                    <TextView
+                        android:id="@+id/msgVoiceDurationIn"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:text="@string/voice_duration_default"
+                        android:textColor="@color/x_bubble_time_in"
+                        android:textSize="12sp" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/msgFileIn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:visibility="gone">
+
+                <FrameLayout
+                    android:id="@+id/msgFileIconInContainer"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp">
+
+                    <ImageView
+                        android:id="@+id/msgFileIconIn"
+                        android:layout_width="36dp"
+                        android:layout_height="36dp"
+                        android:layout_gravity="center"
+                        android:src="@drawable/ic_file"
+                        app:tint="@color/x_accent_primary" />
+
+                    <include
+                        android:id="@+id/msgFileTransferIn"
+                        layout="@layout/view_transfer_loader"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent" />
+                </FrameLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/msgFileNameIn"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/x_bubble_text_in"
+                        android:textSize="14sp"
+                        android:fontFamily="sans-serif-medium"
+                        android:maxWidth="@dimen/message_max_width"
+                        android:ellipsize="end"
+                        android:maxLines="1" />
+
+                    <TextView
+                        android:id="@+id/msgFileSizeIn"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/x_bubble_time_in"
+                        android:textSize="12sp" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/msgMetaIn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:layout_gravity="end"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/msgTtlIn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="6dp"
+                    android:textColor="@color/x_bubble_time_in"
+                    android:textSize="11sp"
+                    android:visibility="gone" />
+
+                <TextView
+                    android:id="@+id/msgTimeIn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/x_bubble_time_in"
+                    android:textSize="11sp" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <!-- Tail (hidden, kept for compatibility) -->
+        <View
+            android:id="@+id/tailIn"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:visibility="gone" />
+    </LinearLayout>
+
+    <!-- Outgoing -->
+    <LinearLayout
+        android:id="@+id/rowOut"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="end"
+        android:orientation="horizontal"
+        android:visibility="gone"
+        android:layout_marginBottom="4dp">
+
+        <LinearLayout
+            android:id="@+id/bubbleOut"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/msg_out_bg"
+            android:paddingHorizontal="12dp"
+            android:paddingVertical="8dp"
+            android:orientation="vertical">
+
+            <!-- Reply block -->
+            <LinearLayout
+                android:id="@+id/replyBlockOut"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:background="@drawable/reply_block_bg_out"
+                android:padding="8dp"
+                android:layout_marginBottom="6dp"
+                android:visibility="gone">
+
+                <View
+                    android:layout_width="3dp"
+                    android:layout_height="match_parent"
+                    android:background="#B3FFFFFF" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_marginStart="8dp">
+
+                    <TextView
+                        android:id="@+id/replySenderOut"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/x_bubble_text_out"
+                        android:textSize="12sp"
+                        android:fontFamily="sans-serif-medium"
+                        android:maxLines="1"
+                        android:ellipsize="end" />
+
+                    <TextView
+                        android:id="@+id/replyContentOut"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/x_bubble_time_out"
+                        android:textSize="13sp"
+                        android:maxLines="1"
+                        android:ellipsize="end"
+                        android:maxWidth="@dimen/message_max_width" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <include
+                android:id="@+id/msgGiftOut"
+                layout="@layout/view_premium_gift"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="gone" />
+
+            <androidx.emoji2.widget.EmojiTextView
+                android:id="@+id/msgTextOut"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/x_bubble_text_out"
+                android:textSize="15sp"
+                android:maxWidth="@dimen/message_max_width"
+                android:breakStrategy="simple"
+                android:hyphenationFrequency="none"
+                android:scrollHorizontally="false" />
+
+            <LinearLayout
+                android:id="@+id/msgChecklistOut"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/msgChecklistTitleOut"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:ellipsize="end"
+                        android:maxLines="1"
+                        android:textColor="@color/x_bubble_text_out"
+                        android:textSize="14sp"
+                        android:fontFamily="sans-serif-medium" />
+
+                    <TextView
+                        android:id="@+id/msgChecklistProgressOut"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:textColor="@color/x_on_accent"
+                        android:alpha="0.7"
+                        android:textSize="12sp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/msgChecklistItemsOut"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="6dp"
+                    android:orientation="vertical" />
+
+                <TextView
+                    android:id="@+id/msgChecklistAddOut"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="6dp"
+                    android:text="@string/checklist_add_item"
+                    android:textColor="@color/x_on_accent"
+                    android:alpha="0.85"
+                    android:textSize="13sp"
+                    android:visibility="gone" />
+            </LinearLayout>
+
+            <FrameLayout
+                android:id="@+id/msgImageOutContainer"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:visibility="gone">
+
+                <ImageView
+                    android:id="@+id/msgImageOut"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:adjustViewBounds="true"
+                    android:maxWidth="280dp"
+                    android:maxHeight="400dp"
+                    android:background="@drawable/msg_image_bg"
+                    android:clipToOutline="true"
+                    android:scaleType="fitCenter" />
+
+                <ImageView
+                    android:id="@+id/msgImageOutSpoiler"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/msg_image_bg"
+                    android:clipToOutline="true"
+                    android:scaleType="centerCrop"
+                    android:visibility="gone" />
+
+                <TextView
+                    android:id="@+id/msgImageOutSpoilerLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:background="@drawable/pill_badge"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp"
+                    android:paddingTop="4dp"
+                    android:paddingBottom="4dp"
+                    android:text="@string/spoiler_tap_to_reveal"
+                    android:textColor="@color/x_on_accent"
+                    android:textSize="12sp"
+                    android:visibility="gone" />
+
+                <include
+                    android:id="@+id/msgImageTransferOut"
+                    layout="@layout/view_transfer_loader"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+            </FrameLayout>
+
+            <com.xipher.wrapper.ui.videonote.VideoNoteView
+                android:id="@+id/msgVideoNoteOut"
+                android:layout_width="180dp"
+                android:layout_height="180dp"
+                android:layout_marginTop="4dp"
+                android:visibility="gone" />
+
+            <LinearLayout
+                android:id="@+id/msgLocationOut"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <ImageView
+                    android:id="@+id/msgLocationMapOut"
+                    android:layout_width="220dp"
+                    android:layout_height="130dp"
+                    android:background="@drawable/msg_image_bg"
+                    android:clipToOutline="true"
+                    android:scaleType="centerCrop" />
+
+                <TextView
+                    android:id="@+id/msgLocationTitleOut"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="6dp"
+                    android:textColor="@color/x_bubble_text_out"
+                    android:textSize="14sp"
+                    android:fontFamily="sans-serif-medium" />
+
+                <TextView
+                    android:id="@+id/msgLocationSubtitleOut"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/x_bubble_time_out"
+                    android:textSize="12sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/msgVoiceOut"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:visibility="gone">
+
+                <ImageButton
+                    android:id="@+id/btnVoicePlayOut"
+                    android:layout_width="38dp"
+                    android:layout_height="38dp"
+                    android:background="@drawable/btn_voice_out"
+                    android:contentDescription="@string/voice_play"
+                    android:padding="8dp"
+                    android:src="@drawable/ic_play"
+                    app:tint="@color/x_bubble_out" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:orientation="vertical">
+
+                    <ProgressBar
+                        android:id="@+id/msgVoiceProgressOut"
+                        style="@android:style/Widget.ProgressBar.Horizontal"
+                        android:layout_width="160dp"
+                        android:layout_height="4dp"
+                        android:indeterminate="false"
+                        android:max="1000"
+                        android:progress="0"
+                        android:progressTint="@color/x_bubble_text_out"
+                        android:progressBackgroundTint="#40FFFFFF" />
+
+                    <TextView
+                        android:id="@+id/msgVoiceDurationOut"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:text="@string/voice_duration_default"
+                        android:textColor="@color/x_bubble_time_out"
+                        android:textSize="12sp" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/msgFileOut"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:visibility="gone">
+
+                <FrameLayout
+                    android:id="@+id/msgFileIconOutContainer"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp">
+
+                    <ImageView
+                        android:id="@+id/msgFileIconOut"
+                        android:layout_width="36dp"
+                        android:layout_height="36dp"
+                        android:layout_gravity="center"
+                        android:src="@drawable/ic_file"
+                        app:tint="@color/x_bubble_text_out" />
+
+                    <include
+                        android:id="@+id/msgFileTransferOut"
+                        layout="@layout/view_transfer_loader"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent" />
+                </FrameLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/msgFileNameOut"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/x_bubble_text_out"
+                        android:textSize="14sp"
+                        android:fontFamily="sans-serif-medium"
+                        android:maxWidth="@dimen/message_max_width"
+                        android:ellipsize="end"
+                        android:maxLines="1" />
+
+                    <TextView
+                        android:id="@+id/msgFileSizeOut"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/x_bubble_time_out"
+                        android:textSize="12sp" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/msgMetaOut"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:layout_gravity="end"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/msgTtlOut"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="6dp"
+                    android:textColor="@color/x_bubble_time_out"
+                    android:textSize="11sp"
+                    android:visibility="gone" />
+
+                <TextView
+                    android:id="@+id/msgTimeOut"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/x_bubble_time_out"
+                    android:textSize="11sp" />
+
+                <ImageView
+                    android:id="@+id/msgStatusOut"
+                    android:layout_width="14dp"
+                    android:layout_height="14dp"
+                    android:layout_marginStart="4dp"
+                    android:contentDescription="@string/message_status"
+                    android:src="@drawable/ic_msg_sent"
+                    app:tint="@color/x_bubble_text_out"
+                    android:visibility="gone" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <!-- Tail (hidden, kept for compatibility) -->
+        <View
+            android:id="@+id/tailOut"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:visibility="gone" />
+
+        <!-- Avatar placeholders (hidden, kept for compatibility) -->
+        <FrameLayout
+            android:id="@+id/avatarOut"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:visibility="gone">
+
+            <ImageView
+                android:id="@+id/avatarOutImage"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:visibility="gone" />
+        </FrameLayout>
+    </LinearLayout>
+
+</FrameLayout>

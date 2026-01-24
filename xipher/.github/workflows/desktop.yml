@@ -1,0 +1,65 @@
+name: desktop-ci
+
+on:
+  push:
+    paths:
+      - 'desktop/**'
+      - '.github/workflows/desktop.yml'
+  pull_request:
+    paths:
+      - 'desktop/**'
+      - '.github/workflows/desktop.yml'
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Qt
+        uses: jurplel/install-qt-action@v3
+        with:
+          version: '6.5.3'
+          modules: 'qtwebsockets qtquickcontrols2'
+
+      - name: Install Linux deps
+        if: runner.os == 'Linux'
+        run: sudo apt-get update && sudo apt-get install -y libsecret-1-dev pkg-config
+
+      - name: Configure
+        env:
+          CMAKE_PREFIX_PATH: ${{ env.Qt6_DIR }}
+        run: >
+          cmake -S xipher/desktop -B xipher/desktop/out/build/ci
+          -DCMAKE_BUILD_TYPE=Release
+          -DBUILD_TESTING=ON
+
+      - name: Build
+        run: cmake --build xipher/desktop/out/build/ci --config Release
+
+      - name: Test
+        env:
+          QT_QPA_PLATFORM: offscreen
+        run: ctest --test-dir xipher/desktop/out/build/ci --output-on-failure
+
+      - name: Package (Windows)
+        if: runner.os == 'Windows'
+        run: pwsh xipher/desktop/tools/packaging/package_windows.ps1 -BuildDir xipher/desktop/out/build/ci -OutDir xipher/desktop/out/artifacts/windows
+
+      - name: Package (macOS)
+        if: runner.os == 'macOS'
+        run: bash xipher/desktop/tools/packaging/package_macos.sh xipher/desktop/out/build/ci xipher/desktop/out/artifacts/macos
+
+      - name: Package (Linux)
+        if: runner.os == 'Linux'
+        run: bash xipher/desktop/tools/packaging/package_linux.sh xipher/desktop/out/build/ci xipher/desktop/out/artifacts/linux
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: xipher_desktop_${{ runner.os }}
+          path: xipher/desktop/out/artifacts/**

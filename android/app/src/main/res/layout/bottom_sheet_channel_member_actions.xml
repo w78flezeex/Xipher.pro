@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:paddingVertical="8dp">
+
+    <!-- Заголовок -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:paddingHorizontal="16dp"
+        android:paddingVertical="12dp">
+
+        <FrameLayout
+            android:layout_width="48dp"
+            android:layout_height="48dp">
+
+            <ImageView
+                android:id="@+id/avatarImage"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:scaleType="centerCrop"
+                android:visibility="gone" />
+
+            <TextView
+                android:id="@+id/avatarLetter"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:gravity="center"
+                android:textSize="18sp"
+                android:textColor="@android:color/white"
+                android:background="@drawable/bg_avatar_circle" />
+
+        </FrameLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginStart="12dp">
+
+            <TextView
+                android:id="@+id/username"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:textColor="?attr/colorOnSurface" />
+
+            <TextView
+                android:id="@+id/memberUsername"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="13sp"
+                android:textColor="?attr/colorOnSurfaceVariant"
+                android:layout_marginTop="2dp" />
+
+            <TextView
+                android:id="@+id/roleLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="12sp"
+                android:textColor="?attr/colorPrimary"
+                android:layout_marginTop="2dp"
+                android:visibility="gone" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="?attr/dividerHorizontal"
+        android:layout_marginTop="8dp" />
+
+    <!-- Действия -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingTop="8dp">
+
+        <!-- Открыть профиль -->
+        <LinearLayout
+            android:id="@+id/actionProfile"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:padding="16dp"
+            android:background="?attr/selectableItemBackground">
+
+            <TextView
+                android:layout_width="32dp"
+                android:layout_height="wrap_content"
+                android:text="👤"
+                android:textSize="20sp"
+                android:gravity="center" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:text="@string/channel_action_view_profile"
+                android:textSize="15sp"
+                android:textColor="?attr/colorOnSurface" />
+
+        </LinearLayout>
+
+        <!-- Написать сообщение -->
+        <LinearLayout
+            android:id="@+id/actionMessage"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:padding="16dp"
+            android:background="?attr/selectableItemBackground">
+
+            <TextView
+                android:layout_width="32dp"
+                android:layout_height="wrap_content"
+                android:text="💬"
+                android:textSize="20sp"
+                android:gravity="center" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:text="@string/channel_action_send_message"
+                android:textSize="15sp"
+                android:textColor="?attr/colorOnSurface" />
+
+        </LinearLayout>
+
+        <!-- Разделитель для админ-действий -->
+        <View
+            android:id="@+id/adminDivider"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="?attr/dividerHorizontal"
+            android:layout_marginVertical="8dp"
+            android:visibility="gone" />
+
+        <!-- Назначить/изменить права админа -->
+        <LinearLayout
+            android:id="@+id/actionPromote"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:padding="16dp"
+            android:background="?attr/selectableItemBackground"
+            android:visibility="gone">
+
+            <TextView
+                android:layout_width="32dp"
+                android:layout_height="wrap_content"
+                android:text="⭐"
+                android:textSize="20sp"
+                android:gravity="center" />
+
+            <TextView
+                android:id="@+id/promoteText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:text="@string/channel_action_promote"
+                android:textSize="15sp"
+                android:textColor="?attr/colorOnSurface" />
+
+        </LinearLayout>
+
+        <!-- Забанить/разбанить -->
+        <LinearLayout
+            android:id="@+id/actionBan"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:padding="16dp"
+            android:background="?attr/selectableItemBackground"
+            android:visibility="gone">
+
+            <TextView
+                android:id="@+id/actionBanIcon"
+                android:layout_width="32dp"
+                android:layout_height="wrap_content"
+                android:text="🚫"
+                android:textSize="20sp"
+                android:gravity="center" />
+
+            <TextView
+                android:id="@+id/banText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:text="@string/channel_action_ban"
+                android:textSize="15sp"
+                android:textColor="@color/design_default_color_error" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="16dp" />
+
+</LinearLayout>

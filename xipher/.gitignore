@@ -1,0 +1,123 @@
+# === СЕКРЕТЫ И CREDENTIALS ===
+*.env
+*.env.*
+.env
+.env.local
+.env.production
+.env.development
+.env.server
+xipher.env.server
+config.json
+credentials.json
+secrets.json
+google-services.json
+firebase-adminsdk*.json
+
+# === ДОКУМЕНТАЦИЯ (внутренняя) ===
+docs/
+
+# Исключения - шаблоны разрешены
+!*.example
+!*.example.*
+!xipher.env.example
+!google-services.example.json
+!keystore.example.properties
+
+# Keystore и сертификаты
+*.jks
+*.keystore
+keystore.properties
+*.pem
+*.key
+*.cert
+*.p12
+
+# База данных с реальными данными
+*.db
+*.sqlite
+*.sqlite3
+orders.db
+database.json
+
+# === ANDROID BUILD ===
+android/app/build/
+android/build/
+android/.gradle/
+android/local.properties
+android/captures/
+android/.externalNativeBuild/
+android/.cxx/
+*.apk
+*.aab
+*.ap_
+*.dex
+*.class
+
+# === C++ BUILD ===
+xipher/build/
+xipher/.android.gradle/
+*.o
+*.so
+*.a
+CMakeCache.txt
+CMakeFiles/
+
+# === NODE.JS ===
+turn-service/node_modules/
+node_modules/
+npm-debug.log
+yarn-error.log
+package-lock.json
+yarn.lock
+
+# === DESKTOP BUILD ===
+desktop/build/
+desktop/.qmake.stash
+desktop/*.pro.user
+desktop/moc_*.cpp
+desktop/qrc_*.cpp
+
+# === LOGS ===
+logs/
+*.log
+crash-logs/
+
+# === IDE ===
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+
+# === TEMPORARY ===
+tmp/
+temp/
+tmp_*/
+*.tmp
+*.cache
+*.backup
+*.bak
+
+# === ДОКУМЕНТАЦИЯ С ПАРОЛЯМИ ===
+docs/**/migration*.sql
+
+# === GRADLE ===
+.gradle/
+gradle-*.zip*
+build/
+!gradle/wrapper/gradle-wrapper.jar
+
+# === MISC ===
+*.orig
+*.rej
+*.patch
+phone-images/
+strotage/
+
+# === UPLOADS (user files) ===
+uploads/
+uploads/files/
+uploads/voices/
+uploads/avatars/

@@ -1,0 +1,28 @@
+[Unit]
+Description=Xipher Messenger Server
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=root
+Group=root
+
+# Defaults (override via /etc/xipher/xipher.env)
+Environment=XIPHER_PORT=21971
+EnvironmentFile=-/etc/xipher/xipher.env
+
+WorkingDirectory=/root/xipher/build
+ExecStart=/root/xipher/build/xipher_server $XIPHER_PORT
+
+Restart=always
+RestartSec=3
+
+# Basic hardening / stability
+NoNewPrivileges=true
+LimitNOFILE=65536
+
+[Install]
+WantedBy=multi-user.target
+
+

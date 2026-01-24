@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <link rel="icon" href="/xipher.ico" type="image/x-icon">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Страница не найдена — Xipher</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/404.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body class="nf-page">
+  <div class="nf-pattern"></div>
+
+  <main class="nf-shell">
+    <section class="nf-card">
+      <div class="nf-brand">
+        <div class="nf-brand-icon">X</div>
+        <div class="nf-brand-name">Xipher</div>
+      </div>
+
+      <div class="nf-code">404</div>
+      <h1 class="nf-heading">Страница не найдена</h1>
+      <p class="nf-subheading">
+        Похоже, адрес неправильный или страница была перемещена.
+      </p>
+
+      <div class="nf-actions">
+        <a class="btn-primary nf-btn" href="/">На главную</a>
+        <a class="nf-link" href="/login">Войти</a>
+      </div>
+
+      <p class="nf-redirect">
+        Автоматический переход на главную через <span id="nfCountdown">3</span> сек…
+      </p>
+    </section>
+  </main>
+
+  <script>
+    (function () {
+      var seconds = 3;
+      var el = document.getElementById('nfCountdown');
+      var tick = function () {
+        seconds -= 1;
+        if (el) el.textContent = String(seconds);
+        if (seconds <= 0) {
+          window.location.href = '/';
+        } else {
+          setTimeout(tick, 1000);
+        }
+      };
+      setTimeout(tick, 1000);
+    })();
+  </script>
+</body>
+</html>
+
+

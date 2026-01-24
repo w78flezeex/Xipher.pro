@@ -1,0 +1,629 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/x_bg_secondary">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appBarLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/x_bg_primary"
+        app:elevation="0dp">
+
+        <com.google.android.material.appbar.CollapsingToolbarLayout
+            android:id="@+id/collapsingToolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_scrollFlags="scroll|exitUntilCollapsed"
+            app:contentScrim="@color/x_bg_primary"
+            app:expandedTitleGravity="bottom|center_horizontal"
+            app:collapsedTitleGravity="center">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:gravity="center_horizontal"
+                android:paddingTop="16dp"
+                android:paddingBottom="20dp"
+                android:background="@color/x_bg_primary"
+                app:layout_collapseMode="parallax">
+
+                <!-- Avatar -->
+                <FrameLayout
+                    android:id="@+id/profileAvatar"
+                    android:layout_width="110dp"
+                    android:layout_height="110dp">
+
+                    <ImageView
+                        android:id="@+id/profileAvatarImage"
+                        android:layout_width="110dp"
+                        android:layout_height="110dp"
+                        android:background="@drawable/avatar_circle_bg"
+                        android:clipToOutline="true"
+                        android:scaleType="centerCrop"
+                        android:visibility="gone" />
+
+                    <TextView
+                        android:id="@+id/profileAvatarLetter"
+                        android:layout_width="110dp"
+                        android:layout_height="110dp"
+                        android:background="@drawable/avatar_circle_bg"
+                        android:gravity="center"
+                        android:text="@string/avatar_placeholder"
+                        android:textColor="@color/x_on_accent"
+                        android:textStyle="bold"
+                        android:textSize="40sp" />
+
+                    <!-- Edit avatar button overlay -->
+                    <ImageButton
+                        android:id="@+id/btnEditAvatar"
+                        android:layout_width="36dp"
+                        android:layout_height="36dp"
+                        android:layout_gravity="bottom|end"
+                        android:background="@drawable/circle_accent_bg"
+                        android:src="@drawable/ic_camera"
+                        android:padding="8dp"
+                        app:tint="@color/x_on_accent"
+                        android:contentDescription="@string/profile_change_photo"
+                        android:visibility="gone" />
+
+                    <!-- Premium badge -->
+                    <ImageView
+                        android:id="@+id/profilePremiumBadge"
+                        android:layout_width="28dp"
+                        android:layout_height="28dp"
+                        android:layout_gravity="bottom|end"
+                        android:layout_marginEnd="4dp"
+                        android:layout_marginBottom="4dp"
+                        android:background="@drawable/premium_badge_bg"
+                        android:contentDescription="@string/premium_badge"
+                        android:padding="4dp"
+                        android:src="@drawable/ic_premium_star"
+                        app:tint="@color/x_on_accent"
+                        android:visibility="gone" />
+                </FrameLayout>
+
+                <!-- Name -->
+                <TextView
+                    android:id="@+id/profileName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="14dp"
+                    android:text="@string/profile_name_placeholder"
+                    android:textColor="@color/x_text_primary"
+                    android:textSize="24sp"
+                    android:fontFamily="sans-serif-medium" />
+
+                <!-- Username -->
+                <TextView
+                    android:id="@+id/profileUsername"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:text="@string/profile_username_placeholder"
+                    android:textColor="@color/x_accent_primary"
+                    android:textSize="15sp" />
+
+                <!-- Status -->
+                <TextView
+                    android:id="@+id/profileStatus"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:textColor="@color/x_text_secondary"
+                    android:textSize="14sp"
+                    android:visibility="gone" />
+
+                <!-- Action Buttons Row -->
+                <LinearLayout
+                    android:id="@+id/profileActionsRow"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:gravity="center"
+                    android:orientation="horizontal"
+                    android:visibility="gone">
+
+                    <!-- Call Button -->
+                    <LinearLayout
+                        android:id="@+id/btnCall"
+                        android:layout_width="80dp"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:orientation="vertical"
+                        android:padding="12dp"
+                        android:background="@drawable/ripple_rounded">
+
+                        <FrameLayout
+                            android:layout_width="48dp"
+                            android:layout_height="48dp"
+                            android:background="@drawable/action_button_bg">
+
+                            <ImageView
+                                android:layout_width="24dp"
+                                android:layout_height="24dp"
+                                android:layout_gravity="center"
+                                android:src="@drawable/ic_call_out"
+                                app:tint="@color/x_accent_primary" />
+                        </FrameLayout>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="6dp"
+                            android:text="@string/profile_call"
+                            android:textColor="@color/x_accent_primary"
+                            android:textSize="12sp" />
+                    </LinearLayout>
+
+                    <!-- Message Button -->
+                    <LinearLayout
+                        android:id="@+id/btnMessage"
+                        android:layout_width="80dp"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:orientation="vertical"
+                        android:padding="12dp"
+                        android:layout_marginStart="8dp"
+                        android:background="@drawable/ripple_rounded">
+
+                        <FrameLayout
+                            android:layout_width="48dp"
+                            android:layout_height="48dp"
+                            android:background="@drawable/action_button_bg">
+
+                            <ImageView
+                                android:layout_width="24dp"
+                                android:layout_height="24dp"
+                                android:layout_gravity="center"
+                                android:src="@drawable/ic_chat"
+                                app:tint="@color/x_accent_primary" />
+                        </FrameLayout>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="6dp"
+                            android:text="@string/profile_message"
+                            android:textColor="@color/x_accent_primary"
+                            android:textSize="12sp" />
+                    </LinearLayout>
+
+                    <!-- Mute Button -->
+                    <LinearLayout
+                        android:id="@+id/btnMute"
+                        android:layout_width="80dp"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:orientation="vertical"
+                        android:padding="12dp"
+                        android:layout_marginStart="8dp"
+                        android:background="@drawable/ripple_rounded">
+
+                        <FrameLayout
+                            android:layout_width="48dp"
+                            android:layout_height="48dp"
+                            android:background="@drawable/action_button_bg">
+
+                            <ImageView
+                                android:id="@+id/btnMuteIcon"
+                                android:layout_width="24dp"
+                                android:layout_height="24dp"
+                                android:layout_gravity="center"
+                                android:src="@drawable/ic_notifications"
+                                app:tint="@color/x_accent_primary" />
+                        </FrameLayout>
+
+                        <TextView
+                            android:id="@+id/btnMuteLabel"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="6dp"
+                            android:text="@string/profile_notifications"
+                            android:textColor="@color/x_accent_primary"
+                            android:textSize="12sp" />
+                    </LinearLayout>
+
+                    <!-- More Button -->
+                    <LinearLayout
+                        android:id="@+id/btnMore"
+                        android:layout_width="80dp"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:orientation="vertical"
+                        android:padding="12dp"
+                        android:layout_marginStart="8dp"
+                        android:background="@drawable/ripple_rounded">
+
+                        <FrameLayout
+                            android:layout_width="48dp"
+                            android:layout_height="48dp"
+                            android:background="@drawable/action_button_bg">
+
+                            <ImageView
+                                android:layout_width="24dp"
+                                android:layout_height="24dp"
+                                android:layout_gravity="center"
+                                android:src="@drawable/ic_more_vert"
+                                app:tint="@color/x_accent_primary" />
+                        </FrameLayout>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="6dp"
+                            android:text="@string/profile_more"
+                            android:textColor="@color/x_accent_primary"
+                            android:textSize="12sp" />
+                    </LinearLayout>
+                </LinearLayout>
+
+                <!-- Save Profile Button (only for self) -->
+                <Button
+                    android:id="@+id/btnSaveProfile"
+                    android:layout_width="wrap_content"
+                    android:layout_height="44dp"
+                    android:layout_marginTop="16dp"
+                    android:background="@drawable/btn_primary"
+                    android:text="@string/profile_save"
+                    android:textColor="@color/x_on_accent"
+                    android:textAllCaps="false"
+                    android:fontFamily="sans-serif-medium"
+                    android:paddingHorizontal="32dp"
+                    android:visibility="gone" />
+
+            </LinearLayout>
+
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                app:layout_collapseMode="pin"
+                app:navigationIcon="@drawable/ic_arrow_back"
+                app:navigationIconTint="@color/x_text_primary"
+                android:background="@android:color/transparent" />
+
+        </com.google.android.material.appbar.CollapsingToolbarLayout>
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingBottom="80dp">
+
+            <!-- Info Section -->
+            <LinearLayout
+                android:id="@+id/infoSection"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/x_bg_primary"
+                android:orientation="vertical"
+                android:layout_marginTop="8dp">
+
+                <!-- Bio Row -->
+                <LinearLayout
+                    android:id="@+id/bioRow"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:paddingHorizontal="16dp"
+                    android:paddingVertical="14dp"
+                    android:background="?attr/selectableItemBackground">
+
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/ic_info"
+                        app:tint="@color/x_text_secondary" />
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_marginStart="16dp"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/profileBio"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text=""
+                            android:textColor="@color/x_text_primary"
+                            android:textSize="15sp"
+                            android:maxLines="5" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="2dp"
+                            android:text="@string/profile_bio"
+                            android:textColor="@color/x_text_secondary"
+                            android:textSize="13sp" />
+                    </LinearLayout>
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginStart="56dp"
+                    android:background="@color/x_divider" />
+
+                <!-- Username Row -->
+                <LinearLayout
+                    android:id="@+id/usernameRow"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:paddingHorizontal="16dp"
+                    android:paddingVertical="14dp"
+                    android:background="?attr/selectableItemBackground">
+
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/ic_at"
+                        app:tint="@color/x_text_secondary" />
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_marginStart="16dp"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/profileUsernameInfo"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="username"
+                            android:textColor="@color/x_text_primary"
+                            android:textSize="15sp" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="2dp"
+                            android:text="@string/profile_username_label"
+                            android:textColor="@color/x_text_secondary"
+                            android:textSize="13sp" />
+                    </LinearLayout>
+                </LinearLayout>
+            </LinearLayout>
+
+            <!-- Edit Section (only for self) -->
+            <LinearLayout
+                android:id="@+id/editSection"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/x_bg_primary"
+                android:orientation="vertical"
+                android:layout_marginTop="8dp"
+                android:padding="16dp"
+                android:visibility="gone">
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/fieldFirstName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/etFirstName"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/profile_first_name"
+                        android:inputType="textPersonName"
+                        android:textColor="@color/x_text_primary"
+                        android:textColorHint="@color/x_text_secondary" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/fieldLastName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/etLastName"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/profile_last_name"
+                        android:inputType="textPersonName"
+                        android:textColor="@color/x_text_primary"
+                        android:textColorHint="@color/x_text_secondary" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/fieldBio"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/etBio"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/profile_bio"
+                        android:inputType="textMultiLine"
+                        android:maxLines="4"
+                        android:textColor="@color/x_text_primary"
+                        android:textColorHint="@color/x_text_secondary" />
+                </com.google.android.material.textfield.TextInputLayout>
+            </LinearLayout>
+
+            <!-- Personal Channel Card -->
+            <LinearLayout
+                android:id="@+id/personalChannelCard"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/x_bg_primary"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:layout_marginTop="8dp"
+                android:paddingHorizontal="16dp"
+                android:paddingVertical="14dp"
+                android:visibility="gone">
+
+                <ImageView
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:src="@drawable/ic_channel"
+                    app:tint="@color/x_text_secondary" />
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginStart="16dp"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/personalChannelName"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/profile_channel_placeholder"
+                        android:textColor="@color/x_text_primary"
+                        android:textSize="15sp" />
+
+                    <TextView
+                        android:id="@+id/personalChannelLink"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="2dp"
+                        android:text="@string/profile_personal_channel"
+                        android:textColor="@color/x_text_secondary"
+                        android:textSize="13sp" />
+                </LinearLayout>
+
+                <Button
+                    android:id="@+id/btnOpenPersonalChannel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="36dp"
+                    android:background="@drawable/btn_secondary_small"
+                    android:text="@string/profile_open_channel"
+                    android:textColor="@color/x_accent_primary"
+                    android:textAllCaps="false"
+                    android:textSize="13sp"
+                    android:paddingHorizontal="14dp" />
+            </LinearLayout>
+
+            <!-- Business Hours Card -->
+            <LinearLayout
+                android:id="@+id/profileBusinessCard"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/x_bg_primary"
+                android:orientation="vertical"
+                android:padding="16dp"
+                android:layout_marginTop="8dp"
+                android:visibility="gone">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/ic_clock"
+                        app:tint="@color/x_text_secondary" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
+                        android:layout_weight="1"
+                        android:text="@string/premium_business_title"
+                        android:textColor="@color/x_text_primary"
+                        android:fontFamily="sans-serif-medium"
+                        android:textSize="15sp" />
+
+                    <TextView
+                        android:id="@+id/profileBusinessStatus"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/badge_bg"
+                        android:paddingHorizontal="10dp"
+                        android:paddingVertical="4dp"
+                        android:text="@string/business_status_closed"
+                        android:textColor="@color/x_on_accent"
+                        android:textSize="11sp"
+                        android:fontFamily="sans-serif-medium" />
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/profileBusinessNext"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginStart="40dp"
+                    android:textColor="@color/x_text_secondary"
+                    android:textSize="13sp" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:layout_marginStart="40dp"
+                    android:orientation="vertical">
+
+                    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:paddingVertical="3dp">
+                        <TextView android:layout_width="36dp" android:layout_height="wrap_content" android:text="@string/business_day_mon" android:textColor="@color/x_text_secondary" android:textSize="13sp" />
+                        <TextView android:id="@+id/profileBusinessTimeMon" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/business_closed" android:textColor="@color/x_text_primary" android:textSize="13sp" />
+                    </LinearLayout>
+                    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:paddingVertical="3dp">
+                        <TextView android:layout_width="36dp" android:layout_height="wrap_content" android:text="@string/business_day_tue" android:textColor="@color/x_text_secondary" android:textSize="13sp" />
+                        <TextView android:id="@+id/profileBusinessTimeTue" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/business_closed" android:textColor="@color/x_text_primary" android:textSize="13sp" />
+                    </LinearLayout>
+                    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:paddingVertical="3dp">
+                        <TextView android:layout_width="36dp" android:layout_height="wrap_content" android:text="@string/business_day_wed" android:textColor="@color/x_text_secondary" android:textSize="13sp" />
+                        <TextView android:id="@+id/profileBusinessTimeWed" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/business_closed" android:textColor="@color/x_text_primary" android:textSize="13sp" />
+                    </LinearLayout>
+                    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:paddingVertical="3dp">
+                        <TextView android:layout_width="36dp" android:layout_height="wrap_content" android:text="@string/business_day_thu" android:textColor="@color/x_text_secondary" android:textSize="13sp" />
+                        <TextView android:id="@+id/profileBusinessTimeThu" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/business_closed" android:textColor="@color/x_text_primary" android:textSize="13sp" />
+                    </LinearLayout>
+                    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:paddingVertical="3dp">
+                        <TextView android:layout_width="36dp" android:layout_height="wrap_content" android:text="@string/business_day_fri" android:textColor="@color/x_text_secondary" android:textSize="13sp" />
+                        <TextView android:id="@+id/profileBusinessTimeFri" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/business_closed" android:textColor="@color/x_text_primary" android:textSize="13sp" />
+                    </LinearLayout>
+                    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:paddingVertical="3dp">
+                        <TextView android:layout_width="36dp" android:layout_height="wrap_content" android:text="@string/business_day_sat" android:textColor="@color/x_text_secondary" android:textSize="13sp" />
+                        <TextView android:id="@+id/profileBusinessTimeSat" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/business_closed" android:textColor="@color/x_text_primary" android:textSize="13sp" />
+                    </LinearLayout>
+                    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:paddingVertical="3dp">
+                        <TextView android:layout_width="36dp" android:layout_height="wrap_content" android:text="@string/business_day_sun" android:textColor="@color/x_text_secondary" android:textSize="13sp" />
+                        <TextView android:id="@+id/profileBusinessTimeSun" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/business_closed" android:textColor="@color/x_text_primary" android:textSize="13sp" />
+                    </LinearLayout>
+                </LinearLayout>
+            </LinearLayout>
+
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+
+    <!-- Bottom Navigation -->
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottomNav"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        style="@style/Xipher.BottomNavigation"
+        app:menu="@menu/bottom_nav" />
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

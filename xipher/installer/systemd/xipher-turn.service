@@ -1,0 +1,25 @@
+[Unit]
+Description=Xipher TURN Credentials Service
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=root
+Group=root
+
+Environment=PORT=8080
+Environment=NODE_ENV=production
+EnvironmentFile=-/etc/xipher/turn.env
+
+WorkingDirectory=/root/xipher/turn-service
+ExecStart=/usr/bin/env node /root/xipher/turn-service/server.js
+
+Restart=always
+RestartSec=3
+
+NoNewPrivileges=true
+LimitNOFILE=65536
+
+[Install]
+WantedBy=multi-user.target

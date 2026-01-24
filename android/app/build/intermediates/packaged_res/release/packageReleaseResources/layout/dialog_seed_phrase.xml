@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="24dp">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="⚠️ ВАЖНО: Запишите эту фразу и храните в безопасном месте!"
+        android:textSize="14sp"
+        android:textColor="#FF5722"
+        android:textStyle="bold"
+        android:layout_marginBottom="16dp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="@drawable/seed_bg"
+        android:padding="16dp"
+        android:layout_marginBottom="16dp">
+
+        <TextView
+            android:id="@+id/seed_phrase_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text=""
+            android:textSize="16sp"
+            android:textColor="#333333"
+            android:fontFamily="monospace"
+            android:lineSpacingMultiplier="1.5" />
+
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/btn_copy_seed"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:text="📋 Копировать"
+        android:textSize="14sp"
+        android:textAllCaps="false"
+        android:background="@drawable/btn_secondary_bg"
+        android:textColor="#6C5CE7" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="• Никому не показывайте эту фразу\n• Не храните её в электронном виде\n• Любой с этой фразой получит доступ к вашим средствам"
+        android:textSize="12sp"
+        android:textColor="#888888"
+        android:layout_marginTop="16dp"
+        android:lineSpacingMultiplier="1.4" />
+
+</LinearLayout>

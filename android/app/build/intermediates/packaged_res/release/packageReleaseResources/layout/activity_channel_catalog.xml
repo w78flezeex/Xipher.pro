@@ -1,0 +1,227 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/x_bg_primary">
+
+    <!-- Header -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp"
+        android:background="@drawable/verification_header_bg">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+
+            <ImageButton
+                android:id="@+id/btnBack"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:background="@drawable/btn_icon"
+                android:src="@drawable/ic_back"
+                android:contentDescription="@string/back"
+                app:tint="@color/x_text_primary" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginStart="12dp"
+                android:text="@string/catalog_title"
+                android:textColor="@color/x_text_primary"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <ImageButton
+                android:id="@+id/btnVerification"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:background="@drawable/btn_icon"
+                android:src="@drawable/ic_check_circle"
+                android:contentDescription="@string/verification_title"
+                app:tint="@color/x_accent" />
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:layout_marginStart="48dp"
+            android:text="@string/catalog_subtitle"
+            android:textColor="@color/x_text_secondary"
+            android:textSize="13sp" />
+    </LinearLayout>
+
+    <!-- Search -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingHorizontal="16dp"
+        android:paddingVertical="12dp">
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/searchLayout"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:boxCornerRadiusBottomEnd="12dp"
+            app:boxCornerRadiusBottomStart="12dp"
+            app:boxCornerRadiusTopEnd="12dp"
+            app:boxCornerRadiusTopStart="12dp"
+            app:startIconDrawable="@drawable/ic_search"
+            app:hintEnabled="false">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etSearch"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/catalog_search_hint"
+                android:inputType="text"
+                android:maxLines="1"
+                android:textSize="14sp" />
+        </com.google.android.material.textfield.TextInputLayout>
+    </LinearLayout>
+
+    <!-- Categories -->
+    <HorizontalScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:scrollbars="none"
+        android:paddingVertical="4dp">
+
+        <LinearLayout
+            android:id="@+id/categoriesContainer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingHorizontal="12dp">
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chipAll"
+                style="@style/Widget.MaterialComponents.Chip.Choice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/catalog_all"
+                android:checked="true"
+                app:checkedIconVisible="false" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chipNews"
+                style="@style/Widget.MaterialComponents.Chip.Choice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/catalog_category_news"
+                app:checkedIconVisible="false" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chipEntertainment"
+                style="@style/Widget.MaterialComponents.Chip.Choice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/catalog_category_entertainment"
+                app:checkedIconVisible="false" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chipTech"
+                style="@style/Widget.MaterialComponents.Chip.Choice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/catalog_category_tech"
+                app:checkedIconVisible="false" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chipEducation"
+                style="@style/Widget.MaterialComponents.Chip.Choice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/catalog_category_education"
+                app:checkedIconVisible="false" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chipMusic"
+                style="@style/Widget.MaterialComponents.Chip.Choice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/catalog_category_music"
+                app:checkedIconVisible="false" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chipGaming"
+                style="@style/Widget.MaterialComponents.Chip.Choice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/catalog_category_gaming"
+                app:checkedIconVisible="false" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chipSports"
+                style="@style/Widget.MaterialComponents.Chip.Choice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/catalog_category_sports"
+                app:checkedIconVisible="false" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chipOther"
+                style="@style/Widget.MaterialComponents.Chip.Choice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/catalog_category_other"
+                app:checkedIconVisible="false" />
+        </LinearLayout>
+    </HorizontalScrollView>
+
+    <!-- Channel List -->
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvChannels"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:clipToPadding="false"
+            android:paddingBottom="16dp" />
+
+        <ProgressBar
+            android:id="@+id/progressBar"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_gravity="center"
+            android:visibility="gone" />
+
+        <LinearLayout
+            android:id="@+id/emptyState"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:padding="32dp"
+            android:visibility="gone">
+
+            <ImageView
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:src="@drawable/ic_search"
+                android:alpha="0.3"
+                app:tint="@color/x_text_secondary" />
+
+            <TextView
+                android:id="@+id/tvEmptyTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="@string/catalog_empty"
+                android:textColor="@color/x_text_secondary"
+                android:textSize="16sp" />
+        </LinearLayout>
+    </FrameLayout>
+</LinearLayout>

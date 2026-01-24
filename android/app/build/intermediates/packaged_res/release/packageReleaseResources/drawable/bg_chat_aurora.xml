@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Xipher Aurora - purple/pink gradient -->
+    <item>
+        <shape android:shape="rectangle">
+            <gradient
+                android:startColor="#1A0A2E"
+                android:centerColor="#16082A"
+                android:endColor="#0F0518"
+                android:angle="270" />
+        </shape>
+    </item>
+    <item android:top="200dp">
+        <shape android:shape="rectangle">
+            <gradient
+                android:startColor="#00000000"
+                android:endColor="#1A9D00FF"
+                android:angle="270" />
+        </shape>
+    </item>
+</layer-list>

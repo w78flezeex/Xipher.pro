@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Xipher Design System - Dark Theme (Purple like web) -->
+    
+    <!-- Core Backgrounds - Telegram X Dark style with purple tint -->
+    <color name="x_bg_primary">#0A0A0F</color>
+    <color name="x_bg_secondary">#12121A</color>
+    <color name="x_bg_tertiary">#1A1A25</color>
+    <color name="x_bg_alt">#1A1A25</color>
+    <color name="x_bg_card">#16161F</color>
+    <color name="x_bg_card_strong">#1A1A25</color>
+    <color name="x_bg_elevated">#1E1E2A</color>
+    <color name="x_bg_input">#1A1A25</color>
+    
+    <!-- Borders & Dividers -->
+    <color name="x_border">#2A2A38</color>
+    <color name="x_divider">#1F1F2A</color>
+    <color name="x_border_soft">#1A9333EA</color>
+    
+    <!-- Text Colors -->
+    <color name="x_text_primary">#F7F7FF</color>
+    <color name="x_text_secondary">#A0A0B8</color>
+    <color name="x_text_hint">#6A6A80</color>
+    <color name="x_text_muted">#6A6A80</color>
+    <color name="x_text_link">#A855F7</color>
+    
+    <!-- Xipher Accent - Purple (matches web: #9d00ff) -->
+    <color name="x_accent">#3B82F6</color>
+    <color name="x_accent_primary">#9D00FF</color>
+    <color name="x_accent_start">#B266FF</color>
+    <color name="x_accent_mid">#9D00FF</color>
+    <color name="x_accent_end">#7B25FF</color>
+    <color name="x_accent_light">#1A9D00FF</color>
+    <color name="x_accent_violet">#A855F7</color>
+    
+    <!-- Legacy Telegram-like blue -->
+    <color name="x_tg_blue">#9D00FF</color>
+    <color name="x_tg_blue_dark">#7B25FF</color>
+    
+    <!-- Accent Pink -->
+    <color name="x_accent_pink">#EC4899</color>
+    <color name="x_accent_pink_light">#2A1520</color>
+    
+    <!-- Functional Colors -->
+    <color name="x_badge_bg">#9D00FF</color>
+    <color name="x_badge_muted">#708499</color>
+    <color name="x_call_accept">#10B981</color>
+    <color name="x_call_reject">#EF4444</color>
+    <color name="x_online">#10B981</color>
+    <color name="x_typing">#9D00FF</color>
+    <color name="x_on_accent">#FFFFFF</color>
+    
+    <!-- Chat Bubbles - Purple gradient like web -->
+    <color name="x_bubble_out">#9D00FF</color>
+    <color name="x_bubble_out_gradient_start">#B266FF</color>
+    <color name="x_bubble_out_gradient_end">#7B25FF</color>
+    <color name="x_bubble_in">#1A1A25</color>
+    <color name="x_bubble_in_dark">#16161F</color>
+    <color name="x_bubble_text_out">#FFFFFF</color>
+    <color name="x_bubble_text_in">#F7F7FF</color>
+    <color name="x_bubble_time_out">#D4B3FF</color>
+    <color name="x_bubble_time_in">#7A7A90</color>
+    
+    <!-- Media Indicators -->
+    <color name="x_media_bg">#66000000</color>
+    <color name="x_media_icon">#FFFFFF</color>
+    
+    <!-- Ripple & Interaction -->
+    <color name="x_ripple">#339D00FF</color>
+    <color name="x_ripple_light">#1A9D00FF</color>
+    <color name="x_highlight">#339D00FF</color>
+    
+    <!-- Navigation -->
+    <color name="x_nav_bg">#0A0A0F</color>
+    <color name="x_nav_border">#1A1A25</color>
+    <color name="x_nav_active">#9D00FF</color>
+    <color name="x_nav_inactive">#7A7A90</color>
+    
+    <!-- Status Colors -->
+    <color name="x_status_sent">#7A7A90</color>
+    <color name="x_status_delivered">#9D00FF</color>
+    <color name="x_status_read">#10B981</color>
+    
+    <!-- Functional Colors (error/warning/success) -->
+    <color name="x_error">#EF4444</color>
+    <color name="x_warning">#F59E0B</color>
+    <color name="x_success">#10B981</color>
+    
+    <!-- Avatar Colors (for initials) -->
+    <color name="x_avatar_1">#FF6B6B</color>
+    <color name="x_avatar_2">#F7B731</color>
+    <color name="x_avatar_3">#26DE81</color>
+    <color name="x_avatar_4">#45AAF2</color>
+    <color name="x_avatar_5">#A55EEA</color>
+    <color name="x_avatar_6">#FD9644</color>
+    <color name="x_avatar_7">#C084FC</color>
+</resources>

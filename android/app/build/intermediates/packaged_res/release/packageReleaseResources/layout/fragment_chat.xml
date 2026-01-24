@@ -1,0 +1,575 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/x_bg_secondary">
+
+    <LinearLayout
+        android:id="@+id/chatContent"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    <!-- Chat Header / Toolbar - Normal Mode -->
+    <LinearLayout
+        android:id="@+id/chatHeaderNormal"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:background="@color/x_bg_primary"
+        android:elevation="2dp"
+        android:gravity="center_vertical"
+        android:paddingHorizontal="4dp">
+
+        <ImageButton
+            android:id="@+id/btnBack"
+            android:layout_width="44dp"
+            android:layout_height="44dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="@string/back"
+            android:padding="10dp"
+            android:src="@drawable/ic_arrow_back"
+            app:tint="@color/x_text_primary" />
+
+        <!-- Avatar -->
+        <FrameLayout
+            android:id="@+id/chatHeaderAvatar"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginStart="4dp">
+
+            <ImageView
+                android:id="@+id/chatHeaderAvatarImage"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:background="@drawable/avatar_circle_bg"
+                android:clipToOutline="true"
+                android:scaleType="centerCrop"
+                android:visibility="gone" />
+
+            <TextView
+                android:id="@+id/chatHeaderAvatarLetter"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:background="@drawable/avatar_circle_bg"
+                android:gravity="center"
+                android:text="@string/avatar_placeholder"
+                android:textColor="@color/x_on_accent"
+                android:textStyle="bold"
+                android:textSize="16sp" />
+        </FrameLayout>
+
+        <!-- Title & Subtitle -->
+        <LinearLayout
+            android:id="@+id/chatTitleContainer"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:layout_marginStart="12dp"
+            android:layout_marginEnd="8dp">
+
+            <TextView
+                android:id="@+id/chatTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:textColor="@color/x_text_primary"
+                android:textSize="17sp"
+                android:fontFamily="sans-serif-medium" />
+
+            <TextView
+                android:id="@+id/chatSubtitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="1dp"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:textColor="@color/x_text_secondary"
+                android:textSize="13sp" />
+        </LinearLayout>
+
+        <!-- Header Actions -->
+        <ImageButton
+            android:id="@+id/btnCall"
+            android:layout_width="44dp"
+            android:layout_height="44dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="@string/call_action"
+            android:padding="10dp"
+            android:src="@drawable/ic_call"
+            app:tint="@color/x_text_secondary" />
+
+        <ImageButton
+            android:id="@+id/btnMore"
+            android:layout_width="44dp"
+            android:layout_height="44dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="@string/more_options"
+            android:padding="10dp"
+            android:src="@drawable/ic_more_vert"
+            app:tint="@color/x_text_secondary" />
+    </LinearLayout>
+
+    <!-- Selection Bar (when messages are selected) -->
+    <LinearLayout
+        android:id="@+id/selectionBar"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:background="@color/x_accent_primary"
+        android:gravity="center_vertical"
+        android:paddingHorizontal="8dp"
+        android:visibility="gone">
+
+        <ImageButton
+            android:id="@+id/btnSelectionClose"
+            android:layout_width="44dp"
+            android:layout_height="44dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="@string/close"
+            android:padding="10dp"
+            android:src="@drawable/ic_close"
+            app:tint="@color/x_on_accent" />
+
+        <TextView
+            android:id="@+id/selectionCount"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_weight="1"
+            android:textColor="@color/x_on_accent"
+            android:textSize="18sp"
+            android:fontFamily="sans-serif-medium" />
+
+        <ImageButton
+            android:id="@+id/btnSelectionForward"
+            android:layout_width="44dp"
+            android:layout_height="44dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="@string/forward_action"
+            android:padding="10dp"
+            android:src="@android:drawable/ic_menu_share"
+            app:tint="@color/x_on_accent" />
+
+        <ImageButton
+            android:id="@+id/btnSelectionDelete"
+            android:layout_width="44dp"
+            android:layout_height="44dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="@string/delete_action"
+            android:padding="10dp"
+            android:src="@drawable/ic_delete"
+            app:tint="@color/x_on_accent" />
+    </LinearLayout>
+
+    <!-- Topic Tabs (Telegram-style forum topics) -->
+    <HorizontalScrollView
+        android:id="@+id/topicTabsScroll"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fillViewport="true"
+        android:scrollbars="none"
+        android:background="@color/x_bg_primary"
+        android:visibility="gone">
+
+        <LinearLayout
+            android:id="@+id/topicTabsContainer"
+            android:layout_width="wrap_content"
+            android:layout_height="48dp"
+            android:paddingHorizontal="12dp"
+            android:paddingVertical="4dp"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+
+            <!-- Topic tabs will be added programmatically here -->
+
+            <!-- Add Topic Button -->
+            <FrameLayout
+                android:id="@+id/topicAddButton"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:layout_marginStart="8dp"
+                android:background="@drawable/topic_add_button_bg"
+                android:clickable="true"
+                android:focusable="true"
+                android:visibility="gone">
+
+                <ImageView
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/ic_add"
+                    app:tint="@color/x_accent_primary" />
+
+            </FrameLayout>
+
+        </LinearLayout>
+
+    </HorizontalScrollView>
+
+    <!-- Messages List -->
+    <FrameLayout
+        android:id="@+id/messagesContainer"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:background="@color/x_bg_secondary">
+
+        <ImageView
+            android:id="@+id/chatBackgroundImage"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop"
+            android:visibility="gone" />
+
+        <View
+            android:id="@+id/chatBackgroundDim"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#000000"
+            android:alpha="0"
+            android:visibility="gone" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerMessages"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingHorizontal="8dp"
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp"
+            android:clipToPadding="false"
+            android:scrollbars="none" />
+
+        <!-- Empty State -->
+        <LinearLayout
+            android:id="@+id/emptyState"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone">
+
+            <ImageView
+                android:layout_width="64dp"
+                android:layout_height="64dp"
+                android:src="@drawable/msg_in_tail"
+                android:alpha="0.6"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/chat_empty_title"
+                android:textStyle="bold"
+                android:textSize="18sp"
+                android:textColor="@color/x_text_primary"
+                android:layout_marginTop="12dp"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/chat_empty_subtitle"
+                android:textColor="@color/x_text_secondary"
+                android:layout_marginTop="6dp"/>
+        </LinearLayout>
+    </FrameLayout>
+
+    <LinearLayout
+        android:id="@+id/recordingBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/bg_input_bar"
+        android:gravity="center_vertical"
+        android:padding="10dp"
+        android:visibility="gone">
+
+        <View
+            android:layout_width="8dp"
+            android:layout_height="8dp"
+            android:background="@drawable/record_dot" />
+
+        <TextView
+            android:id="@+id/recordingLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:text="@string/recording_label"
+            android:textColor="@color/x_text_primary"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/recordingTimer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:text="@string/recording_timer_default"
+            android:textColor="@color/x_text_secondary"
+            android:textSize="12sp" />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+
+        <ImageButton
+            android:id="@+id/btnRecordCancel"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:background="@drawable/btn_icon"
+            android:contentDescription="@string/recording_cancel"
+            android:padding="6dp"
+            android:src="@drawable/ic_close"
+            app:tint="@color/x_text_secondary" />
+    </LinearLayout>
+
+    <GridLayout
+        android:id="@+id/emojiPanel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/bg_emoji_panel"
+        android:columnCount="8"
+        android:padding="8dp"
+        android:visibility="gone" />
+
+    <TextView
+        android:id="@+id/channelReadOnly"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/bg_input_bar"
+        android:gravity="center"
+        android:padding="12dp"
+        android:text="@string/channel_read_only"
+        android:textColor="@color/x_text_secondary"
+        android:textSize="13sp"
+        android:visibility="gone" />
+
+    <!-- Input Bar Container with Reply Preview - Telegram Style -->
+    <LinearLayout
+        android:id="@+id/inputBarContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="@color/x_bg_primary">
+
+        <!-- Reply Preview Panel -->
+        <LinearLayout
+            android:id="@+id/replyPreviewPanel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingHorizontal="12dp"
+            android:paddingVertical="8dp"
+            android:gravity="center_vertical"
+            android:visibility="gone">
+
+            <!-- Blue accent line -->
+            <View
+                android:layout_width="3dp"
+                android:layout_height="36dp"
+                android:background="@color/x_accent_primary" />
+
+            <!-- Reply content -->
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="8dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/replyPreviewSender"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/x_accent_primary"
+                    android:textSize="13sp"
+                    android:fontFamily="sans-serif-medium"
+                    android:maxLines="1"
+                    android:ellipsize="end" />
+
+                <TextView
+                    android:id="@+id/replyPreviewText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:textColor="@color/x_text_secondary"
+                    android:textSize="13sp"
+                    android:maxLines="1"
+                    android:ellipsize="end" />
+            </LinearLayout>
+
+            <!-- Reply thumbnail for media -->
+            <ImageView
+                android:id="@+id/replyPreviewThumbnail"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:layout_marginEnd="8dp"
+                android:scaleType="centerCrop"
+                android:visibility="gone" />
+
+            <!-- Close button -->
+            <ImageButton
+                android:id="@+id/btnReplyClose"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:src="@drawable/ic_close"
+                android:padding="6dp"
+                app:tint="@color/x_text_secondary"
+                android:contentDescription="@string/close" />
+        </LinearLayout>
+
+        <!-- Main Input Row -->
+        <LinearLayout
+            android:id="@+id/inputBar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="bottom"
+            android:paddingStart="4dp"
+            android:paddingEnd="4dp"
+            android:paddingTop="4dp"
+            android:paddingBottom="8dp">
+
+            <!-- Left side: Emoji button -->
+            <ImageButton
+                android:id="@+id/btnEmoji"
+                android:layout_width="44dp"
+                android:layout_height="44dp"
+                android:layout_gravity="bottom"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:contentDescription="@string/emoji"
+                android:padding="10dp"
+                android:src="@drawable/ic_emoji"
+                app:tint="@color/x_text_secondary" />
+
+            <!-- Input field container with rounded background -->
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:background="@drawable/bg_input_field_tg"
+                android:minHeight="44dp">
+
+                <androidx.emoji2.widget.EmojiEditText
+                    android:id="@+id/etMessage"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@android:color/transparent"
+                    android:hint="@string/message_hint"
+                    android:inputType="textMultiLine|textCapSentences"
+                    android:maxLines="6"
+                    android:minHeight="40dp"
+                    android:paddingStart="14dp"
+                    android:paddingEnd="4dp"
+                    android:paddingTop="10dp"
+                    android:paddingBottom="10dp"
+                    android:textColor="@color/x_text_primary"
+                    android:textColorHint="@color/x_text_hint"
+                    android:textSize="16sp" />
+
+                <!-- Attach button inside input -->
+                <ImageButton
+                    android:id="@+id/btnAttach"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:contentDescription="@string/attach_file"
+                    android:padding="8dp"
+                    android:src="@drawable/ic_attach"
+                    app:tint="@color/x_text_secondary" />
+            </LinearLayout>
+
+            <!-- Right side: Send/Voice button -->
+            <FrameLayout
+                android:layout_width="44dp"
+                android:layout_height="44dp"
+                android:layout_gravity="bottom"
+                android:layout_marginStart="4dp">
+
+                <ImageButton
+                    android:id="@+id/btnSend"
+                    android:layout_width="44dp"
+                    android:layout_height="44dp"
+                    android:background="@drawable/btn_send_circle"
+                    android:contentDescription="@string/send"
+                    android:padding="10dp"
+                    android:src="@drawable/ic_send"
+                    android:visibility="gone"
+                    app:tint="@color/x_on_accent" />
+
+                <com.xipher.wrapper.ui.videonote.MediaRecorderButton
+                    android:id="@+id/btnMedia"
+                    android:layout_width="44dp"
+                    android:layout_height="44dp"
+                    android:contentDescription="@string/voice_record" />
+            </FrameLayout>
+        </LinearLayout>
+
+        <!-- Hidden buttons for spoiler and TTL - will be accessible from menu -->
+        <ImageButton
+            android:id="@+id/btnSpoiler"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:visibility="gone"
+            android:contentDescription="@string/spoiler_toggle" />
+
+        <ImageButton
+            android:id="@+id/btnTtl"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:visibility="gone"
+            android:contentDescription="@string/ttl_select" />
+
+        <!-- Recording Hints (hidden views for code compatibility) -->
+        <LinearLayout
+            android:id="@+id/recordingHintCancel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/record_cancel_hint" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/recordingHintLock"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/record_lock_hint" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/recordingHintLocked"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/recording_locked" />
+        </LinearLayout>
+    </LinearLayout>
+    </LinearLayout>
+
+    <com.xipher.wrapper.ui.videonote.CircularCameraView
+        android:id="@+id/videoNotePreview"
+        android:layout_width="180dp"
+        android:layout_height="180dp"
+        android:layout_gravity="center"
+        android:elevation="8dp"
+        android:visibility="gone" />
+
+</FrameLayout>

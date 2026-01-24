@@ -1,0 +1,2921 @@
+// Функционал для работы с группами
+
+let groups = [];
+let currentGroup = null;
+let currentViewType = 'chats'; // 'chats', 'groups', 'channels'
+let lastGroupInviteUrl = '';
+
+// Экспортируем currentGroup для глобального доступа
+window.currentGroup = currentGroup;
+
+// Инициализация при загрузке страницы
+function initGroups() {
+    console.log('Initializing groups module...');
+    setupGroupTabs();
+    setupCreateGroupModal();
+    if (window.currentViewType === 'groups') {
+        loadGroups();
+    }
+}
+
+// Экспортируем для глобального доступа
+window.initGroups = initGroups;
+
+function setupGroupTabs() {
+    const tabs = document.querySelectorAll('.chat-type-tab');
+    tabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+            tabs.forEach(t => t.classList.remove('active'));
+            tab.classList.add('active');
+            window.currentViewType = tab.dataset.type;
+            
+            if (window.currentViewType === 'groups') {
+                loadGroups();
+            } else if (window.currentViewType === 'chats') {
+                if (typeof loadChats === 'function') {
+                    loadChats();
+                }
+            } else if (window.currentViewType === 'channels') {
+                if (typeof loadChannels === 'function') {
+                    loadChannels();
+                }
+            }
+        });
+    });
+}
+
+function setupCreateGroupModal() {
+    const createBtn = document.getElementById('createGroupBtn');
+    const modal = document.getElementById('createGroupModal');
+    const confirmBtn = document.getElementById('confirmCreateGroupBtn');
+    const cancelBtn = document.getElementById('cancelCreateGroupBtn');
+    const nameInput = document.getElementById('groupNameInput');
+    const descInput = document.getElementById('groupDescriptionInput');
+
+    if (!createBtn) {
+        console.error('createGroupBtn not found');
+        return;
+    }
+    
+    if (!modal) {
+        console.error('createGroupModal not found');
+        return;
+    }
+
+    console.log('Setting up create group modal handlers');
+    
+    createBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        console.log('Create group button clicked');
+        if (modal) {
+            modal.style.display = 'flex';
+            if (nameInput) nameInput.value = '';
+            if (descInput) descInput.value = '';
+        }
+    });
+
+    if (cancelBtn) cancelBtn.addEventListener('click', () => {
+        modal.style.display = 'none';
+    });
+
+    const closeBtn = document.getElementById('closeCreateGroupModal');
+    if (closeBtn) closeBtn.addEventListener('click', () => {
+        modal.style.display = 'none';
+    });
+
+    if (confirmBtn) confirmBtn.addEventListener('click', async () => {
+        const name = nameInput.value.trim();
+        const description = descInput.value.trim();
+
+        if (!name || name.length < 3) {
+            notifications.error('Название группы должно быть не менее 3 символов');
+            return;
+        }
+
+        await createGroup(name, description);
+        modal.style.display = 'none';
+    });
+
+    // Закрытие по клику вне модального окна
+    if (modal) modal.addEventListener('click', (e) => {
+        if (e.target === modal) {
+            modal.style.display = 'none';
+        }
+    });
+}
+
+async function createGroup(name, description) {
+    const token = localStorage.getItem('xipher_token');
+    if (!token) {
+        notifications.error('Необходима авторизация');
+        return;
+    }
+
+    try {
+        const response = await fetch('/api/create-group', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                token,
+                name,
+                description
+            })
+        });
+
+        const data = await response.json();
+        
+        console.log('Create group response:', data);
+
+        if (data.success) {
+            notifications.success('Группа создана успешно');
+            // Обновляем общий список
+            if (typeof loadAllChats === 'function') {
+                loadAllChats();
+            } else if (typeof loadChats === 'function') {
+                loadChats();
+            }
+        } else {
+            const errorMsg = data.error || data.message || 'Ошибка при создании группы';
+            console.error('Create group error:', errorMsg);
+            notifications.error(errorMsg);
+        }
+    } catch (error) {
+        console.error('Error creating group:', error);
+        notifications.error('Ошибка при создании группы');
+    }
+}
+
+async function loadGroups() {
+    const token = localStorage.getItem('xipher_token');
+    if (!token) {
+        return;
+    }
+
+    try {
+        const response = await fetch('/api/get-groups', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ token })
+        });
+
+        const data = await response.json();
+
+        if (data.success && data.groups) {
+            groups = data.groups;
+            renderGroups();
+        }
+    } catch (error) {
+        console.error('Error loading groups:', error);
+    }
+}
+
+function renderGroups() {
+    const chatsList = document.getElementById('chatsList');
+    if (!chatsList) return;
+
+    if (window.currentViewType !== 'groups') {
+        return; // Не рендерим, если не выбрана вкладка групп
+    }
+
+    chatsList.innerHTML = '';
+
+    if (groups.length === 0) {
+        const emptyState = document.createElement('div');
+        emptyState.style.cssText = 'padding: 2rem; text-align: center; color: var(--text-secondary);';
+        const p1 = document.createElement('p');
+        p1.textContent = 'Нет групп';
+        const p2 = document.createElement('p');
+        p2.style.cssText = 'font-size: 0.85rem; margin-top: 0.5rem;';
+        p2.textContent = 'Создайте группу, чтобы начать общение';
+        emptyState.appendChild(p1);
+        emptyState.appendChild(p2);
+        chatsList.appendChild(emptyState);
+        return;
+    }
+
+    groups.forEach(group => {
+        const chatItem = document.createElement('div');
+        chatItem.className = 'chat-item';
+        chatItem.dataset.groupId = group.id;
+        chatItem.dataset.type = 'group';
+
+        chatItem.innerHTML = `
+            <div class="chat-avatar" style="background: var(--gradient-purple);">
+                ${group.name.charAt(0).toUpperCase()}
+            </div>
+            <div class="chat-info">
+                <div class="chat-name">${escapeHtml(group.name)}</div>
+                <div class="chat-last-message">Группа</div>
+            </div>
+        `;
+
+        chatItem.addEventListener('click', () => {
+            selectGroup(group);
+        });
+
+        chatsList.appendChild(chatItem);
+    });
+}
+
+async function selectGroup(group) {
+    if (window.channelsModule && typeof window.channelsModule.resetCurrentChannel === 'function') {
+        window.channelsModule.resetCurrentChannel();
+    }
+    if (typeof window.stopTypingForCurrentTarget === 'function') {
+        window.stopTypingForCurrentTarget();
+    }
+    currentGroup = group;
+    window.currentGroup = group; // Обновляем глобальную переменную
+    currentChat = null; // Сбрасываем текущий чат
+    if (typeof updatePremiumGiftAvailability === 'function') {
+        updatePremiumGiftAvailability();
+    }
+    if (typeof closePremiumGiftModal === 'function') {
+        closePremiumGiftModal();
+    }
+
+    if (typeof clearReplyState === 'function') {
+        clearReplyState();
+    }
+    if (typeof clearPendingAttachments === 'function') {
+        clearPendingAttachments();
+    }
+    if (typeof resetReplyKeyboardState === 'function') {
+        resetReplyKeyboardState();
+    }
+    if (typeof persistActiveChatSelection === 'function') {
+        persistActiveChatSelection({ id: group.id, type: 'group' });
+    }
+
+    // Обновляем активный элемент в списке
+    document.querySelectorAll('.chat-item').forEach(item => {
+        item.classList.remove('active');
+    });
+    { const _el = document.querySelector(`[data-group-id="${group.id}"]`); if (_el) _el.classList.add('active'); };
+
+    // Показываем область чата
+    const chatHeader = document.getElementById('chatHeader');
+    const chatInputArea = document.getElementById('chatInputArea');
+    if (chatHeader) chatHeader.style.display = 'flex';
+    if (chatInputArea) chatInputArea.style.display = 'block';
+
+    // Обновляем заголовок чата
+    const chatHeaderName = document.getElementById('chatHeaderName');
+    const chatHeaderStatus = document.getElementById('chatHeaderStatus');
+    const chatHeaderAvatar = document.getElementById('chatHeaderAvatar');
+    const leaveBtn = document.getElementById('leaveGroupBtn');
+    
+    if (chatHeaderName) {
+        chatHeaderName.textContent = group.name;
+    }
+    
+    // Для групп показываем просто "Группа" без @username
+    if (chatHeaderStatus) {
+        if (typeof window.setChatHeaderStatusBase === 'function') {
+            window.setChatHeaderStatusBase('Группа');
+        } else {
+            chatHeaderStatus.textContent = 'Группа';
+        }
+    }
+    
+    if (chatHeaderAvatar) {
+        chatHeaderAvatar.textContent = group.name.charAt(0).toUpperCase();
+    }
+    if (typeof window.clearTypingIndicator === 'function') {
+        window.clearTypingIndicator();
+    }
+    
+    // Показываем кнопку звонка для групп
+    const callBtn = document.getElementById('callBtn');
+    const searchBtn = document.getElementById('searchChannelBtn');
+    const menuBtn = document.getElementById('channelMenuBtn');
+    const inviteBtn = document.getElementById('groupInviteBtn');
+    const channelSubscribeBtn = document.getElementById('channelSubscribeBtn');
+    if (callBtn) callBtn.style.display = 'flex';
+    if (searchBtn) searchBtn.style.display = 'none';
+    if (menuBtn) {
+        menuBtn.style.display = 'flex';
+        menuBtn.title = 'Настройки группы';
+        menuBtn.onclick = () => openGroupSettingsModal();
+    }
+    if (channelSubscribeBtn) channelSubscribeBtn.remove();
+    if (inviteBtn) {
+        inviteBtn.style.display = 'flex';
+        inviteBtn.onclick = () => createGroupInvite(group.id);
+    }
+    if (leaveBtn) {
+        leaveBtn.style.display = 'flex';
+        leaveBtn.onclick = () => leaveCurrentGroup();
+    }
+
+    // Check if group has forum mode enabled and load topics
+    if (window.topicsModule) {
+        const topicsData = await window.topicsModule.loadGroupTopics(group.id);
+        if (topicsData.forum_mode && topicsData.topics && topicsData.topics.length > 0) {
+            // Show topics panel instead of regular messages
+            renderGroupWithTopics(group, topicsData.topics);
+            return;
+        }
+    }
+
+    // Загружаем сообщения группы
+    await loadGroupMessages(group.id);
+}
+
+async function leaveCurrentGroup() {
+    if (!currentGroup) return;
+    const confirmed = confirm('Выйти из группы?');
+    if (!confirmed) return;
+    const token = localStorage.getItem('xipher_token');
+    if (!token) {
+        notifications.error('Необходима авторизация');
+        return;
+    }
+    try {
+        const res = await fetch('/api/leave-group', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ token, group_id: currentGroup.id })
+        });
+        const data = await res.json();
+        if (data.success) {
+            notifications.success('Вы вышли из группы');
+            currentGroup = null;
+            window.currentGroup = null;
+            await loadGroups();
+            // Очистим чат
+            const messagesContainer = document.getElementById('chatMessages');
+            if (messagesContainer) messagesContainer.innerHTML = '';
+            const chatHeader = document.getElementById('chatHeader');
+            if (chatHeader) chatHeader.style.display = 'none';
+            const chatInputArea = document.getElementById('chatInputArea');
+            if (chatInputArea) chatInputArea.style.display = 'none';
+            const leaveBtn = document.getElementById('leaveGroupBtn');
+            if (leaveBtn) leaveBtn.style.display = 'none';
+            const inviteBtn = document.getElementById('groupInviteBtn');
+            if (inviteBtn) inviteBtn.style.display = 'none';
+        } else {
+            notifications.error(data.error || 'Не удалось выйти из группы');
+        }
+    } catch (e) {
+        console.error('leave group error', e);
+        notifications.error('Ошибка выхода из группы');
+    }
+}
+
+// ======================== TELEGRAM-STYLE GROUP MANAGEMENT ========================
+
+const GROUP_AVATAR_COLORS = ['#e17076', '#eda86c', '#a695e7', '#7bc862', '#6ec9cb', '#65aadd', '#ee7aae'];
+
+function getAvatarColor(id) {
+    return GROUP_AVATAR_COLORS[Math.abs(hashCode(id || '')) % GROUP_AVATAR_COLORS.length];
+}
+
+function openGroupSettingsModal() {
+    if (!currentGroup) return;
+    const existing = document.getElementById('groupInfoPanel');
+    if (existing) existing.remove();
+    
+    const userId = localStorage.getItem('xipher_user_id');
+    const isCreator = currentGroup.creator_id === userId;
+    // Check if user is admin from currentGroup.members or currentGroup.user_role
+    const userRole = currentGroup.user_role || (isCreator ? 'creator' : 'member');
+    const isAdmin = isCreator || userRole === 'admin' || userRole === 'creator';
+    
+    // Боковая панель в стиле Telegram Desktop
+    const panel = document.createElement('div');
+    panel.id = 'groupInfoPanel';
+    panel.className = 'tg-panel';
+    panel.innerHTML = `
+        <style>
+            .tg-panel {
+                position: fixed; top: 0; right: 0; width: 420px; max-width: 100vw; height: 100vh;
+                background: var(--bg-primary); box-shadow: -2px 0 20px rgba(0,0,0,0.15);
+                z-index: 1000; display: flex; flex-direction: column;
+                transform: translateX(100%); transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            }
+            .tg-panel.open { transform: translateX(0); }
+            .tg-header { display: flex; align-items: center; padding: 8px 8px 8px 4px; border-bottom: 1px solid var(--border-subtle); min-height: 56px; }
+            .tg-btn { width: 40px; height: 40px; border-radius: 50%; border: none; background: transparent; color: var(--text-primary); font-size: 18px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: background 0.15s; }
+            .tg-btn:hover { background: var(--bg-tertiary); }
+            .tg-title { flex: 1; font-size: 16px; font-weight: 500; color: var(--text-primary); padding: 0 8px; }
+            .tg-content { flex: 1; overflow-y: auto; }
+            .tg-profile { padding: 24px 16px; text-align: center; border-bottom: 1px solid var(--border-subtle); }
+            .tg-avatar { width: 120px; height: 120px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-size: 48px; margin: 0 auto 16px; }
+            .tg-name { font-size: 20px; font-weight: 500; color: var(--text-primary); margin-bottom: 4px; }
+            .tg-subtitle { font-size: 14px; color: var(--text-muted); }
+            .tg-section { padding: 8px 0; border-bottom: 1px solid var(--border-subtle); }
+            .tg-section-title { display: flex; align-items: center; padding: 8px 16px; justify-content: space-between; }
+            .tg-section-title span { font-size: 14px; font-weight: 500; color: var(--accent-primary); }
+            .tg-item { display: flex; align-items: center; padding: 10px 16px; cursor: pointer; transition: background 0.1s; }
+            .tg-item:hover { background: var(--bg-tertiary); }
+            .tg-item-icon { width: 42px; height: 42px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 12px; font-size: 17px; flex-shrink: 0; }
+            .tg-item-content { flex: 1; min-width: 0; }
+            .tg-item-title { font-size: 14px; font-weight: 500; color: var(--text-primary); display: flex; align-items: center; gap: 8px; }
+            .tg-item-subtitle { font-size: 13px; color: var(--text-muted); }
+            .tg-item-action { padding: 6px 10px; font-size: 13px; color: var(--accent-primary); }
+            .tg-search { padding: 8px 16px; }
+            .tg-search input { width: 100%; padding: 10px 12px; border: none; border-radius: 8px; background: var(--bg-tertiary); color: var(--text-primary); font-size: 14px; outline: none; box-sizing: border-box; }
+            .tg-search input:focus { background: var(--bg-secondary); }
+            .tg-footer { padding: 8px 16px 16px; border-top: 1px solid var(--border-subtle); }
+            .tg-btn-danger { width: 100%; padding: 12px; background: transparent; color: #e53935; border: none; border-radius: 8px; font-size: 14px; font-weight: 500; cursor: pointer; }
+            .tg-btn-danger:hover { background: rgba(229,57,53,0.08); }
+            .tg-tabs { display: flex; border-bottom: 1px solid var(--border-subtle); }
+            .tg-tab { flex: 1; padding: 12px 8px; background: none; border: none; color: var(--text-muted); font-size: 13px; font-weight: 500; cursor: pointer; position: relative; }
+            .tg-tab.active { color: var(--accent-primary); }
+            .tg-tab.active::after { content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 2px; background: var(--accent-primary); }
+            .tg-tab-content { display: none; }
+            .tg-tab-content.active { display: block; }
+            .tg-menu { position: absolute; background: var(--bg-primary); border-radius: 8px; box-shadow: 0 2px 16px rgba(0,0,0,0.2); min-width: 200px; z-index: 1001; overflow: hidden; display: none; }
+            .tg-menu-item { padding: 12px 16px; cursor: pointer; font-size: 14px; color: var(--text-primary); display: flex; align-items: center; gap: 12px; }
+            .tg-menu-item:hover { background: var(--bg-tertiary); }
+            .tg-menu-item.danger { color: #e53935; }
+            .tg-menu-item.danger:hover { background: rgba(229,57,53,0.08); }
+            .tg-divider { height: 1px; background: var(--border-subtle); margin: 4px 0; }
+            .tg-role { font-size: 12px; padding: 2px 6px; border-radius: 4px; font-weight: 500; }
+            .tg-role.creator { color: #e17076; background: rgba(225,112,118,0.1); }
+            .tg-role.admin { color: #65aadd; background: rgba(101,170,221,0.1); }
+            .tg-action-row { display: flex; gap: 8px; padding: 16px; border-bottom: 1px solid var(--border-subtle); }
+            .tg-action-btn { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 12px 8px; background: var(--bg-tertiary); border: none; border-radius: 12px; cursor: pointer; transition: background 0.15s; }
+            .tg-action-btn:hover { background: var(--bg-secondary); }
+            .tg-action-btn .icon { font-size: 20px; }
+            .tg-action-btn .label { font-size: 12px; color: var(--text-muted); }
+            .tg-info-row { display: flex; align-items: center; padding: 12px 16px; cursor: pointer; }
+            .tg-info-row:hover { background: var(--bg-tertiary); }
+            .tg-info-icon { width: 24px; margin-right: 16px; color: var(--text-muted); text-align: center; }
+            .tg-info-content { flex: 1; }
+            .tg-info-value { font-size: 14px; color: var(--text-primary); }
+            .tg-info-label { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
+            .tg-toggle { width: 42px; height: 24px; background: var(--bg-tertiary); border-radius: 12px; position: relative; cursor: pointer; transition: background 0.2s; }
+            .tg-toggle.on { background: var(--accent-primary); }
+            .tg-toggle::after { content: ''; position: absolute; width: 20px; height: 20px; background: white; border-radius: 50%; top: 2px; left: 2px; transition: transform 0.2s; }
+            .tg-toggle.on::after { transform: translateX(18px); }
+            
+            /* Мобильная адаптация */
+            @media (max-width: 768px) {
+                .tg-panel { width: 100vw; max-width: 100vw; }
+                .tg-avatar { width: 90px; height: 90px; font-size: 36px; }
+                .tg-profile { padding: 20px 12px; }
+                .tg-name { font-size: 18px; }
+                .tg-action-row { padding: 12px; gap: 6px; }
+                .tg-action-btn { padding: 10px 6px; }
+                .tg-action-btn .icon { font-size: 18px; }
+                .tg-action-btn .label { font-size: 11px; }
+                .tg-item { padding: 12px; }
+                .tg-item-icon { width: 48px; height: 48px; }
+                .tg-menu { min-width: 180px; }
+                .tg-tabs { flex-wrap: nowrap; overflow-x: auto; }
+                .tg-tab { padding: 14px 12px; font-size: 14px; white-space: nowrap; }
+            }
+            
+            @media (max-width: 480px) {
+                .tg-header { padding: 6px; min-height: 50px; }
+                .tg-title { font-size: 15px; }
+                .tg-btn { width: 36px; height: 36px; font-size: 16px; }
+                .tg-avatar { width: 80px; height: 80px; font-size: 32px; }
+                .tg-section-title { padding: 8px 12px; }
+                .tg-item { padding: 10px 12px; }
+                .tg-item-icon { width: 44px; height: 44px; margin-right: 10px; }
+                .tg-item-title { font-size: 15px; }
+                .tg-item-subtitle { font-size: 12px; }
+                .tg-search { padding: 6px 12px; }
+                .tg-search input { padding: 12px; font-size: 15px; }
+            }
+            
+            /* Стили для long-press на мобильных */
+            .member-item.pressing { background: var(--bg-secondary) !important; transform: scale(0.98); }
+            .member-item { transition: transform 0.1s, background 0.1s; -webkit-user-select: none; user-select: none; }
+        </style>
+        
+        <!-- Хедер -->
+        <div class="tg-header">
+            <button class="tg-btn" id="closePanel">←</button>
+            <div class="tg-title">Информация о группе</div>
+            ${isAdmin ? '<button class="tg-btn" id="editBtn">✏️</button>' : ''}
+            <button class="tg-btn" id="moreBtn">⋮</button>
+        </div>
+        
+        <!-- Табы -->
+        <div class="tg-tabs">
+            <button class="tg-tab active" data-tab="info">Обзор</button>
+            <button class="tg-tab" data-tab="members">Участники</button>
+            ${isAdmin ? '<button class="tg-tab" data-tab="settings">Настройки</button>' : ''}
+        </div>
+        
+        <!-- Контент -->
+        <div class="tg-content">
+            <!-- Таб: Обзор -->
+            <div class="tg-tab-content active" data-tab="info">
+                <!-- Профиль -->
+                <div class="tg-profile">
+                    <div class="tg-avatar" style="background: linear-gradient(180deg, #7B68EE 0%, #9370DB 100%);">
+                        ${escapeHtml((currentGroup.name || 'G').charAt(0).toUpperCase())}
+                    </div>
+                    <div class="tg-name">${escapeHtml(currentGroup.name)}</div>
+                    <div class="tg-subtitle" id="membersCount">загрузка...</div>
+                </div>
+                
+                <!-- Быстрые действия -->
+                <div class="tg-action-row">
+                    <button class="tg-action-btn" id="actionNotify">
+                        <span class="icon">🔔</span>
+                        <span class="label">Уведомления</span>
+                    </button>
+                    <button class="tg-action-btn" id="actionSearch">
+                        <span class="icon">🔍</span>
+                        <span class="label">Поиск</span>
+                    </button>
+                    <button class="tg-action-btn" id="actionInvite">
+                        <span class="icon">🔗</span>
+                        <span class="label">Ссылка</span>
+                    </button>
+                    <button class="tg-action-btn" id="actionLeave">
+                        <span class="icon">🚪</span>
+                        <span class="label">Выйти</span>
+                    </button>
+                </div>
+                
+                <!-- Инфо -->
+                <div class="tg-section">
+                    ${currentGroup.description ? `
+                    <div class="tg-info-row">
+                        <div class="tg-info-icon">📝</div>
+                        <div class="tg-info-content">
+                            <div class="tg-info-value">${escapeHtml(currentGroup.description)}</div>
+                            <div class="tg-info-label">Описание</div>
+                        </div>
+                    </div>
+                    ` : ''}
+                    <div class="tg-info-row" id="inviteLinkRow">
+                        <div class="tg-info-icon">🔗</div>
+                        <div class="tg-info-content">
+                            <div class="tg-info-value" id="inviteLinkValue">${lastGroupInviteUrl || 'Нет ссылки'}</div>
+                            <div class="tg-info-label">Ссылка-приглашение</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Медиа-секции (превью) -->
+                <div class="tg-section">
+                    <div class="tg-item" data-action="media">
+                        <div class="tg-info-icon">🖼️</div>
+                        <div class="tg-item-content">
+                            <div class="tg-item-title">Медиа</div>
+                        </div>
+                        <div class="tg-item-action">→</div>
+                    </div>
+                    <div class="tg-item" data-action="files">
+                        <div class="tg-info-icon">📁</div>
+                        <div class="tg-item-content">
+                            <div class="tg-item-title">Файлы</div>
+                        </div>
+                        <div class="tg-item-action">→</div>
+                    </div>
+                    <div class="tg-item" data-action="links">
+                        <div class="tg-info-icon">🔗</div>
+                        <div class="tg-item-content">
+                            <div class="tg-item-title">Ссылки</div>
+                        </div>
+                        <div class="tg-item-action">→</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Таб: Участники -->
+            <div class="tg-tab-content" data-tab="members">
+                <div class="tg-section-title">
+                    <span id="membersSectionTitle">Участники</span>
+                    ${isAdmin ? '<button class="tg-btn" style="width:auto;height:auto;padding:4px 12px;font-size:13px;" id="addMemberBtn">+ Добавить</button>' : ''}
+                </div>
+                <div class="tg-search">
+                    <input type="text" id="searchMembers" placeholder="Поиск участников...">
+                </div>
+                <div id="membersList">
+                    <div style="padding: 40px; text-align: center; color: var(--text-muted);">Загрузка...</div>
+                </div>
+            </div>
+            
+            <!-- Таб: Настройки (только для админов) -->
+            ${isAdmin ? `
+            <div class="tg-tab-content" data-tab="settings">
+                <div class="tg-section">
+                    <div class="tg-section-title"><span>Управление группой</span></div>
+                    
+                    <div class="tg-item" id="settingsEditGroup">
+                        <div class="tg-info-icon">✏️</div>
+                        <div class="tg-item-content">
+                            <div class="tg-item-title">Редактировать группу</div>
+                            <div class="tg-item-subtitle">Название, описание, фото</div>
+                        </div>
+                    </div>
+                    
+                    <div class="tg-item" id="settingsAdmins">
+                        <div class="tg-info-icon">👑</div>
+                        <div class="tg-item-content">
+                            <div class="tg-item-title">Администраторы</div>
+                            <div class="tg-item-subtitle">Управление правами</div>
+                        </div>
+                    </div>
+                    
+                    <div class="tg-item" id="settingsInviteLinks">
+                        <div class="tg-info-icon">🔗</div>
+                        <div class="tg-item-content">
+                            <div class="tg-item-title">Пригласительные ссылки</div>
+                            <div class="tg-item-subtitle">Создание и управление</div>
+                        </div>
+                    </div>
+                    
+                    <div class="tg-item" id="settingsBanned">
+                        <div class="tg-info-icon">🚫</div>
+                        <div class="tg-item-content">
+                            <div class="tg-item-title">Заблокированные</div>
+                            <div class="tg-item-subtitle">Управление банами</div>
+                        </div>
+                    </div>
+                    
+                    <div class="tg-item" id="settingsPublicDirectory">
+                        <div class="tg-info-icon">🧭</div>
+                        <div class="tg-item-content">
+                            <div class="tg-item-title">Публичный каталог</div>
+                            <div class="tg-item-subtitle">Видимость в общем каталоге</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="tg-section">
+                    <div class="tg-section-title"><span>Разрешения</span></div>
+                    
+                    <div class="tg-item">
+                        <div class="tg-info-icon">💬</div>
+                        <div class="tg-item-content">
+                            <div class="tg-item-title">Отправка сообщений</div>
+                            <div class="tg-item-subtitle">Все участники</div>
+                        </div>
+                        <div class="tg-toggle on" data-perm="send_messages"></div>
+                    </div>
+                    
+                    <div class="tg-item">
+                        <div class="tg-info-icon">📎</div>
+                        <div class="tg-item-content">
+                            <div class="tg-item-title">Отправка медиа</div>
+                            <div class="tg-item-subtitle">Все участники</div>
+                        </div>
+                        <div class="tg-toggle on" data-perm="send_media"></div>
+                    </div>
+                    
+                    <div class="tg-item">
+                        <div class="tg-info-icon">👥</div>
+                        <div class="tg-item-content">
+                            <div class="tg-item-title">Добавление участников</div>
+                            <div class="tg-item-subtitle">Все участники</div>
+                        </div>
+                        <div class="tg-toggle on" data-perm="add_members"></div>
+                    </div>
+                </div>
+                
+                <div class="tg-section">
+                    <div class="tg-section-title"><span>Режим форума</span></div>
+                    
+                    <div class="tg-item" id="forumModeToggle">
+                        <div class="tg-info-icon">📋</div>
+                        <div class="tg-item-content">
+                            <div class="tg-item-title">Темы (Topics)</div>
+                            <div class="tg-item-subtitle">Организуйте обсуждения по темам как в форуме</div>
+                        </div>
+                        <div class="tg-toggle" id="forumModeSwitch" data-perm="forum_mode"></div>
+                    </div>
+                    
+                    <div class="tg-item" id="manageTopicsBtn" style="display: none;">
+                        <div class="tg-info-icon">💬</div>
+                        <div class="tg-item-content">
+                            <div class="tg-item-title">Управление темами</div>
+                            <div class="tg-item-subtitle">Создать, редактировать, удалить темы</div>
+                        </div>
+                    </div>
+                </div>
+                
+                ${isCreator ? `
+                <div class="tg-section">
+                    <div class="tg-section-title"><span style="color: #e53935;">Опасная зона</span></div>
+                    <div class="tg-item" id="deleteGroupBtn">
+                        <div class="tg-info-icon" style="color: #e53935;">🗑️</div>
+                        <div class="tg-item-content">
+                            <div class="tg-item-title" style="color: #e53935;">Удалить группу</div>
+                            <div class="tg-item-subtitle">Это действие нельзя отменить</div>
+                        </div>
+                    </div>
+                </div>
+                ` : ''}
+            </div>
+            ` : ''}
+        </div>
+        
+        <!-- Контекстное меню -->
+        <div class="tg-menu" id="contextMenu">
+            <div class="tg-menu-item" data-action="copyLink">📋 Скопировать ссылку</div>
+            <div class="tg-menu-item" data-action="share">📤 Поделиться</div>
+            ${isAdmin ? '<div class="tg-divider"></div><div class="tg-menu-item" data-action="report">⚠️ Пожаловаться</div>' : ''}
+        </div>
+        
+        <!-- Меню участника -->
+        <div class="tg-menu" id="memberMenu">
+            <div class="mobile-menu-header" style="display: none; padding: 12px 16px; border-bottom: 1px solid var(--border-subtle); text-align: center;">
+                <div style="width: 40px; height: 4px; background: var(--border-subtle); border-radius: 2px; margin: 0 auto 8px;"></div>
+                <div style="font-size: 14px; color: var(--text-muted);">Действия</div>
+            </div>
+            <div class="tg-menu-item" data-action="profile">👤 Открыть профиль</div>
+            <div class="tg-menu-item" data-action="message">💬 Написать</div>
+            ${isAdmin ? `
+            <div class="tg-divider"></div>
+            <div class="tg-menu-item" data-action="promote">👑 Назначить админом</div>
+            <div class="tg-menu-item" data-action="mute">🔇 Заглушить</div>
+            <div class="tg-menu-item danger" data-action="kick">🚪 Исключить</div>
+            <div class="tg-menu-item danger" data-action="ban">🚫 Заблокировать</div>
+            ` : ''}
+            <div class="mobile-menu-cancel" style="display: none; padding: 12px 16px; margin-top: 8px; text-align: center; color: var(--accent-primary); font-weight: 500; cursor: pointer; border-top: 1px solid var(--border-subtle);">Отмена</div>
+        </div>
+    `;
+    
+    document.body.appendChild(panel);
+    requestAnimationFrame(() => panel.classList.add('open'));
+    
+    // Загружаем участников
+    loadGroupMembersForPanel(currentGroup.id, panel);
+    
+    // === ОБРАБОТЧИКИ ===
+    
+    // Закрытие панели
+    const closePanel = () => {
+        panel.classList.remove('open');
+        setTimeout(() => panel.remove(), 250);
+    };
+    panel.querySelector('#closePanel').addEventListener('click', closePanel);
+    
+    // Табы
+    panel.querySelectorAll('.tg-tab').forEach(tab => {
+        tab.addEventListener('click', () => {
+            panel.querySelectorAll('.tg-tab').forEach(t => t.classList.remove('active'));
+            panel.querySelectorAll('.tg-tab-content').forEach(c => c.classList.remove('active'));
+            tab.classList.add('active');
+            panel.querySelector(`.tg-tab-content[data-tab="${tab.dataset.tab}"]`).classList.add('active');
+        });
+    });
+    
+    // Контекстное меню (⋮)
+    const ctxMenu = panel.querySelector('#contextMenu');
+    panel.querySelector('#moreBtn').addEventListener('click', (e) => {
+        e.stopPropagation();
+        ctxMenu.style.display = ctxMenu.style.display === 'block' ? 'none' : 'block';
+        ctxMenu.style.top = '60px';
+        ctxMenu.style.right = '8px';
+    });
+    
+    document.addEventListener('click', () => {
+        ctxMenu.style.display = 'none';
+        panel.querySelector('#memberMenu').style.display = 'none';
+    });
+    
+    // Действия контекстного меню
+    ctxMenu.querySelectorAll('.tg-menu-item').forEach(item => {
+        item.addEventListener('click', async () => {
+            ctxMenu.style.display = 'none';
+            const action = item.dataset.action;
+            
+            if (action === 'copyLink') {
+                if (!lastGroupInviteUrl) await createGroupInvite(currentGroup.id);
+                if (lastGroupInviteUrl) {
+                    (navigator.clipboard && navigator.clipboard.writeText)(lastGroupInviteUrl);
+                    notifications.success('Ссылка скопирована');
+                    panel.querySelector('#inviteLinkValue').textContent = lastGroupInviteUrl;
+                }
+            } else if (action === 'share') {
+                if (!lastGroupInviteUrl) await createGroupInvite(currentGroup.id);
+                if (lastGroupInviteUrl && navigator.share) {
+                    navigator.share({ title: currentGroup.name, url: lastGroupInviteUrl });
+                } else if (lastGroupInviteUrl) {
+                    (navigator.clipboard && navigator.clipboard.writeText)(lastGroupInviteUrl);
+                    notifications.success('Ссылка скопирована');
+                }
+            }
+        });
+    });
+    
+    // Быстрые действия
+    { const _el = panel.querySelector('#actionNotify'); if (_el) _el.addEventListener('click', () => {
+        openNotificationsModal();
+    });
+    
+    { const _el = panel.querySelector('#actionSearch'); if (_el) _el.addEventListener('click', () => {
+        openSearchMessagesModal();
+    });
+    
+    { const _el = panel.querySelector('#actionInvite'); if (_el) _el.addEventListener('click', async () => {
+        if (!lastGroupInviteUrl) await createGroupInvite(currentGroup.id);
+        if (lastGroupInviteUrl) {
+            (navigator.clipboard && navigator.clipboard.writeText)(lastGroupInviteUrl);
+            notifications.success('Ссылка скопирована!');
+            panel.querySelector('#inviteLinkValue').textContent = lastGroupInviteUrl;
+        }
+    });
+    
+    { const _el = panel.querySelector('#actionLeave'); if (_el) _el.addEventListener('click', async () => {
+        if (confirm('Вы уверены, что хотите покинуть группу?')) {
+            closePanel();
+            await leaveCurrentGroup();
+        }
+    });
+    
+    // Клик по ссылке-приглашению
+    { const _el = panel.querySelector('#inviteLinkRow'); if (_el) _el.addEventListener('click', async () => {
+        if (lastGroupInviteUrl) {
+            (navigator.clipboard && navigator.clipboard.writeText)(lastGroupInviteUrl);
+            notifications.success('Ссылка скопирована');
+        } else {
+            await createGroupInvite(currentGroup.id);
+            if (lastGroupInviteUrl) {
+                (navigator.clipboard && navigator.clipboard.writeText)(lastGroupInviteUrl);
+                notifications.success('Ссылка создана и скопирована');
+                panel.querySelector('#inviteLinkValue').textContent = lastGroupInviteUrl;
+            }
+        }
+    });
+    
+    // Поиск участников
+    { const _el = panel.querySelector('#searchMembers'); if (_el) _el.addEventListener('input', (e) => {
+        const query = e.target.value.toLowerCase();
+        panel.querySelectorAll('.member-item').forEach(item => {
+            const name = ((item.dataset.username || '').toLowerCase()) || '';
+            item.style.display = name.includes(query) ? 'flex' : 'none';
+        });
+    });
+    
+    // Добавить участника
+    { const _el = panel.querySelector('#addMemberBtn'); if (_el) _el.addEventListener('click', () => {
+        openAddMemberModal();
+    });
+    
+    // Настройки (для админов)
+    { const _el = panel.querySelector('#editBtn'); if (_el) _el.addEventListener('click', () => openEditGroupModal());
+    { const _el = panel.querySelector('#settingsEditGroup'); if (_el) _el.addEventListener('click', () => openEditGroupModal());
+    { const _el = panel.querySelector('#settingsAdmins'); if (_el) _el.addEventListener('click', () => openAdminsModal());
+    { const _el = panel.querySelector('#settingsInviteLinks'); if (_el) _el.addEventListener('click', () => openInviteLinksModal());
+    { const _el = panel.querySelector('#settingsBanned'); if (_el) _el.addEventListener('click', () => openBannedModal());
+    { const _el = panel.querySelector('#settingsPublicDirectory'); if (_el) _el.addEventListener('click', () => openPublicDirectorySettings());
+    { const _el = panel.querySelector('#deleteGroupBtn'); if (_el) _el.addEventListener('click', async () => {
+        if (confirm('Вы уверены, что хотите УДАЛИТЬ группу? Это действие НЕЛЬЗЯ отменить!')) {
+            await deleteGroup(currentGroup.id);
+            closePanel();
+        }
+    });
+    
+    // Forum mode toggle
+    const forumSwitch = panel.querySelector('#forumModeSwitch');
+    const forumToggleItem = panel.querySelector('#forumModeToggle');
+    const manageTopicsBtn = panel.querySelector('#manageTopicsBtn');
+    console.log('Forum switch found:', !!forumSwitch, 'topicsModule:', !!window.topicsModule);
+    
+    let forumToggleInProgress = false;
+    
+    async function toggleForumModeHandler(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        
+        if (forumToggleInProgress) {
+            console.log('Toggle already in progress');
+            return;
+        }
+        
+        console.log('Forum switch clicked, topicsModule:', !!window.topicsModule);
+        
+        if (!window.topicsModule) {
+            console.error('topicsModule not available');
+            notifications.error('Модуль топиков не загружен');
+            return;
+        }
+        
+        if (!currentGroup || !currentGroup.id) {
+            console.error('No current group');
+            notifications.error('Группа не выбрана');
+            return;
+        }
+        
+        forumToggleInProgress = true;
+        const isOn = forumSwitch.classList.contains('on');
+        console.log('Current state:', isOn, 'switching to:', !isOn);
+        
+        try {
+            const result = await window.topicsModule.setGroupForumMode(currentGroup.id, !isOn);
+            console.log('setGroupForumMode result:', result);
+            
+            if (result.success) {
+                forumSwitch.classList.toggle('on');
+                if (manageTopicsBtn) manageTopicsBtn.style.display = !isOn ? 'flex' : 'none';
+                // Reload group view
+                if (currentGroup) {
+                    setTimeout(() => selectGroup(currentGroup), 300);
+                }
+            } else {
+                notifications.error(result.message || 'Ошибка включения режима форума');
+            }
+        } catch (err) {
+            console.error('Toggle forum mode error:', err);
+            notifications.error('Ошибка: ' + err.message);
+        } finally {
+            forumToggleInProgress = false;
+        }
+    }
+    
+    if (forumSwitch) {
+        // Check current forum mode status
+        if (window.topicsModule) {
+            window.topicsModule.loadGroupTopics(currentGroup.id).then(data => {
+                console.log('Loaded forum mode:', data.forum_mode);
+                if (data.forum_mode) {
+                    forumSwitch.classList.add('on');
+                    if (manageTopicsBtn) manageTopicsBtn.style.display = 'flex';
+                }
+            }).catch(err => console.error('Error loading topics:', err));
+        }
+        
+        // Add click handler to the whole item, not just the switch
+        if (forumToggleItem) {
+            forumToggleItem.style.cursor = 'pointer';
+            forumToggleItem.addEventListener('click', toggleForumModeHandler);
+        }
+    }
+    
+    if (manageTopicsBtn) {
+        manageTopicsBtn.addEventListener('click', () => {
+            closePanel();
+            openTopicsManagementPanel(currentGroup.id);
+        });
+    }
+    
+    // Переключатели разрешений
+    panel.querySelectorAll('.tg-toggle:not(#forumModeSwitch)').forEach(toggle => {
+        toggle.addEventListener('click', async () => {
+            const perm = toggle.dataset.perm;
+            const isOn = toggle.classList.contains('on');
+            toggle.classList.toggle('on');
+            await updateGroupPermission(currentGroup.id, perm, !isOn);
+        });
+    });
+}
+
+// Загрузка участников для панели
+async function loadGroupMembersForPanel(groupId, panel) {
+    const token = localStorage.getItem('xipher_token');
+    const userId = localStorage.getItem('xipher_user_id');
+    if (!token) return;
+    
+    try {
+        const response = await fetch('/api/get-group-members', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ token, group_id: groupId })
+        });
+        
+        const data = await response.json();
+        const listEl = panel.querySelector('#membersList');
+        const countEl = panel.querySelector('#membersCount');
+        const titleEl = panel.querySelector('#membersSectionTitle');
+        
+        if (data.success && data.members) {
+            const members = data.members;
+            const count = members.length;
+            
+            // Обновляем счётчики
+            if (countEl) countEl.textContent = formatMembersCount(count);
+            if (titleEl) titleEl.textContent = `${count} ${formatMembersWord(count)}`;
+            
+            if (count === 0) {
+                if (listEl) listEl.innerHTML = '<div style="padding: 40px; text-align: center; color: var(--text-muted);">Нет участников</div>';
+                return;
+            }
+            
+            // Сортировка: creator > admin > member
+            const roleOrder = { 'creator': 0, 'admin': 1, 'member': 2 };
+            members.sort((a, b) => (roleOrder[a.role] || 3) - (roleOrder[b.role] || 3));
+            
+            let html = '';
+            for (const m of members) {
+                const color = getAvatarColor(m.user_id || m.username || '');
+                const isMe = m.user_id === userId;
+                const roleClass = m.role === 'creator' ? 'creator' : m.role === 'admin' ? 'admin' : '';
+                const roleLabel = m.role === 'creator' ? 'владелец' : m.role === 'admin' ? 'админ' : '';
+                
+                html += `
+                    <div class="member-item tg-item" data-username="${escapeHtml(m.username || '')}" data-userid="${escapeHtml(m.user_id || '')}" data-role="${m.role || 'member'}" style="cursor: pointer;">
+                        <div class="tg-item-icon" style="background: ${color}; color: white;">
+                            ${escapeHtml((m.username || 'U').charAt(0).toUpperCase())}
+                        </div>
+                        <div class="tg-item-content">
+                            <div class="tg-item-title">
+                                ${escapeHtml(m.username || 'Неизвестный')}
+                                ${isMe ? '<span style="color: var(--text-muted); font-weight: 400;"> (вы)</span>' : ''}
+                                ${roleLabel ? `<span class="tg-role ${roleClass}">${roleLabel}</span>` : ''}
+                            </div>
+                            <div class="tg-item-subtitle">${m.is_muted ? '🔇 заглушен' : 'был(а) недавно'}</div>
+                        </div>
+                    </div>
+                `;
+            }
+            
+            if (listEl) listEl.innerHTML = html;
+            
+            // Обработчики кликов на участников
+            const isAdmin = currentGroup.creator_id === userId; // TODO: check admin role too
+            const memberMenu = panel.querySelector('#memberMenu');
+            let selectedMember = null;
+            const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+            
+            panel.querySelectorAll('.member-item').forEach(item => {
+                let longPressTimer = null;
+                let isLongPress = false;
+                
+                // Показать меню
+                const showMenu = (x, y) => {
+                    selectedMember = {
+                        userId: item.dataset.userid,
+                        username: item.dataset.username,
+                        role: item.dataset.role
+                    };
+                    
+                    memberMenu.style.display = 'block';
+                    
+                    // Позиция меню с учётом размера экрана
+                    const menuHeight = 250;
+                    const menuWidth = 200;
+                    let top = Math.min(y, window.innerHeight - menuHeight);
+                    let left = Math.min(x, window.innerWidth - menuWidth);
+                    
+                    // Показываем/скрываем мобильные элементы
+                    const mobileHeader = memberMenu.querySelector('.mobile-menu-header');
+                    const mobileCancel = memberMenu.querySelector('.mobile-menu-cancel');
+                    
+                    // На мобильных центрируем меню снизу
+                    if (isTouchDevice && window.innerWidth <= 768) {
+                        memberMenu.style.position = 'fixed';
+                        memberMenu.style.bottom = '0';
+                        memberMenu.style.left = '0';
+                        memberMenu.style.right = '0';
+                        memberMenu.style.top = 'auto';
+                        memberMenu.style.width = '100%';
+                        memberMenu.style.maxWidth = '100%';
+                        memberMenu.style.borderRadius = '16px 16px 0 0';
+                        memberMenu.style.padding = '0';
+                        if (mobileHeader) mobileHeader.style.display = 'block';
+                        if (mobileCancel) mobileCancel.style.display = 'block';
+                    } else {
+                        memberMenu.style.position = 'absolute';
+                        memberMenu.style.top = `${top}px`;
+                        memberMenu.style.left = `${left}px`;
+                        memberMenu.style.right = 'auto';
+                        memberMenu.style.bottom = 'auto';
+                        memberMenu.style.width = 'auto';
+                        memberMenu.style.borderRadius = '8px';
+                        memberMenu.style.padding = '8px 0';
+                        if (mobileHeader) mobileHeader.style.display = 'none';
+                        if (mobileCancel) mobileCancel.style.display = 'none';
+                    }
+                    
+                    // Скрываем некоторые опции для себя или создателя
+                    const isTargetCreator = selectedMember.role === 'creator';
+                    const isTargetMe = selectedMember.userId === userId;
+                    
+                    memberMenu.querySelectorAll('[data-action="promote"], [data-action="mute"], [data-action="kick"], [data-action="ban"]').forEach(el => {
+                        el.style.display = (isTargetCreator || isTargetMe || !isAdmin) ? 'none' : 'flex';
+                    });
+                };
+                
+                // Desktop: левый клик - профиль
+                item.addEventListener('click', (e) => {
+                    if (isLongPress) {
+                        isLongPress = false;
+                        return;
+                    }
+                    e.stopPropagation();
+                    const username = item.dataset.username;
+                    if (username && typeof window.openUserProfile === 'function') {
+                        window.openUserProfile({ username });
+                    }
+                });
+                
+                // Desktop: правый клик - контекстное меню
+                item.addEventListener('contextmenu', (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    showMenu(e.clientX, e.clientY);
+                });
+                
+                // Mobile: long-press для меню
+                item.addEventListener('touchstart', (e) => {
+                    isLongPress = false;
+                    item.classList.add('pressing');
+                    longPressTimer = setTimeout(() => {
+                        isLongPress = true;
+                        item.classList.remove('pressing');
+                        // Вибрация на мобильных
+                        if (navigator.vibrate) navigator.vibrate(50);
+                        const touch = e.touches[0];
+                        showMenu(touch.clientX, touch.clientY);
+                    }, 500);
+                }, { passive: true });
+                
+                item.addEventListener('touchend', () => {
+                    item.classList.remove('pressing');
+                    if (longPressTimer) {
+                        clearTimeout(longPressTimer);
+                        longPressTimer = null;
+                    }
+                });
+                
+                item.addEventListener('touchmove', () => {
+                    item.classList.remove('pressing');
+                    if (longPressTimer) {
+                        clearTimeout(longPressTimer);
+                        longPressTimer = null;
+                    }
+                });
+            });
+            
+            // Закрытие меню при клике вне его
+            const closeMenuHandler = (e) => {
+                if (memberMenu && !memberMenu.contains(e.target)) {
+                    memberMenu.style.display = 'none';
+                }
+            };
+            document.addEventListener('click', closeMenuHandler);
+            document.addEventListener('touchstart', closeMenuHandler, { passive: true });
+            
+            // Кнопка "Отмена" на мобильных
+            { const _el = memberMenu.querySelector('.mobile-menu-cancel'); if (_el) _el.addEventListener('click', () => {
+                memberMenu.style.display = 'none';
+            });
+            
+            // Действия меню участника
+            memberMenu.querySelectorAll('.tg-menu-item').forEach(menuItem => {
+                menuItem.addEventListener('click', async () => {
+                    memberMenu.style.display = 'none';
+                    if (!selectedMember) return;
+                    
+                    const action = menuItem.dataset.action;
+                    
+                    if (action === 'profile') {
+                        if (selectedMember.username && typeof window.openUserProfile === 'function') {
+                            window.openUserProfile({ username: selectedMember.username });
+                        }
+                    } else if (action === 'message') {
+                        // Открыть личный чат
+                        if (selectedMember.username && typeof window.selectChat === 'function') {
+                            window.selectChat(selectedMember.username);
+                            { const _el = document.getElementById('groupInfoPanel'); if (_el) _el.remove(); };
+                        } else if (selectedMember.username) {
+                            // Альтернатива: поиск и выбор чата
+                            const searchInput = document.querySelector('#searchInput');
+                            if (searchInput) {
+                                searchInput.value = selectedMember.username;
+                                searchInput.dispatchEvent(new Event('input'));
+                            }
+                        }
+                    } else if (action === 'promote') {
+                        await setMemberRole(currentGroup.id, selectedMember.userId, 'admin');
+                    } else if (action === 'mute') {
+                        await muteMember(currentGroup.id, selectedMember.userId, true);
+                    } else if (action === 'kick') {
+                        if (confirm(`Исключить ${selectedMember.username} из группы?`)) {
+                            await kickMember(currentGroup.id, selectedMember.userId);
+                        }
+                    } else if (action === 'ban') {
+                        if (confirm(`Заблокировать ${selectedMember.username}? Он не сможет вернуться в группу.`)) {
+                            await banMember(currentGroup.id, selectedMember.userId, true);
+                        }
+                    }
+                });
+            });
+            
+        } else {
+            if (listEl) listEl.innerHTML = '<div style="padding: 40px; text-align: center; color: var(--text-danger);">Ошибка загрузки</div>';
+        }
+    } catch (e) {
+        console.error('[Groups] loadGroupMembersForPanel error:', e);
+    }
+}
+
+// === API ФУНКЦИИ УПРАВЛЕНИЯ УЧАСТНИКАМИ ===
+
+async function kickMember(groupId, targetUserId) {
+    const token = localStorage.getItem('xipher_token');
+    try {
+        const resp = await fetch('/api/kick-member', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ token, group_id: groupId, target_user_id: targetUserId })
+        });
+        const data = await resp.json();
+        if (data.success) {
+            notifications.success('Участник исключён');
+            // Перезагружаем список
+            const panel = document.getElementById('groupInfoPanel');
+            if (panel) loadGroupMembersForPanel(groupId, panel);
+        } else {
+            notifications.error(data.error || 'Ошибка');
+        }
+    } catch (e) {
+        notifications.error('Ошибка сети');
+    }
+}
+
+async function banMember(groupId, targetUserId, banned) {
+    const token = localStorage.getItem('xipher_token');
+    try {
+        const resp = await fetch('/api/ban-member', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ token, group_id: groupId, target_user_id: targetUserId, banned: banned ? 'true' : 'false' })
+        });
+        const data = await resp.json();
+        if (data.success) {
+            notifications.success(banned ? 'Участник заблокирован' : 'Участник разблокирован');
+            const panel = document.getElementById('groupInfoPanel');
+            if (panel) loadGroupMembersForPanel(groupId, panel);
+        } else {
+            notifications.error(data.error || 'Ошибка');
+        }
+    } catch (e) {
+        notifications.error('Ошибка сети');
+    }
+}
+
+async function muteMember(groupId, targetUserId, muted) {
+    const token = localStorage.getItem('xipher_token');
+    try {
+        const resp = await fetch('/api/mute-member', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ token, group_id: groupId, target_user_id: targetUserId, muted: muted ? 'true' : 'false' })
+        });
+        const data = await resp.json();
+        if (data.success) {
+            notifications.success(muted ? 'Участник заглушён' : 'Участник может писать');
+            const panel = document.getElementById('groupInfoPanel');
+            if (panel) loadGroupMembersForPanel(groupId, panel);
+        } else {
+            notifications.error(data.error || 'Ошибка');
+        }
+    } catch (e) {
+        notifications.error('Ошибка сети');
+    }
+}
+
+async function setMemberRole(groupId, targetUserId, role) {
+    const token = localStorage.getItem('xipher_token');
+    try {
+        const resp = await fetch('/api/set-admin-permissions', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ token, group_id: groupId, target_user_id: targetUserId, role })
+        });
+        const data = await resp.json();
+        if (data.success) {
+            notifications.success(role === 'admin' ? 'Назначен администратором' : 'Роль изменена');
+            const panel = document.getElementById('groupInfoPanel');
+            if (panel) loadGroupMembersForPanel(groupId, panel);
+        } else {
+            notifications.error(data.error || 'Ошибка');
+        }
+    } catch (e) {
+        notifications.error('Ошибка сети');
+    }
+}
+
+// === ДОПОЛНИТЕЛЬНЫЕ ФУНКЦИИ ===
+
+async function deleteGroup(groupId) {
+    const token = localStorage.getItem('xipher_token');
+    try {
+        const resp = await fetch('/api/delete-group', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ token, group_id: groupId })
+        });
+        const data = await resp.json();
+        if (data.success) {
+            notifications.success('Группа удалена');
+            currentGroup = null;
+            loadGroups();
+            // Очищаем чат
+            const messagesContainer = document.getElementById('messagesContainer');
+            if (messagesContainer) messagesContainer.innerHTML = '';
+        } else {
+            notifications.error(data.error || 'Ошибка удаления');
+        }
+    } catch (e) {
+        notifications.error('Ошибка сети');
+    }
+}
+
+async function updateGroupPermission(groupId, permission, enabled) {
+    const token = localStorage.getItem('xipher_token');
+    try {
+        const resp = await fetch('/api/update-group-permissions', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ token, group_id: groupId, permission, enabled: enabled ? 'true' : 'false' })
+        });
+        const data = await resp.json();
+        if (data.success) {
+            notifications.success('Разрешение обновлено');
+        } else {
+            notifications.error(data.error || 'Ошибка');
+        }
+    } catch (e) {
+        notifications.error('Ошибка сети');
+    }
+}
+
+function openNotificationsModal() {
+    if (!currentGroup) return;
+    
+    const modal = createModal('Уведомления', `
+        <div style="margin-bottom: 20px;">
+            <div style="font-size: 14px; color: var(--text-muted); margin-bottom: 16px;">
+                Настройте уведомления для этой группы
+            </div>
+            
+            <div style="display: flex; flex-direction: column; gap: 12px;">
+                <label style="display: flex; align-items: center; justify-content: space-between; padding: 12px; background: var(--bg-tertiary); border-radius: 8px; cursor: pointer;">
+                    <div>
+                        <div style="font-size: 14px; color: var(--text-primary);">Все сообщения</div>
+                        <div style="font-size: 12px; color: var(--text-muted);">Уведомлять о каждом сообщении</div>
+                    </div>
+                    <input type="radio" name="notifyMode" value="all" checked style="width: 18px; height: 18px;">
+                </label>
+                
+                <label style="display: flex; align-items: center; justify-content: space-between; padding: 12px; background: var(--bg-tertiary); border-radius: 8px; cursor: pointer;">
+                    <div>
+                        <div style="font-size: 14px; color: var(--text-primary);">Только упоминания</div>
+                        <div style="font-size: 12px; color: var(--text-muted);">Когда вас упоминают (@)</div>
+                    </div>
+                    <input type="radio" name="notifyMode" value="mentions" style="width: 18px; height: 18px;">
+                </label>
+                
+                <label style="display: flex; align-items: center; justify-content: space-between; padding: 12px; background: var(--bg-tertiary); border-radius: 8px; cursor: pointer;">
+                    <div>
+                        <div style="font-size: 14px; color: var(--text-primary);">Выключить</div>
+                        <div style="font-size: 12px; color: var(--text-muted);">Не уведомлять о сообщениях</div>
+                    </div>
+                    <input type="radio" name="notifyMode" value="off" style="width: 18px; height: 18px;">
+                </label>
+            </div>
+        </div>
+        
+        <div style="border-top: 1px solid var(--border-subtle); padding-top: 16px;">
+            <label style="display: flex; align-items: center; justify-content: space-between; padding: 12px; background: var(--bg-tertiary); border-radius: 8px; cursor: pointer;">
+                <div>
+                    <div style="font-size: 14px; color: var(--text-primary);">Звук уведомлений</div>
+                </div>
+                <input type="checkbox" id="notifySound" checked style="width: 18px; height: 18px;">
+            </label>
+        </div>
+        
+        <div style="display: flex; gap: 8px; margin-top: 20px;">
+            <button id="cancelBtn" style="flex: 1; padding: 12px; border: none; border-radius: 8px; background: var(--bg-tertiary); color: var(--text-primary); font-size: 14px; cursor: pointer;">Отмена</button>
+            <button id="saveBtn" style="flex: 1; padding: 12px; border: none; border-radius: 8px; background: var(--accent-primary); color: white; font-size: 14px; font-weight: 500; cursor: pointer;">Сохранить</button>
+        </div>
+    `);
+    
+    // Загружаем сохранённые настройки
+    const savedMode = localStorage.getItem(`group_notify_${currentGroup.id}`) || 'all';
+    const savedSound = localStorage.getItem(`group_sound_${currentGroup.id}`) !== 'false';
+    { const _el = modal.querySelector(`input[value="${savedMode}"]`); if (_el) _el.setAttribute('checked', 'checked'); };
+    modal.querySelector('#notifySound').checked = savedSound;
+    
+    modal.querySelector('#cancelBtn').addEventListener('click', () => modal.remove());
+    modal.querySelector('#saveBtn').addEventListener('click', () => {
+        const mode = (function() { const _el = modal.querySelector('input[name="notifyMode"]:checked'); return _el ? _el.value : undefined; })() || 'all';
+        const sound = (function() { const _el = modal.querySelector('#notifySound'); return _el ? _el.checked : false; })();
+        
+        localStorage.setItem(`group_notify_${currentGroup.id}`, mode);
+        localStorage.setItem(`group_sound_${currentGroup.id}`, sound ? 'true' : 'false');
+        
+        notifications.success('Настройки уведомлений сохранены');
+        modal.remove();
+    });
+}
+
+function openSearchMessagesModal() {
+    if (!currentGroup) return;
+    
+    const modal = createModal('Поиск по сообщениям', `
+        <div style="margin-bottom: 16px;">
+            <input type="text" id="searchQuery" placeholder="Введите текст для поиска..." style="width: 100%; padding: 12px; border: 1px solid var(--border-subtle); border-radius: 8px; background: var(--bg-secondary); color: var(--text-primary); font-size: 14px; outline: none; box-sizing: border-box;">
+        </div>
+        <div id="searchResults" style="max-height: 300px; overflow-y: auto;">
+            <div style="color: var(--text-muted); text-align: center; padding: 40px;">
+                Введите запрос для поиска
+            </div>
+        </div>
+    `);
+    
+    const searchInput = modal.querySelector('#searchQuery');
+    const resultsContainer = modal.querySelector('#searchResults');
+    
+    let searchTimeout = null;
+    
+    searchInput.addEventListener('input', (e) => {
+        clearTimeout(searchTimeout);
+        const query = e.target.value.trim();
+        
+        if (query.length < 2) {
+            resultsContainer.innerHTML = '<div style="color: var(--text-muted); text-align: center; padding: 40px;">Введите минимум 2 символа</div>';
+            return;
+        }
+        
+        resultsContainer.innerHTML = '<div style="color: var(--text-muted); text-align: center; padding: 40px;">Поиск...</div>';
+        
+        searchTimeout = setTimeout(async () => {
+            try {
+                const token = localStorage.getItem('xipher_token');
+                const resp = await fetch('/api/search-group-messages', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ token, group_id: currentGroup.id, query })
+                });
+                const data = await resp.json();
+                
+                if (data.success && data.messages && data.messages.length > 0) {
+                    resultsContainer.innerHTML = data.messages.map(msg => `
+                        <div class="search-result" data-msgid="${msg.id}" style="padding: 12px; border-bottom: 1px solid var(--border-subtle); cursor: pointer; transition: background 0.15s;">
+                            <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 4px;">
+                                <span style="font-size: 13px; font-weight: 500; color: var(--accent-primary);">${escapeHtml(msg.sender_name || 'Неизвестный')}</span>
+                                <span style="font-size: 11px; color: var(--text-muted);">${formatMessageTime(msg.created_at)}</span>
+                            </div>
+                            <div style="font-size: 14px; color: var(--text-primary);">${highlightSearchText(escapeHtml(msg.content), query)}</div>
+                        </div>
+                    `).join('');
+                    
+                    // Клик для перехода к сообщению
+                    resultsContainer.querySelectorAll('.search-result').forEach(item => {
+                        item.addEventListener('click', () => {
+                            const msgId = item.dataset.msgid;
+                            modal.remove();
+                            scrollToMessage(msgId);
+                        });
+                        item.addEventListener('mouseover', () => item.style.background = 'var(--bg-tertiary)');
+                        item.addEventListener('mouseout', () => item.style.background = 'transparent');
+                    });
+                } else {
+                    resultsContainer.innerHTML = '<div style="color: var(--text-muted); text-align: center; padding: 40px;">Ничего не найдено</div>';
+                }
+            } catch (e) {
+                resultsContainer.innerHTML = '<div style="color: var(--text-danger); text-align: center; padding: 40px;">Ошибка поиска</div>';
+            }
+        }, 300);
+    });
+    
+    searchInput.focus();
+}
+
+function highlightSearchText(text, query) {
+    if (!query) return text;
+    const regex = new RegExp(`(${query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'gi');
+    return text.replace(regex, '<mark style="background: rgba(255,200,0,0.3); padding: 0 2px; border-radius: 2px;">$1</mark>');
+}
+
+function scrollToMessage(messageId) {
+    const msgEl = document.querySelector(`[data-message-id="${messageId}"]`);
+    if (msgEl) {
+        msgEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        msgEl.style.background = 'rgba(100, 180, 255, 0.2)';
+        setTimeout(() => { msgEl.style.background = ''; }, 2000);
+    }
+}
+
+function formatMessageTime(dateStr) {
+    if (!dateStr) return '';
+    try {
+        const date = new Date(dateStr);
+        const now = new Date();
+        const isToday = date.toDateString() === now.toDateString();
+        
+        if (isToday) {
+            return date.toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' });
+        }
+        return date.toLocaleDateString('ru-RU', { day: 'numeric', month: 'short' }) + ' ' + 
+               date.toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' });
+    } catch (e) {
+        return '';
+    }
+}
+
+// === МОДАЛЬНЫЕ ОКНА НАСТРОЕК ===
+
+function openAddMemberModal() {
+    if (!currentGroup) return;
+    
+    const modal = createModal('Добавить участника', `
+        <div style="margin-bottom: 16px; color: var(--text-muted); font-size: 14px;">
+            Скопируйте ссылку-приглашение и отправьте её друзьям
+        </div>
+        <div style="background: var(--bg-tertiary); border-radius: 8px; padding: 12px; margin-bottom: 16px; word-break: break-all; font-size: 14px; color: var(--accent-primary);" id="inviteLinkText">
+            ${lastGroupInviteUrl || 'Ссылка не создана'}
+        </div>
+        <div style="display: flex; gap: 8px;">
+            <button id="createNewLink" style="flex: 1; padding: 12px; border: none; border-radius: 8px; background: var(--bg-tertiary); color: var(--text-primary); font-size: 14px; cursor: pointer;">Создать ссылку</button>
+            <button id="copyLink" style="flex: 1; padding: 12px; border: none; border-radius: 8px; background: var(--accent-primary); color: white; font-size: 14px; font-weight: 500; cursor: pointer;">Скопировать</button>
+        </div>
+    `);
+    
+    modal.querySelector('#createNewLink').addEventListener('click', async () => {
+        await createGroupInvite(currentGroup.id);
+        if (lastGroupInviteUrl) {
+            modal.querySelector('#inviteLinkText').textContent = lastGroupInviteUrl;
+        }
+    });
+    
+    modal.querySelector('#copyLink').addEventListener('click', async () => {
+        if (!lastGroupInviteUrl) await createGroupInvite(currentGroup.id);
+        if (lastGroupInviteUrl) {
+            (navigator.clipboard && navigator.clipboard.writeText)(lastGroupInviteUrl);
+            notifications.success('Ссылка скопирована');
+            modal.remove();
+        }
+    });
+}
+
+async function openAdminsModal() {
+    if (!currentGroup) return;
+    
+    const token = localStorage.getItem('xipher_token');
+    const userId = localStorage.getItem('xipher_user_id');
+    const isCreator = currentGroup.creator_id === userId;
+    
+    // Загружаем участников
+    let members = [];
+    try {
+        const resp = await fetch('/api/get-group-members', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ token, group_id: currentGroup.id })
+        });
+        const data = await resp.json();
+        if (data.success) members = data.members || [];
+    } catch (e) { console.error(e); }
+    
+    // Фильтруем админов
+    const admins = members.filter(m => m.role === 'admin' || m.role === 'creator');
+    const regularMembers = members.filter(m => m.role === 'member');
+    
+    let adminsHtml = admins.map(m => {
+        const perms = m.permissions || {};
+        const permSummary = getPermissionsSummary(perms, m.role);
+        return `
+        <div class="admin-item" data-userid="${escapeHtml(m.user_id)}" data-role="${m.role}" data-permissions='${JSON.stringify(perms)}' style="display: flex; align-items: center; padding: 12px; border-radius: 12px; margin-bottom: 8px; background: var(--bg-tertiary); cursor: pointer; transition: background 0.2s;">
+            <div style="width: 44px; height: 44px; border-radius: 50%; background: ${getAvatarColor(m.user_id)}; display: flex; align-items: center; justify-content: center; color: white; font-weight: 500; font-size: 18px; margin-right: 12px; flex-shrink: 0;">
+                ${escapeHtml((m.username || 'U').charAt(0).toUpperCase())}
+            </div>
+            <div style="flex: 1; min-width: 0;">
+                <div style="font-size: 15px; font-weight: 500; color: var(--text-primary);">${escapeHtml(m.username)}</div>
+                <div style="font-size: 13px; color: ${m.role === 'creator' ? '#e17076' : '#65aadd'}; margin-top: 2px;">
+                    ${m.role === 'creator' ? '👑 Владелец' : '⭐ Администратор'}
+                </div>
+                <div style="font-size: 12px; color: var(--text-muted); margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                    ${permSummary}
+                </div>
+            </div>
+            ${isCreator && m.role !== 'creator' ? `
+                <div style="display: flex; gap: 6px;">
+                    <button class="edit-admin-btn" style="padding: 8px 12px; background: rgba(101,170,221,0.1); color: #65aadd; border: none; border-radius: 8px; font-size: 12px; cursor: pointer;">✏️</button>
+                    <button class="demote-btn" style="padding: 8px 12px; background: rgba(229,57,53,0.1); color: #e53935; border: none; border-radius: 8px; font-size: 12px; cursor: pointer;">❌</button>
+                </div>
+            ` : ''}
+        </div>
+    `}).join('');
+    
+    const modal = createModal('Администраторы', `
+        <div style="margin-bottom: 16px;">
+            <div style="font-size: 13px; color: var(--text-muted); margin-bottom: 12px; display: flex; align-items: center;">
+                <span style="flex: 1;">Текущие администраторы (${admins.length})</span>
+            </div>
+            <div style="max-height: 300px; overflow-y: auto;">
+                ${adminsHtml || '<div style="color: var(--text-muted); padding: 20px; text-align: center;">Нет администраторов</div>'}
+            </div>
+        </div>
+        ${isCreator ? `
+        <div style="border-top: 1px solid var(--border-subtle); padding-top: 16px;">
+            <button id="addAdminBtn" style="width: 100%; padding: 14px; background: var(--accent-primary); color: white; border: none; border-radius: 10px; font-size: 15px; font-weight: 500; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px;">
+                <span style="font-size: 18px;">➕</span> Добавить администратора
+            </button>
+        </div>
+        ` : ''}
+    `);
+    
+    // Снятие админа
+    modal.querySelectorAll('.demote-btn').forEach(btn => {
+        btn.addEventListener('click', async (e) => {
+            e.stopPropagation();
+            const item = btn.closest('.admin-item');
+            const targetId = item.dataset.userid;
+            if (confirm('Снять права администратора?')) {
+                await setMemberRole(currentGroup.id, targetId, 'member');
+                modal.remove();
+                openAdminsModal();
+            }
+        });
+    });
+    
+    // Редактирование прав админа
+    modal.querySelectorAll('.edit-admin-btn').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const item = btn.closest('.admin-item');
+            const targetId = item.dataset.userid;
+            const username = item.querySelector('div[style*="font-size: 15px"]').textContent;
+            let permissions = {};
+            try { permissions = JSON.parse(item.dataset.permissions || '{}'); } catch(e) {}
+            modal.remove();
+            openEditAdminPermissionsModal(targetId, username, permissions);
+        });
+    });
+    
+    // Добавить админа
+    { const _btn = modal.querySelector('#addAdminBtn'); if (_btn) _btn.addEventListener('click', () => {
+        modal.remove();
+        openAddAdminModal(regularMembers);
+    });
+}
+
+// Получить краткое описание прав
+function getPermissionsSummary(perms, role) {
+    if (role === 'creator') return 'Полные права';
+    if (!perms || Object.keys(perms).length === 0) return 'Все права';
+    
+    const rights = [];
+    if (perms.can_change_info) rights.push('Редактирование');
+    if (perms.can_delete_messages) rights.push('Удаление');
+    if (perms.can_ban_users) rights.push('Бан');
+    if (perms.can_invite_users) rights.push('Приглашения');
+    if (perms.can_pin_messages) rights.push('Закрепление');
+    if (perms.can_promote_members) rights.push('Назначение');
+    
+    if (rights.length === 0) {
+        const enabled = Object.values(perms).filter(v => v === true).length;
+        if (enabled === 0) return 'Без особых прав';
+        return `${enabled} прав`;
+    }
+    
+    return rights.join(', ');
+}
+
+// Модалка добавления нового админа
+async function openAddAdminModal(regularMembers) {
+    if (regularMembers.length === 0) {
+        notifications.info('Нет участников для назначения администратором');
+        openAdminsModal();
+        return;
+    }
+    
+    const membersHtml = regularMembers.map(m => `
+        <div class="member-select-item" data-userid="${escapeHtml(m.user_id)}" data-username="${escapeHtml(m.username)}" style="display: flex; align-items: center; padding: 12px; border-radius: 10px; margin-bottom: 6px; background: var(--bg-tertiary); cursor: pointer; transition: all 0.2s;">
+            <div style="width: 40px; height: 40px; border-radius: 50%; background: ${getAvatarColor(m.user_id)}; display: flex; align-items: center; justify-content: center; color: white; margin-right: 12px;">
+                ${escapeHtml((m.username || 'U').charAt(0).toUpperCase())}
+            </div>
+            <div style="flex: 1;">
+                <div style="font-size: 14px; font-weight: 500; color: var(--text-primary);">${escapeHtml(m.username)}</div>
+            </div>
+            <div class="check-icon" style="width: 24px; height: 24px; border-radius: 50%; border: 2px solid var(--border-subtle); display: flex; align-items: center; justify-content: center; color: white; font-size: 14px;"></div>
+        </div>
+    `).join('');
+    
+    const modal = createModal('Выберите участника', `
+        <div style="margin-bottom: 16px;">
+            <input type="text" id="memberSearchInput" placeholder="Поиск..." style="width: 100%; padding: 12px 16px; border: 1px solid var(--border-subtle); border-radius: 10px; background: var(--bg-secondary); color: var(--text-primary); font-size: 14px; outline: none; box-sizing: border-box; margin-bottom: 12px;">
+            <div id="membersListContainer" style="max-height: 350px; overflow-y: auto;">
+                ${membersHtml}
+            </div>
+        </div>
+        <div style="display: flex; gap: 8px;">
+            <button id="cancelBtn" style="flex: 1; padding: 12px; border: none; border-radius: 10px; background: var(--bg-tertiary); color: var(--text-primary); font-size: 14px; cursor: pointer;">Отмена</button>
+            <button id="nextBtn" style="flex: 1; padding: 12px; border: none; border-radius: 10px; background: var(--accent-primary); color: white; font-size: 14px; font-weight: 500; cursor: pointer; opacity: 0.5;" disabled>Далее</button>
+        </div>
+    `);
+    
+    let selectedUserId = null;
+    let selectedUsername = null;
+    
+    // Выбор участника
+    modal.querySelectorAll('.member-select-item').forEach(item => {
+        item.addEventListener('click', () => {
+            modal.querySelectorAll('.member-select-item').forEach(i => {
+                i.style.background = 'var(--bg-tertiary)';
+                i.querySelector('.check-icon').style.background = 'transparent';
+                i.querySelector('.check-icon').style.border = '2px solid var(--border-subtle)';
+                i.querySelector('.check-icon').textContent = '';
+            });
+            item.style.background = 'rgba(101,170,221,0.15)';
+            item.querySelector('.check-icon').style.background = 'var(--accent-primary)';
+            item.querySelector('.check-icon').style.border = 'none';
+            item.querySelector('.check-icon').textContent = '✓';
+            selectedUserId = item.dataset.userid;
+            selectedUsername = item.dataset.username;
+            modal.querySelector('#nextBtn').disabled = false;
+            modal.querySelector('#nextBtn').style.opacity = '1';
+        });
+    });
+    
+    // Поиск
+    modal.querySelector('#memberSearchInput').addEventListener('input', (e) => {
+        const query = e.target.value.toLowerCase();
+        modal.querySelectorAll('.member-select-item').forEach(item => {
+            const name = item.dataset.username.toLowerCase();
+            item.style.display = name.includes(query) ? 'flex' : 'none';
+        });
+    });
+    
+    modal.querySelector('#cancelBtn').addEventListener('click', () => {
+        modal.remove();
+        openAdminsModal();
+    });
+    
+    modal.querySelector('#nextBtn').addEventListener('click', () => {
+        if (selectedUserId) {
+            modal.remove();
+            openEditAdminPermissionsModal(selectedUserId, selectedUsername, {}, true);
+        }
+    });
+}
+
+// Модалка редактирования прав админа (как в Telegram)
+function openEditAdminPermissionsModal(userId, username, currentPermissions = {}, isNewAdmin = false) {
+    const permissions = [
+        { key: 'can_change_info', label: 'Изменять данные группы', desc: 'Название, фото и описание', icon: '✏️' },
+        { key: 'can_delete_messages', label: 'Удалять сообщения', desc: 'Удалять сообщения других участников', icon: '🗑️' },
+        { key: 'can_ban_users', label: 'Блокировать участников', desc: 'Блокировать и разблокировать пользователей', icon: '🚫' },
+        { key: 'can_invite_users', label: 'Добавлять участников', desc: 'Создавать ссылки-приглашения', icon: '➕' },
+        { key: 'can_pin_messages', label: 'Закреплять сообщения', desc: 'Закреплять и откреплять сообщения', icon: '📌' },
+        { key: 'can_manage_voice', label: 'Управлять звонками', desc: 'Создавать и управлять групповыми звонками', icon: '📞' },
+        { key: 'can_promote_members', label: 'Назначать администраторов', desc: 'Добавлять и удалять администраторов', icon: '👑' },
+        { key: 'is_anonymous', label: 'Анонимность', desc: 'Скрывать имя при действиях администратора', icon: '🎭' },
+    ];
+    
+    // Если права не заданы, по умолчанию все true кроме promote
+    const getDefault = (key) => {
+        if (Object.keys(currentPermissions).length === 0) {
+            return key !== 'can_promote_members' && key !== 'is_anonymous';
+        }
+        return currentPermissions[key] === true;
+    };
+    
+    const permissionsHtml = permissions.map(p => {
+        const iconHtml = typeof emojiToIcon === 'function' ? emojiToIcon(p.icon) : p.icon;
+        return `
+        <label class="permission-toggle" style="display: flex; align-items: flex-start; padding: 14px 0; border-bottom: 1px solid var(--border-subtle); cursor: pointer;">
+            <div style="font-size: 22px; margin-right: 14px; width: 30px; text-align: center;">${iconHtml}</div>
+            <div style="flex: 1; padding-right: 10px;">
+                <div style="font-size: 15px; color: var(--text-primary); font-weight: 500;">${p.label}</div>
+                <div style="font-size: 13px; color: var(--text-muted); margin-top: 2px;">${p.desc}</div>
+            </div>
+            <label class="switch" style="position: relative; width: 50px; height: 28px; flex-shrink: 0;">
+                <input type="checkbox" data-perm="${p.key}" ${getDefault(p.key) ? 'checked' : ''} style="opacity: 0; width: 0; height: 0;">
+                <span class="slider" style="position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: var(--bg-tertiary); transition: .3s; border-radius: 28px;"></span>
+            </label>
+        </label>
+    `}).join('');
+    
+    const modal = createModal(isNewAdmin ? 'Права администратора' : `Права: ${username}`, `
+        <style>
+            .switch input:checked + .slider { background-color: var(--accent-primary) !important; }
+            .switch .slider:before {
+                position: absolute;
+                content: "";
+                height: 22px;
+                width: 22px;
+                left: 3px;
+                bottom: 3px;
+                background-color: white;
+                transition: .3s;
+                border-radius: 50%;
+            }
+            .switch input:checked + .slider:before { transform: translateX(22px); }
+        </style>
+        <div style="margin-bottom: 8px; padding: 12px; background: rgba(101,170,221,0.1); border-radius: 10px;">
+            <div style="display: flex; align-items: center; gap: 10px;">
+                <div style="width: 40px; height: 40px; border-radius: 50%; background: ${getAvatarColor(userId)}; display: flex; align-items: center; justify-content: center; color: white; font-size: 16px; font-weight: 500;">
+                    ${escapeHtml((username || 'U').charAt(0).toUpperCase())}
+                </div>
+                <div>
+                    <div style="font-size: 15px; font-weight: 500; color: var(--text-primary);">${escapeHtml(username)}</div>
+                    <div style="font-size: 13px; color: #65aadd;">⭐ Администратор</div>
+                </div>
+            </div>
+        </div>
+        <div style="font-size: 13px; color: var(--text-muted); margin: 16px 0 8px 0;">Что может делать этот администратор:</div>
+        <div style="max-height: 350px; overflow-y: auto; margin-bottom: 16px;">
+            ${permissionsHtml}
+        </div>
+        <div style="display: flex; gap: 8px;">
+            <button id="cancelBtn" style="flex: 1; padding: 14px; border: none; border-radius: 10px; background: var(--bg-tertiary); color: var(--text-primary); font-size: 15px; cursor: pointer;">Отмена</button>
+            <button id="saveBtn" style="flex: 1; padding: 14px; border: none; border-radius: 10px; background: var(--accent-primary); color: white; font-size: 15px; font-weight: 500; cursor: pointer;">
+                ${isNewAdmin ? 'Назначить' : 'Сохранить'}
+            </button>
+        </div>
+    `);
+    
+    modal.querySelector('#cancelBtn').addEventListener('click', () => {
+        modal.remove();
+        openAdminsModal();
+    });
+    
+    modal.querySelector('#saveBtn').addEventListener('click', async () => {
+        const perms = {};
+        modal.querySelectorAll('input[data-perm]').forEach(input => {
+            perms[input.dataset.perm] = input.checked;
+        });
+        
+        await setAdminWithPermissions(currentGroup.id, userId, 'admin', perms);
+        modal.remove();
+        openAdminsModal();
+    });
+}
+
+// Установить админа с правами
+async function setAdminWithPermissions(groupId, targetUserId, role, permissions) {
+    const token = localStorage.getItem('xipher_token');
+    try {
+        const resp = await fetch('/api/set-admin-permissions', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ 
+                token, 
+                group_id: groupId, 
+                target_user_id: targetUserId, 
+                role,
+                permissions: JSON.stringify(permissions)
+            })
+        });
+        const data = await resp.json();
+        if (data.success) {
+            notifications.success(role === 'admin' ? 'Права администратора обновлены' : 'Роль изменена');
+            const panel = document.getElementById('groupInfoPanel');
+            if (panel) loadGroupMembersForPanel(groupId, panel);
+        } else {
+            notifications.error(data.error || 'Ошибка');
+        }
+    } catch (e) {
+        notifications.error('Ошибка сети');
+    }
+}
+
+function openInviteLinksModal() {
+    openAddMemberModal();
+}
+
+async function openBannedModal() {
+    if (!currentGroup) return;
+    
+    const token = localStorage.getItem('xipher_token');
+    
+    // Загружаем заблокированных (запрашиваем API)
+    let banned = [];
+    try {
+        const resp = await fetch('/api/get-group-members', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ token, group_id: currentGroup.id, include_banned: true })
+        });
+        const data = await resp.json();
+        if (data.success && data.banned) banned = data.banned;
+    } catch (e) { console.error(e); }
+    
+    let bannedHtml = banned.length > 0 ? banned.map(m => `
+        <div class="banned-item" data-userid="${escapeHtml(m.user_id)}" style="display: flex; align-items: center; padding: 12px; border-radius: 8px; margin-bottom: 8px; background: var(--bg-tertiary);">
+            <div style="width: 40px; height: 40px; border-radius: 50%; background: ${getAvatarColor(m.user_id)}; display: flex; align-items: center; justify-content: center; color: white; margin-right: 12px;">
+                ${escapeHtml((m.username || 'U').charAt(0).toUpperCase())}
+            </div>
+            <div style="flex: 1;">
+                <div style="font-size: 14px; font-weight: 500; color: var(--text-primary);">${escapeHtml(m.username || 'Неизвестный')}</div>
+                <div style="font-size: 12px; color: var(--text-muted);">Заблокирован ${m.banned_at ? formatJoinDate(m.banned_at) : ''}</div>
+            </div>
+            <button class="unban-btn" style="padding: 6px 12px; background: var(--accent-primary); color: white; border: none; border-radius: 6px; font-size: 12px; cursor: pointer;">Разблокировать</button>
+        </div>
+    `).join('') : '<div style="color: var(--text-muted); padding: 40px; text-align: center;">Нет заблокированных пользователей</div>';
+    
+    const modal = createModal('Заблокированные', `
+        <div style="max-height: 400px; overflow-y: auto;">
+            ${bannedHtml}
+        </div>
+    `);
+    
+    // Разблокировка
+    modal.querySelectorAll('.unban-btn').forEach(btn => {
+        btn.addEventListener('click', async () => {
+            const item = btn.closest('.banned-item');
+            const targetId = item.dataset.userid;
+            await banMember(currentGroup.id, targetId, false);
+            modal.remove();
+            openBannedModal();
+        });
+    });
+}
+
+// Модальное окно редактирования группы
+function openEditGroupModal() {
+    if (!currentGroup) return;
+    
+    const modal = createModal('Редактировать группу', `
+        <div style="margin-bottom: 16px;">
+            <label style="display: block; font-size: 13px; color: var(--text-muted); margin-bottom: 6px;">Название группы</label>
+            <input type="text" id="editGroupName" value="${escapeHtml(currentGroup.name)}" style="width: 100%; padding: 12px; border: 1px solid var(--border-subtle); border-radius: 8px; background: var(--bg-secondary); color: var(--text-primary); font-size: 14px; outline: none; box-sizing: border-box;">
+        </div>
+        <div style="margin-bottom: 16px;">
+            <label style="display: block; font-size: 13px; color: var(--text-muted); margin-bottom: 6px;">Описание</label>
+            <textarea id="editGroupDesc" rows="3" style="width: 100%; padding: 12px; border: 1px solid var(--border-subtle); border-radius: 8px; background: var(--bg-secondary); color: var(--text-primary); font-size: 14px; outline: none; resize: none; box-sizing: border-box;">${escapeHtml(currentGroup.description || '')}</textarea>
+        </div>
+        <div style="display: flex; gap: 8px; justify-content: flex-end;">
+            <button id="cancelBtn" style="padding: 10px 20px; border: none; border-radius: 8px; background: var(--bg-tertiary); color: var(--text-primary); font-size: 14px; cursor: pointer;">Отмена</button>
+            <button id="saveBtn" style="padding: 10px 20px; border: none; border-radius: 8px; background: var(--accent-primary); color: white; font-size: 14px; font-weight: 500; cursor: pointer;">Сохранить</button>
+        </div>
+    `);
+    
+    modal.querySelector('#cancelBtn').addEventListener('click', () => modal.remove());
+    
+    modal.querySelector('#saveBtn').addEventListener('click', async () => {
+        const name = (function() { const _el = modal.querySelector('#editGroupName'); return _el ? _el.value : undefined; })().trim();
+        const desc = (function() { const _el = modal.querySelector('#editGroupDesc'); return _el ? _el.value : undefined; })().trim();
+        
+        if (!name) {
+            notifications.error('Введите название группы');
+            return;
+        }
+        
+        const token = localStorage.getItem('xipher_token');
+        try {
+            // Обновляем название
+            const respName = await fetch('/api/update-group-name', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ token, group_id: currentGroup.id, name })
+            });
+            
+            // Обновляем описание
+            const respDesc = await fetch('/api/update-group-description', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ token, group_id: currentGroup.id, description: desc })
+            });
+            
+            const dataName = await respName.json();
+            const dataDesc = await respDesc.json();
+            
+            if (dataName.success || dataDesc.success) {
+                notifications.success('Группа обновлена');
+                currentGroup.name = name;
+                currentGroup.description = desc;
+                // Обновляем UI
+                (document.querySelector('.tg-name') ? document.querySelector('.tg-name').textContent : null) && (document.querySelector('.tg-name').textContent = name);
+                modal.remove();
+                // Перезагружаем список групп
+                loadGroups();
+            } else {
+                notifications.error(dataName.error || dataDesc.error || 'Ошибка');
+            }
+        } catch (e) {
+            notifications.error('Ошибка сети');
+        }
+    });
+}
+
+// Утилита для создания модальных окон
+function createModal(title, content) {
+    const existing = document.querySelector('.tg-modal-overlay');
+    if (existing) existing.remove();
+    
+    const isMobile = window.innerWidth <= 768;
+    
+    const overlay = document.createElement('div');
+    overlay.className = 'tg-modal-overlay';
+    overlay.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.5);display:flex;align-items:' + (isMobile ? 'flex-end' : 'center') + ';justify-content:center;z-index:1200;';
+    
+    overlay.innerHTML = `
+        <style>
+            .tg-modal {
+                background: var(--bg-primary);
+                overflow: hidden;
+                max-height: 90vh;
+                display: flex;
+                flex-direction: column;
+            }
+            @media (min-width: 769px) {
+                .tg-modal {
+                    border-radius: 12px;
+                    width: 420px;
+                    max-width: 90vw;
+                }
+            }
+            @media (max-width: 768px) {
+                .tg-modal {
+                    border-radius: 16px 16px 0 0;
+                    width: 100%;
+                    max-width: 100%;
+                    max-height: 85vh;
+                }
+                .tg-modal-header {
+                    padding: 16px !important;
+                }
+                .tg-modal-content {
+                    padding: 12px 16px 24px !important;
+                }
+            }
+        </style>
+        <div class="tg-modal">
+            <div class="tg-modal-header" style="padding: 20px 20px 16px; border-bottom: 1px solid var(--border-subtle); display: flex; align-items: center;">
+                <div style="font-size: 18px; font-weight: 500; color: var(--text-primary); flex: 1;">${title}</div>
+                <button class="modal-close-btn" style="width: 32px; height: 32px; border: none; background: transparent; color: var(--text-muted); font-size: 20px; cursor: pointer; display: flex; align-items: center; justify-content: center; border-radius: 50%;">✕</button>
+            </div>
+            <div class="tg-modal-content" style="padding: 16px 20px; overflow-y: auto; flex: 1;">
+                ${content}
+            </div>
+        </div>
+    `;
+    
+    document.body.appendChild(overlay);
+    overlay.addEventListener('click', (e) => { if (e.target === overlay) overlay.remove(); });
+    { const _btn = overlay.querySelector('.modal-close-btn'); if (_btn) _btn.addEventListener('click', () => overlay.remove());
+    
+    // Закрытие свайпом вниз на мобильных
+    if (isMobile) {
+        let startY = 0;
+        let currentY = 0;
+        const modal = overlay.querySelector('.tg-modal');
+        
+        modal.addEventListener('touchstart', (e) => {
+            startY = e.touches[0].clientY;
+        }, { passive: true });
+        
+        modal.addEventListener('touchmove', (e) => {
+            currentY = e.touches[0].clientY;
+            const diff = currentY - startY;
+            if (diff > 0) {
+                modal.style.transform = `translateY(${diff}px)`;
+            }
+        }, { passive: true });
+        
+        modal.addEventListener('touchend', () => {
+            const diff = currentY - startY;
+            if (diff > 100) {
+                overlay.remove();
+            } else {
+                modal.style.transform = '';
+            }
+            startY = 0;
+            currentY = 0;
+        });
+    }
+    
+    return overlay;
+}
+
+function formatMembersCount(n) {
+    if (n === 1) return '1 участник';
+    if (n >= 2 && n <= 4) return `${n} участника`;
+    return `${n} участников`;
+}
+
+function formatMembersWord(n) {
+    if (n === 1) return 'участник';
+    if (n >= 2 && n <= 4) return 'участника';
+    return 'участников';
+}
+
+function hashCode(str) {
+    let hash = 0;
+    for (let i = 0; i < str.length; i++) {
+        hash = ((hash << 5) - hash) + str.charCodeAt(i);
+        hash = hash & hash;
+    }
+    return hash;
+}
+async function createGroupInvite(groupId) {
+    console.log('[Groups] createGroupInvite called with groupId:', groupId);
+    const token = localStorage.getItem('xipher_token');
+    if (!token) {
+        console.error('[Groups] No token found');
+        notifications.error('Необходима авторизация');
+        return false;
+    }
+    // Простая настройка срока действия в часах
+    const hoursStr = prompt('Срок действия ссылки в часах (оставьте пусто для бессрочной):', '24');
+    console.log('[Groups] Prompt result:', hoursStr);
+    // Если пользователь отменил prompt, прерываем выполнение
+    if (hoursStr === null) {
+        console.log('[Groups] User cancelled prompt');
+        return false;
+    }
+    let expires_in_seconds = 0;
+    if (hoursStr && hoursStr.trim()) {
+        const hrs = parseInt(hoursStr, 10);
+        if (!isNaN(hrs) && hrs > 0) {
+            expires_in_seconds = hrs * 3600;
+        }
+    }
+    try {
+        console.log('[Groups] Sending request to create invite link, groupId:', groupId, 'expires_in_seconds:', expires_in_seconds);
+        const response = await fetch('/api/create-group-invite', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ token, group_id: groupId, expires_in_seconds })
+        });
+        console.log('[Groups] Response status:', response.status, response.statusText);
+        const data = await response.json();
+        console.log('[Groups] Response data:', data);
+        // Проверяем invite_link в data.data (структура ответа от сервера)
+        const invite_link = data.invite_link || (data.data && data.data.invite_link);
+        if (data.success && invite_link) {
+            const url = `${window.location.origin}/join/${invite_link}`;
+            lastGroupInviteUrl = url;
+            console.log('[Groups] Invite link created, URL:', url);
+            console.log('[Groups] lastGroupInviteUrl set to:', lastGroupInviteUrl);
+            
+            // Обновляем превью в модальном окне, если оно открыто
+            // Пробуем найти в overlay, если модальное окно открыто
+            const overlay = document.querySelector('#groupSettingsModal');
+            const preview = overlay && overlay.querySelector('#groupInvitePreview') || document.querySelector('#groupInvitePreview');
+            if (preview) {
+                preview.textContent = url;
+                preview.innerText = url; // На всякий случай обновляем и innerText
+                console.log('[Groups] Preview updated with URL:', url);
+                console.log('[Groups] Preview element after update:', preview.textContent);
+                console.log('[Groups] Preview innerText:', preview.innerText);
+            } else {
+                console.warn('[Groups] Preview element not found! Overlay:', overlay);
+            }
+            
+            // Не копируем автоматически, просто создаем
+            notifications.success('Ссылка создана');
+            return true;
+        } else if (data.success) {
+            // Успех, но сервер не прислал invite_link — показываем сообщение как успех
+            console.warn('[Groups] Success but no invite_link in response:', data);
+            notifications.success(data.message || 'Invite link created');
+            return false;
+        } else {
+            console.error('[Groups] Failed to create invite link:', data);
+            notifications.error(data.message || 'Не удалось создать ссылку');
+            return false;
+        }
+    } catch (e) {
+        console.error('[Groups] createGroupInvite error:', e);
+        notifications.error('Ошибка создания ссылки');
+        return false;
+    }
+}
+
+async function checkNewGroupMessages(groupId) {
+    const token = localStorage.getItem('xipher_token');
+    if (!token) return;
+    if (!currentGroup || currentGroup.id !== groupId) return;
+
+    try {
+        const response = await fetch('/api/get-group-messages', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                token,
+                group_id: groupId,
+                limit: 50
+            })
+        });
+
+        const data = await response.json();
+
+        if (data.success && data.messages && Array.isArray(data.messages)) {
+            if (!currentGroup || currentGroup.id !== groupId) return;
+            const messagesContainer = document.getElementById('chatMessages');
+            if (!messagesContainer) return;
+
+            const currentMessageIds = new Set();
+            
+            // Собираем ID всех текущих сообщений в UI
+            messagesContainer.querySelectorAll('[data-message-id]').forEach(el => {
+                const msgId = el.dataset.messageId;
+                if (msgId) {
+                    currentMessageIds.add(msgId);
+                }
+            });
+            
+            // Проверяем новые сообщения (те, которых нет в UI)
+            const newMessages = data.messages.filter(msg => {
+                if (currentMessageIds.has(msg.id)) return false;
+                if (typeof isChecklistUpdateContent === 'function'
+                    && isChecklistUpdateContent(msg.content || '')
+                    && typeof hasProcessedChecklistUpdateId === 'function'
+                    && hasProcessedChecklistUpdateId(msg.id)) {
+                    return false;
+                }
+                return true;
+            });
+            
+            if (newMessages.length > 0) {
+                // Добавляем только новые сообщения
+                newMessages.reverse().forEach(msg => {
+                    addGroupMessageToUI(msg);
+                    if (typeof notifyIncomingMessageFromPayload === 'function'
+                        && typeof isMessageFromCurrentUser === 'function'
+                        && !isMessageFromCurrentUser(msg)) {
+                        notifyIncomingMessageFromPayload(msg, {
+                            chatId: groupId,
+                            chatType: 'group',
+                            chatName: (currentGroup ? currentGroup.name : '') || ''
+                        });
+                    }
+                });
+                
+                // Прокручиваем вниз только если пользователь уже внизу
+                const container = document.getElementById('chatMessages');
+                if (container) {
+                    const isNearBottom = container.scrollHeight - container.scrollTop - container.clientHeight < 100;
+                    if (isNearBottom) {
+                        if (typeof scrollToBottom === 'function') {
+                            scrollToBottom();
+                        } else {
+                            container.scrollTop = container.scrollHeight;
+                        }
+                    }
+                }
+            }
+        }
+    } catch (error) {
+        console.error('[Groups] Error checking new group messages:', error);
+    }
+}
+
+async function loadGroupMessages(groupId) {
+    const token = localStorage.getItem('xipher_token');
+    if (!token) return;
+    if (typeof resetChecklistState === 'function') {
+        resetChecklistState();
+    }
+    if (!currentGroup || currentGroup.id !== groupId) return;
+
+    try {
+        const response = await fetch('/api/get-group-messages', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                token,
+                group_id: groupId,
+                limit: 50
+            })
+        });
+
+        const data = await response.json();
+
+        if (data.success && data.messages) {
+            if (!currentGroup || currentGroup.id !== groupId) return;
+            const messagesContainer = document.getElementById('chatMessages');
+            if (!messagesContainer) return;
+
+            messagesContainer.innerHTML = '';
+
+            // Отображаем сообщения (обратный порядок для правильного отображения)
+            const messages = data.messages.reverse();
+            messages.forEach(msg => {
+                addGroupMessageToUI(msg);
+            });
+
+            if (typeof scrollToBottom === 'function') {
+                scrollToBottom();
+            } else {
+                const messagesContainer = document.getElementById('chatMessages');
+                if (messagesContainer) {
+                    messagesContainer.scrollTop = messagesContainer.scrollHeight;
+                }
+            }
+        }
+    } catch (error) {
+        console.error('Error loading group messages:', error);
+    }
+}
+
+function addGroupMessageToUI(msg) {
+    const messagesContainer = document.getElementById('chatMessages');
+    if (!messagesContainer) return;
+
+    if (typeof handleChecklistUpdateMessage === 'function' && handleChecklistUpdateMessage(msg)) {
+        return;
+    }
+
+    const locationPayload = typeof parseLocationPayload === 'function' ? parseLocationPayload(msg.content || '') : null;
+    const liveId = msg.message_type === 'live_location' && (locationPayload ? locationPayload.liveId : null) ? locationPayload.liveId : null;
+    const locationCard = typeof buildLocationCard === 'function' ? buildLocationCard(msg) : null;
+    const checklistPayload = typeof parseChecklistPayloadContent === 'function'
+        ? parseChecklistPayloadContent(msg.content || '')
+        : null;
+
+    if (liveId) {
+        const existingLive = messagesContainer.querySelector(`[data-live-id="${liveId}"]`);
+        if (existingLive) {
+            if (msg.id) {
+                existingLive.dataset.messageId = msg.id;
+            }
+            const timeEl = existingLive.querySelector('.message-time');
+            if (timeEl && msg.time) {
+                timeEl.textContent = msg.time;
+            }
+            const bubble = existingLive.querySelector('.message-bubble');
+            if (bubble && locationCard) {
+                const existingCard = bubble.querySelector('.message-location');
+                if (existingCard) {
+                    existingCard.replaceWith(locationCard);
+                } else {
+                    bubble.appendChild(locationCard);
+                }
+            }
+            return;
+        }
+    }
+
+    // Проверяем, не существует ли уже сообщение с таким ID
+    if (msg.id) {
+        const existingMessage = messagesContainer.querySelector(`[data-message-id="${msg.id}"]`);
+        if (existingMessage) {
+            return; // Сообщение уже существует, не добавляем дубликат
+        }
+    }
+
+    const isSent = typeof isMessageFromCurrentUser === 'function'
+        ? isMessageFromCurrentUser(msg)
+        : msg.sent === true;
+    const time = msg.time || new Date().toLocaleTimeString('ru-RU', { 
+        hour: '2-digit', 
+        minute: '2-digit' 
+    });
+    const senderName = msg.sender_username || 'Неизвестный';
+    const currentUsername = localStorage.getItem('xipher_username') || '';
+
+    const messageDiv = document.createElement('div');
+    messageDiv.className = `message ${isSent ? 'sent' : 'received'}`;
+    messageDiv.dataset.messageId = msg.id || '';
+    if (liveId) {
+        messageDiv.dataset.liveId = liveId;
+    }
+
+    // Аватар отправителя (только для полученных сообщений)
+    const avatar = document.createElement('div');
+    avatar.className = 'message-avatar';
+    if (isSent) {
+        avatar.textContent = currentUsername.charAt(0).toUpperCase() || 'U';
+    } else {
+        avatar.textContent = senderName.charAt(0).toUpperCase() || 'U';
+    }
+    messageDiv.appendChild(avatar);
+
+    const bubble = document.createElement('div');
+    bubble.className = 'message-bubble';
+
+    // Имя отправителя (только для полученных сообщений в группах)
+    if (!isSent) {
+        const senderDiv = document.createElement('div');
+        senderDiv.className = 'message-sender';
+        senderDiv.style.cssText = 'font-size: 0.85rem; font-weight: 600; color: var(--purple-primary); margin-bottom: 0.25rem;';
+        senderDiv.textContent = senderName;
+        senderDiv.style.cursor = 'pointer';
+        // Открыть профиль по клику
+        if (typeof window.openUserProfile === 'function' && msg.sender_id) {
+            senderDiv.addEventListener('click', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                window.openUserProfile({ user_id: msg.sender_id });
+            });
+        }
+        bubble.appendChild(senderDiv);
+    }
+
+    if (locationCard) {
+        bubble.appendChild(locationCard);
+    } else if (checklistPayload && typeof buildChecklistElement === 'function') {
+        const checklistEl = buildChecklistElement(checklistPayload, msg, messageDiv);
+        if (checklistEl) {
+            bubble.appendChild(checklistEl);
+        }
+    } else {
+        const messageText = document.createElement('p');
+        messageText.className = 'message-text';
+        
+        // Парсим упоминания (@username и @channel) и делаем их кликабельными
+        if (typeof parseMentions === 'function') {
+            const parsedContent = parseMentions(msg.content || '');
+            messageText.innerHTML = parsedContent;
+            
+            // Добавляем обработчики кликов на упоминания
+            messageText.querySelectorAll('.mention-link').forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    const username = link.dataset.username;
+                    if (username && typeof handleMentionClick === 'function') {
+                        handleMentionClick(username);
+                    }
+                });
+            });
+        } else {
+            messageText.textContent = msg.content || '';
+        }
+
+        bubble.appendChild(messageText);
+    }
+
+    const messageTime = document.createElement('div');
+    messageTime.className = 'message-time';
+    messageTime.textContent = time;
+    bubble.appendChild(messageTime);
+
+    // Индикатор закрепления
+    if (msg.is_pinned) {
+        const pinIndicator = document.createElement('span');
+        pinIndicator.className = 'message-pin-indicator';
+        pinIndicator.innerHTML = '📌 Закреплено';
+        messageTime.appendChild(pinIndicator);
+        messageDiv.classList.add('pinned');
+    }
+
+    messageDiv.appendChild(bubble);
+    messagesContainer.appendChild(messageDiv);
+
+    if (typeof applyMessageTtlData === 'function') {
+        applyMessageTtlData(messageDiv, msg);
+    }
+
+    // Добавляем обработчик правой кнопки мыши
+    messageDiv.addEventListener('contextmenu', (e) => {
+        if (typeof handleRightClick === 'function') {
+            handleRightClick(e, msg, messageDiv);
+        } else if (typeof showMessageContextMenu === 'function') {
+            // fallback to legacy handler if new one недоступен
+            e.preventDefault();
+            showMessageContextMenu(e, msg, messageDiv);
+        }
+    });
+
+    // Прокручиваем вниз
+    setTimeout(() => {
+        messagesContainer.scrollTop = messagesContainer.scrollHeight;
+    }, 100);
+}
+
+// Отправка сообщения в группу
+async function sendGroupMessage(content, messageType = 'text', filePath = '', fileName = '', fileSize = 0, ttlSeconds = 0) {
+    if (!currentGroup) {
+        console.error('[Groups] Cannot send message: no current group');
+        return;
+    }
+
+    const token = localStorage.getItem('xipher_token');
+    if (!token) {
+        console.error('[Groups] Cannot send message: no token');
+        return;
+    }
+
+    if (!content || content.trim() === '') {
+        console.warn('[Groups] Cannot send empty message');
+        return;
+    }
+
+    try {
+        console.log('[Groups] Sending message to group:', currentGroup.id, 'content:', content.substring(0, 50));
+        const resolvedTtl = Number.isFinite(ttlSeconds) ? ttlSeconds : 0;
+        const requestBody = {
+            token,
+            group_id: currentGroup.id,
+            content,
+            message_type: messageType,
+            file_path: filePath,
+            file_name: fileName,
+            file_size: fileSize
+        };
+        if (resolvedTtl > 0) {
+            requestBody.ttl_seconds = resolvedTtl;
+        }
+        const response = await fetch('/api/send-group-message', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(requestBody)
+        });
+
+        console.log('[Groups] Response status:', response.status);
+        const data = await response.json();
+        console.log('[Groups] Response data:', data);
+
+        if (data.success) {
+            // Очищаем поле ввода
+            const input = document.getElementById('messageInput');
+            if (input) {
+                input.value = '';
+                input.style.height = 'auto';
+            }
+            
+            // Сбрасываем реплай
+            const replyPreview = document.getElementById('replyPreview');
+            if (replyPreview) replyPreview.style.display = 'none';
+            
+            // Обновляем сообщения
+            await loadGroupMessages(currentGroup.id);
+            
+            // Обновляем общий список чатов
+            if (typeof loadAllChats === 'function') {
+                loadAllChats();
+            } else if (typeof loadChats === 'function') {
+                loadChats();
+            }
+        } else {
+            const errorMessage = data.message || data.error || 'Ошибка при отправке сообщения';
+            console.error('[Groups] Failed to send message:', data);
+            notifications.error(errorMessage);
+        }
+    } catch (error) {
+        console.error('[Groups] Error sending group message:', error);
+        notifications.error('Failed to send message. Please try again.');
+    }
+}
+
+// Функция для экранирования HTML
+function escapeHtml(text) {
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
+}
+
+// Функция для сброса текущей группы
+function resetCurrentGroup() {
+    currentGroup = null;
+    window.currentGroup = null;
+}
+
+// Функция загрузки участников группы для модального окна настроек
+async function loadGroupMembersForSettings(groupId, overlay) {
+    const token = localStorage.getItem('xipher_token');
+    if (!token) {
+        const listEl = overlay.querySelector('#groupMembersList');
+        if (listEl) listEl.innerHTML = '<div style="padding: 40px; text-align: center; color: var(--text-danger);">Необходима авторизация</div>';
+        return;
+    }
+    
+    try {
+        const response = await fetch('/api/get-group-members', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ token, group_id: groupId })
+        });
+        
+        const data = await response.json();
+        const listEl = overlay.querySelector('#groupMembersList');
+        const countHeaderEl = overlay.querySelector('#groupMembersCountHeader');
+        
+        if (data.success && data.members) {
+            const members = data.members;
+            
+            // Обновляем счётчик в шапке
+            if (countHeaderEl) {
+                countHeaderEl.textContent = members.length === 1 ? '1 участник' : `${members.length} участника`;
+            }
+            
+            if (members.length === 0) {
+                if (listEl) listEl.innerHTML = '<div style="padding: 40px; text-align: center; color: var(--text-muted);">Нет участников</div>';
+                return;
+            }
+            
+            // Сортируем: создатель первый, затем админы, потом остальные
+            const roleOrder = { 'creator': 0, 'admin': 1, 'member': 2 };
+            members.sort((a, b) => (roleOrder[a.role] || 3) - (roleOrder[b.role] || 3));
+            
+            // Цвета аватарок как в Telegram
+            const avatarColors = [
+                '#e17076', '#eda86c', '#a695e7', '#7bc862', '#6ec9cb', '#65aadd', '#ee7aae'
+            ];
+            
+            let html = '';
+            for (let i = 0; i < members.length; i++) {
+                const m = members[i];
+                const colorIndex = Math.abs(hashCode(m.user_id || m.username || String(i))) % avatarColors.length;
+                const avatarColor = avatarColors[colorIndex];
+                const roleText = getRoleBadge(m.role);
+                
+                html += `
+                    <div style="display: flex; align-items: center; padding: 8px 16px; cursor: pointer; transition: background 0.15s;" onmouseover="this.style.background='var(--bg-tertiary)'" onmouseout="this.style.background='transparent'">
+                        <div style="width: 42px; height: 42px; border-radius: 50%; background: ${avatarColor}; display: flex; align-items: center; justify-content: center; color: white; font-weight: 500; font-size: 16px; flex-shrink: 0; margin-right: 12px;">
+                            ${escapeHtml((m.username || 'U').charAt(0).toUpperCase())}
+                        </div>
+                        <div style="flex: 1; min-width: 0;">
+                            <div style="display: flex; align-items: center; gap: 6px;">
+                                <span style="font-size: 14px; font-weight: 500; color: var(--text-primary); overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${escapeHtml(m.username || 'Неизвестный')}</span>
+                                ${roleText}
+                            </div>
+                            <div style="font-size: 13px; color: var(--text-muted); margin-top: 1px;">
+                                ${m.is_muted ? '🔇 заглушен' : (m.is_banned ? '🚫 заблокирован' : 'был(а) недавно')}
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+            
+            if (listEl) listEl.innerHTML = html;
+        } else {
+            if (listEl) listEl.innerHTML = '<div style="padding: 40px; text-align: center; color: var(--text-danger);">' + escapeHtml(data.message || 'Ошибка загрузки') + '</div>';
+            if (countHeaderEl) countHeaderEl.textContent = 'ошибка';
+        }
+    } catch (e) {
+        console.error('[Groups] loadGroupMembersForSettings error:', e);
+        const listEl = overlay.querySelector('#groupMembersList');
+        if (listEl) listEl.innerHTML = '<div style="padding: 40px; text-align: center; color: var(--text-danger);">Ошибка загрузки участников</div>';
+    }
+}
+
+// Настройки публичного каталога для группы
+function openPublicDirectorySettings() {
+    if (!currentGroup) return;
+    
+    const CATEGORIES = [
+        { id: '', name: 'Без категории', emoji: '📁' },
+        { id: 'news', name: 'Новости', emoji: '📰' },
+        { id: 'tech', name: 'Технологии', emoji: '💻' },
+        { id: 'crypto', name: 'Крипто', emoji: '₿' },
+        { id: 'gaming', name: 'Игры', emoji: '🎮' },
+        { id: 'music', name: 'Музыка', emoji: '🎵' },
+        { id: 'movies', name: 'Кино', emoji: '🎬' },
+        { id: 'education', name: 'Образование', emoji: '📚' },
+        { id: 'sport', name: 'Спорт', emoji: '⚽' },
+        { id: 'art', name: 'Искусство', emoji: '🎨' },
+        { id: 'food', name: 'Еда', emoji: '🍕' },
+        { id: 'travel', name: 'Путешествия', emoji: '✈️' },
+        { id: 'business', name: 'Бизнес', emoji: '💼' },
+        { id: 'health', name: 'Здоровье', emoji: '❤️' },
+        { id: 'science', name: 'Наука', emoji: '🔬' },
+        { id: 'people', name: 'Общение', emoji: '👥' }
+    ];
+    
+    const isPublic = currentGroup.is_public || false;
+    const currentCategory = currentGroup.category || '';
+    
+    const categoryOptions = CATEGORIES.map(cat => 
+        `<option value="${cat.id}" ${cat.id === currentCategory ? 'selected' : ''}>${cat.emoji} ${cat.name}</option>`
+    ).join('');
+    
+    const overlay = document.createElement('div');
+    overlay.className = 'modal-overlay';
+    overlay.id = 'publicDirectorySettingsModal';
+    overlay.innerHTML = `
+        <div class="modal-content" style="max-width: 400px;">
+            <div class="modal-header">
+                <h3>🧭 Публичный каталог</h3>
+                <button class="close-btn" onclick="this.closest('.modal-overlay').remove()">&times;</button>
+            </div>
+            <div class="modal-body" style="padding: 20px;">
+                <p style="margin-bottom: 16px; color: var(--text-secondary); font-size: 14px;">
+                    Публичные группы видны в каталоге и любой пользователь может найти и вступить в них.
+                </p>
+                
+                <div style="display: flex; align-items: center; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid var(--border-subtle);">
+                    <div>
+                        <div style="font-weight: 500;">Показывать в каталоге</div>
+                        <div style="font-size: 13px; color: var(--text-secondary);">Группа будет видна всем</div>
+                    </div>
+                    <div class="tg-toggle ${isPublic ? 'on' : ''}" id="publicToggle"></div>
+                </div>
+                
+                <div style="margin-top: 16px;">
+                    <label style="font-size: 14px; font-weight: 500; display: block; margin-bottom: 8px;">Категория</label>
+                    <select id="categorySelect" style="width: 100%; padding: 12px; border-radius: 8px; border: 1px solid var(--border-subtle); background: var(--bg-secondary); color: var(--text-primary); font-size: 14px;">
+                        ${categoryOptions}
+                    </select>
+                </div>
+                
+                <button id="savePublicSettings" class="btn btn-primary" style="width: 100%; margin-top: 20px; padding: 12px;">
+                    Сохранить
+                </button>
+            </div>
+        </div>
+    `;
+    
+    document.body.appendChild(overlay);
+    
+    // Toggle handler
+    const toggle = overlay.querySelector('#publicToggle');
+    if (toggle) toggle.addEventListener('click', () => {
+        toggle.classList.toggle('on');
+    });
+    
+    // Save handler
+    { const _btn = overlay.querySelector('#savePublicSettings'); if (_btn) _btn.addEventListener('click', async () => {
+        const isPublicNew = toggle.classList.contains('on');
+        const categoryNew = overlay.querySelector('#categorySelect').value;
+        
+        try {
+            const token = localStorage.getItem('xipher_token');
+            const response = await fetch('/api/set-group-public', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    token,
+                    group_id: currentGroup.id,
+                    is_public: isPublicNew ? 'true' : 'false',
+                    category: categoryNew
+                })
+            });
+            
+            const data = await response.json();
+            if (data.success) {
+                currentGroup.is_public = isPublicNew;
+                currentGroup.category = categoryNew;
+                showToast('Настройки каталога сохранены', 'success');
+                overlay.remove();
+            } else {
+                showToast(data.error || 'Ошибка сохранения', 'error');
+            }
+        } catch (e) {
+            console.error('Error saving public settings:', e);
+            showToast('Ошибка сохранения', 'error');
+        }
+    });
+    
+    // Close on backdrop click
+    overlay.addEventListener('click', (e) => {
+        if (e.target === overlay) overlay.remove();
+    });
+}
+
+// Простая хэш-функция для генерации цвета аватарки
+function hashCode(str) {
+    let hash = 0;
+    for (let i = 0; i < str.length; i++) {
+        const char = str.charCodeAt(i);
+        hash = ((hash << 5) - hash) + char;
+        hash = hash & hash;
+    }
+    return hash;
+}
+
+// Вспомогательная функция для отображения роли участника
+function getRoleBadge(role) {
+    switch (role) {
+        case 'creator':
+            return '<span style="font-size: 12px; color: #e17076; font-weight: 500;">владелец</span>';
+        case 'admin':
+            return '<span style="font-size: 12px; color: #65aadd; font-weight: 500;">админ</span>';
+        default:
+            return '';
+    }
+}
+
+// Вспомогательная функция для форматирования даты
+function formatJoinDate(dateStr) {
+    if (!dateStr) return 'неизвестно';
+    try {
+        const date = new Date(dateStr);
+        if (isNaN(date.getTime())) return 'неизвестно';
+        return date.toLocaleDateString('ru-RU', { day: 'numeric', month: 'short', year: 'numeric' });
+    } catch (e) {
+        return 'неизвестно';
+    }
+}
+
+// =====================================================
+// GROUP WITH TOPICS (FORUM MODE) RENDERING
+// =====================================================
+
+function renderGroupWithTopics(group, topics) {
+    const chatArea = document.getElementById('chatArea') || document.querySelector('.chat-messages');
+    if (!chatArea) return;
+    
+    // Store current group for topic navigation
+    window.currentForumGroup = group;
+    
+    const userId = localStorage.getItem('xipher_user_id');
+    const isAdmin = group.creator_id === userId;
+    
+    chatArea.innerHTML = `
+        <div class="topics-panel">
+            <div class="topics-list-header">
+                <h3 class="topics-title">
+                    <span class="topics-icon">📋</span>
+                    Темы
+                </h3>
+                ${isAdmin ? `
+                    <button class="create-topic-btn" onclick="showCreateTopicModal('${group.id}')">
+                        <span>+</span> Новая тема
+                    </button>
+                ` : ''}
+            </div>
+            <div class="topics-list" id="topicsListContent">
+                ${renderTopicsListHTML(topics, isAdmin)}
+            </div>
+        </div>
+    `;
+}
+
+function renderTopicsListHTML(topics, isAdmin) {
+    if (!topics || topics.length === 0) {
+        return `
+            <div class="topics-empty">
+                <span class="empty-icon">💬</span>
+                <p>Нет тем</p>
+                <p class="empty-hint">Создайте первую тему для обсуждения</p>
+            </div>
+        `;
+    }
+    
+    // Sort: general first, then pinned, then by last_message_at
+    const sortedTopics = [...topics].sort((a, b) => {
+        if (a.is_general && !b.is_general) return -1;
+        if (!a.is_general && b.is_general) return 1;
+        if (a.pinned_order !== b.pinned_order) return b.pinned_order - a.pinned_order;
+        return new Date(b.last_message_at) - new Date(a.last_message_at);
+    });
+    
+    return sortedTopics.map(topic => `
+        <div class="topic-item ${topic.is_closed ? 'closed' : ''} ${topic.pinned_order > 0 ? 'pinned' : ''}" 
+             data-topic-id="${topic.id}" onclick="openTopic('${topic.id}')">
+            <div class="topic-icon" style="background: ${topic.icon_color || '#9333ea'}">
+                ${topic.icon_emoji || '💬'}
+            </div>
+            <div class="topic-info">
+                <div class="topic-name-row">
+                    <span class="topic-name">${escapeHtml(topic.name)}</span>
+                    ${topic.is_general ? '<span class="topic-badge general">General</span>' : ''}
+                    ${topic.is_closed ? '<span class="topic-badge closed">🔒</span>' : ''}
+                    ${topic.pinned_order > 0 ? '<span class="topic-badge pinned">📌</span>' : ''}
+                </div>
+                <div class="topic-meta">
+                    <span class="topic-messages-count">${topic.message_count || 0} сообщений</span>
+                    <span class="topic-time">${formatTopicTimeLocal(topic.last_message_at)}</span>
+                </div>
+            </div>
+            ${isAdmin && !topic.is_general ? `
+                <div class="topic-actions">
+                    <button class="topic-action-btn" onclick="event.stopPropagation(); showTopicContextMenu('${topic.id}', event)" title="Действия">
+                        ⋮
+                    </button>
+                </div>
+            ` : ''}
+        </div>
+    `).join('');
+}
+
+function formatTopicTimeLocal(timestamp) {
+    if (!timestamp) return '';
+    
+    const date = new Date(timestamp);
+    const now = new Date();
+    const diff = now - date;
+    
+    if (diff < 60000) return 'только что';
+    if (diff < 3600000) return Math.floor(diff / 60000) + ' мин';
+    if (diff < 86400000) return Math.floor(diff / 3600000) + ' ч';
+    if (diff < 604800000) return Math.floor(diff / 86400000) + ' д';
+    
+    return date.toLocaleDateString('ru-RU', { day: 'numeric', month: 'short' });
+}
+
+// Function to refresh topics list for current group
+window.renderCurrentGroupTopics = async function() {
+    if (!currentGroup) return;
+    
+    if (window.topicsModule) {
+        const data = await window.topicsModule.loadGroupTopics(currentGroup.id);
+        if (data.forum_mode && data.topics) {
+            renderGroupWithTopics(currentGroup, data.topics);
+        }
+    }
+};
+
+// Topics management panel
+function openTopicsManagementPanel(groupId) {
+    // Just open the group with topics view
+    if (currentGroup && currentGroup.id === groupId) {
+        selectGroup(currentGroup);
+    }
+}
+
+// Экспортируем функции для использования в chat.js
+window.checkNewGroupMessages = checkNewGroupMessages;
+window.groupsModule = {
+    loadGroups,
+    selectGroup,
+    sendGroupMessage,
+    currentGroup: () => currentGroup,
+    isGroupActive: () => currentGroup !== null,
+    resetCurrentGroup,
+    openGroupSettings: openGroupSettingsModal,
+    renderGroupWithTopics
+};
